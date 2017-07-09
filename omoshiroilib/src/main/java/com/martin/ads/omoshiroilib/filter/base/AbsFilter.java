@@ -66,7 +66,7 @@ public abstract class AbsFilter {
     }
 
     public void addPostDrawTask(final Runnable runnable) {
-        synchronized (mPreDrawTaskList) {
+        synchronized (mPostDrawTaskList) {
             mPostDrawTaskList.addLast(runnable);
         }
     }
