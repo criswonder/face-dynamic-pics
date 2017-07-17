@@ -16,7 +16,7 @@ public class FBO {
         return new FBO();
     }
 
-    FBO create(int width,int height){
+    public FBO create(int width,int height){
         int[] frameBuffers = new int[1];
         int[] frameBufferTextures = new int[1];
         GLES20.glGenFramebuffers(1, frameBuffers, 0);
@@ -47,20 +47,24 @@ public class FBO {
         return this;
     }
 
-    void destroy(){
+    public void destroy(){
         GLES20.glDeleteTextures(1, new int[]{frameBufferTexture}, 0);
         GLES20.glDeleteFramebuffers(1, new int[]{frameBuffer}, 0);
     }
 
-    void bind(){
+    public void bind(){
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, frameBuffer);
     }
 
-    void unbind(){
+    public void unbind(){
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
     }
 
     public int getFrameBufferTextureId() {
         return frameBufferTexture;
+    }
+
+    public int getFrameBuffer() {
+        return frameBuffer;
     }
 }

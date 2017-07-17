@@ -29,6 +29,7 @@ import com.martin.ads.omoshiroilib.debug.removeit.GlobalConfig;
 import com.martin.ads.omoshiroilib.encoder.gles.EGLFilterDispatcher;
 import com.martin.ads.omoshiroilib.encoder.gles.GLTextureSaver;
 import com.martin.ads.omoshiroilib.filter.base.AbsFilter;
+import com.martin.ads.omoshiroilib.filter.base.FBO;
 import com.martin.ads.omoshiroilib.filter.base.FilterGroup;
 import com.martin.ads.omoshiroilib.filter.base.OESFilter;
 import com.martin.ads.omoshiroilib.filter.base.OrthoFilter;
@@ -201,6 +202,9 @@ public class GLRender implements GLSurfaceView.Renderer , IFaceDetector.FaceDete
 
     private Rotate2DFilter rotate2DFilter;
 
+    private FBO fbo;
+    private PassThroughFilter screenDrawer;
+
     public GLRender(final Context context, CameraEngine cameraEngine) {
         this.context=context;
         this.cameraEngine=cameraEngine;
@@ -227,6 +231,7 @@ public class GLRender implements GLSurfaceView.Renderer , IFaceDetector.FaceDete
         filterGroup.addFilter(customizedFilters);
         filterGroup.addFilter(postProcessFilters);
 
+        screenDrawer=new PassThroughFilter(context);
         cameraEngine.setPictureTakenCallBack(new PictureTakenCallBack() {
             @Override
             public void saveAsBitmap(final byte[] data) {
@@ -358,6 +363,7 @@ public class GLRender implements GLSurfaceView.Renderer , IFaceDetector.FaceDete
     @Override
     public void onSurfaceCreated(GL10 glUnused, EGLConfig config) {
         filterGroup.init();
+        screenDrawer.init();
     }
 
     @Override
@@ -387,7 +393,11 @@ public class GLRender implements GLSurfaceView.Renderer , IFaceDetector.FaceDete
         Log.d(TAG, "lalalalala: "+mFaceCount+" "+mOutputWidth+" "+mOutputHeight);
         mGroupBase.setFaceDetResult(mFaceCount, mFaceDetectResultLst, mOutputWidth, mOutputHeight);
 
-        mGroupBase.draw(lastProcessFilter.getSavedTextureId(), GLEtc.NO_TEXTURE, mGLCubeBuffer, mGLTextureBuffer);
+        mGroupBase.draw(lastProcessFilter.getLastTextureId(), fbo.getFrameBuffer(), mGLCubeBuffer, mGLTextureBuffer);
+        fbo.unbind();
+        lastProcessFilter.setSavedTextureId(fbo.getFrameBufferTextureId());
+        screenDrawer.onFilterChanged(surfaceWidth,surfaceHeight);
+        screenDrawer.onDrawFrame(fbo.getFrameBufferTextureId());
         runAll(mRunOnDrawEnd);
     }
 
@@ -418,6 +428,7 @@ public class GLRender implements GLSurfaceView.Renderer , IFaceDetector.FaceDete
         this.surfaceHeight=height;
         GLES20.glViewport(0,0,width,height);
         filterGroup.onFilterChanged(width,height);
+        fbo=FBO.newInstance().create(surfaceWidth,surfaceHeight);
         if(cameraEngine.isCameraOpened()){
             cameraEngine.stopPreview();
             cameraEngine.releaseCamera();

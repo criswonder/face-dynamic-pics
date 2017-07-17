@@ -3,6 +3,7 @@ package com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.base;
 
 import android.graphics.PointF;
 import android.opengl.GLES20;
+import android.util.Log;
 
 import com.martin.ads.omoshiroilib.constant.Rotation;
 import com.martin.ads.omoshiroilib.flyu.openglfilter.common.FilterCompat;
@@ -121,6 +122,7 @@ public abstract class GPUImageFilterGroupBase extends GPUImageAudioFilter
             {
                 GLES20.glGenFramebuffers(1, this.bD, j);
                 GLES20.glGenTextures(1, this.bE, j);
+                //Log.d(TAG, "20170717: "+paramInt1+" "+paramInt2);
                 OpenGlUtils.bindTextureToFrameBuffer(this.bD[j], this.bE[j], paramInt1, paramInt2);
             }
         }
