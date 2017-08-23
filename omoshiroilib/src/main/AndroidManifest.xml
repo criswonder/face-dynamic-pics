@@ -6,6 +6,9 @@
         <activity
             android:name=".ui.CameraPreviewActivity"/>
         <activity android:name=".ui.DecorateActivity"/>
+        <activity android:name=".ui.EditActivity"/>
+        <activity android:name=".ui.SplashActivity"/>
+
         <!--Activities below is used for develop. Ignore them.-->
         <activity android:name=".debug.lab.FilterThumbActivity"/>
         <activity android:name=".debug.teststmobile.MultitrackerActivity"/>

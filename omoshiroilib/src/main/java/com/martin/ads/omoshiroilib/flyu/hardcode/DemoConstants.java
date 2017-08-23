@@ -7,6 +7,7 @@ import java.io.File;
 public class DemoConstants {
     public static final String SDCARD = getSDPath();
     public static final String APPDIR = SDCARD + "/Omoshiroi/TestFaceU";
+    public static final String IMAGE_PATH="image_path";
 
     public static String getSDPath() {
         File sdDir = null;

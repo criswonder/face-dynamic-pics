@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.martin.ads.omoshiroilib.debug.lab.FilterThumbActivity;
 import com.martin.ads.omoshiroilib.ui.CameraPreviewActivity;
+import com.martin.ads.omoshiroilib.ui.SplashActivity;
 import com.martin.ads.testfaceu.faceu.ui.TestFaceUActivity;
 import com.martin.ads.omoshiroilib.debug.teststmobile.MultitrackerActivity;
 
@@ -41,7 +42,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             findViewById(R.id.test_faceu_btn).setOnClickListener(this);
             findViewById(R.id.debug_btn).setOnClickListener(this);
         }else {
-            startActivity(new Intent(this,CameraPreviewActivity.class));
+            startActivity(new Intent(this,SplashActivity.class));
             finish();
         }
     }
