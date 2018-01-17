@@ -512,10 +512,11 @@ public class GLRender implements GLSurfaceView.Renderer , IFaceDetector.FaceDete
 
     public void startRecording() {
         try {
-            File vidFolder=GlobalConfig.context.getCacheDir();
+            File vidFolder=GlobalConfig.context.getExternalCacheDir();
             if (!vidFolder.exists())
                 vidFolder.mkdirs();
             outputPath=vidFolder.getAbsolutePath()+FileUtils.getVidName();
+            Log.e(TAG,"startRecording output="+outputPath);
             mMuxer = new MediaMuxerWrapper(outputPath);	// if you record audio only, ".m4a" is also OK.
             if (true) {
                 // for video capturing

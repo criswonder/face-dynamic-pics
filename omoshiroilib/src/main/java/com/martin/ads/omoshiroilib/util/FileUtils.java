@@ -132,7 +132,7 @@ public class FileUtils {
     }
 
     public static String getVidName(){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd_HH_mm_ss");
         String filename="/Vid_" + simpleDateFormat.format(new Date())+".mp4";
         return filename;
     }
