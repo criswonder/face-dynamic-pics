@@ -608,8 +608,8 @@ public class CameraPreviewActivity extends AppCompatActivity implements GPUImage
     }
 
     private void doUpdateFilter(HardCodeData.EffectItem item) {
+        //人脸动图opengl生成的地方
         GPUImageFilterGroupBase filterGroup = parseEffect(item.type, DemoConstants.APPDIR + "/" + item.unzipPath);
-
         filterGroup.setGroupStateChangedListener(this);
         if (null != faceWrapper) {
             mCurrentFilter = filterGroup;

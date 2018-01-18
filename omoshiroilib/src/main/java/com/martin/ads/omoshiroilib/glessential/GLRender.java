@@ -289,6 +289,8 @@ public class GLRender implements GLSurfaceView.Renderer , IFaceDetector.FaceDete
     }
 
     @SuppressWarnings("SuspiciousNameCombination")
+
+    //TODO 看懂下面的scale调整
     private void adjustImageScaling() {
         float outputWidth = mOutputWidth;
         float outputHeight = mOutputHeight;
@@ -369,6 +371,8 @@ public class GLRender implements GLSurfaceView.Renderer , IFaceDetector.FaceDete
     @Override
     public void onDrawFrame(GL10 glUnused) {
 
+        //运行mRunOnDraw里面的cmd，会把摄像头的数据拿过来进行人脸识别的处理; mGLTextureId也会赋值；
+        // 这个cmd是在CameraEngine::onPreviewFrame加入的
         runAll(mRunOnDraw);
         long timeStamp=cameraEngine.doTextureUpdate(oesFilter.getSTMatrix());
         Log.d(TAG, "onDrawFrame mGLTextureId: " +mGLTextureId);
@@ -660,7 +664,7 @@ public class GLRender implements GLSurfaceView.Renderer , IFaceDetector.FaceDete
                 }
 
                 cmdItem.param1 = cmdItem.param2 = null;
-                mCmdItemCacher.cache(cmdItem);
+                mCmdItemCacher.cache(cmdItem);//TODO cache了有什么作用
             }
         }
     }
@@ -702,6 +706,8 @@ public class GLRender implements GLSurfaceView.Renderer , IFaceDetector.FaceDete
                 mGLRgbBuffer = ByteBuffer.allocate(mCachePrevSize.x * mCachePrevSize.y * 4);
             }
             JniEntry.YUVtoRBGA(data, mCachePrevSize.x, mCachePrevSize.y, mGLRgbBuffer.array());
+
+            //从摄像头的buffer数据获取一个textureid，有复用textureid逻辑
             mGLTextureId = TextureUtils.getTextureFromByteBufferWithOldTexId(
                     mGLRgbBuffer,mCachePrevSize.x,mCachePrevSize.y,mGLTextureId);
             mGLRgbBuffer.clear();

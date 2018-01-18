@@ -50,6 +50,8 @@ public class FilterGroup extends AbsFilter {
         }
         int size = filters.size();
         int previousTexture = textureId;
+
+        //TODO 在图上画出逻辑
         for (int i = 0; i < size; i++) {
             AbsFilter filter = filters.get(i);
             Log.d(TAG, "onDrawFrame: "+i+" / "+size +" "+filter.getClass().getSimpleName()+" "+

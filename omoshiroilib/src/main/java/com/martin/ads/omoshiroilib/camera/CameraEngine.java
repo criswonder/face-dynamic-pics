@@ -48,7 +48,7 @@ public class CameraEngine
     private int frameWidth;
     private int frameHeight;
 
-    private FakeMat[] mFrameChain;
+    private FakeMat[] mFrameChain;//这里的FakeMat会把摄像头的数据拷贝一份，也没有看出有什么其它特别的用途
     private int mChainIdx;
     private Thread mWorkerThread;
     private boolean mStopThread;

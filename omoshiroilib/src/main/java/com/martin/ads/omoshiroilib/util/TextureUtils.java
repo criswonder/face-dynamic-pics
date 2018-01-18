@@ -123,6 +123,8 @@ public class TextureUtils{
                 GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
         GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
                 GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+
+        //https://www.khronos.org/registry/OpenGL-Refpages/es2.0/xhtml/glTexImage2D.xml
         GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA,
                 width,height, 0,
                 GLES20.GL_RGBA,
@@ -137,9 +139,12 @@ public class TextureUtils{
         if(byteBuffer.array().length!=width*height*4) throw new RuntimeException("Illegal byte array");
         int textures[] = new int[1];
         if (usedTexId == GLEtc.NO_TEXTURE) {
-            return getTextureFromByteBuffer(byteBuffer,width,height);
+            return getTextureFromByteBuffer(byteBuffer,width,height);//创建纹理
         } else {
+            //复用原有的纹理id
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, usedTexId);
+
+            //https://www.khronos.org/registry/OpenGL-Refpages/es2.0/xhtml/glTexSubImage2D.xml
             GLES20.glTexSubImage2D(GLES20.GL_TEXTURE_2D,0,0,0,
                     width,height,
                     GLES20.GL_RGBA,

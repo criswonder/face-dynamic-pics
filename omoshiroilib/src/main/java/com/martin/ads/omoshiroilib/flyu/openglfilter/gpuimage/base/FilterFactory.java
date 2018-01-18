@@ -1,14 +1,15 @@
 package com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.base;
 
 import android.graphics.PointF;
+import android.util.Log;
 
 import com.martin.ads.omoshiroilib.flyu.openglfilter.common.FilterCompat;
 import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.changeface.ChangeFaceInfo;
 import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.decorateface.DecorateFaceBean;
-import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.dstickers.DstickerDataBean;
-import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.dstickers.DynamicStickerData;
-import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.dstickers.DstickerDataBeanExt;
 import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.dstickers.DStickerVignetteBean;
+import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.dstickers.DstickerDataBean;
+import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.dstickers.DstickerDataBeanExt;
+import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.dstickers.DynamicStickerData;
 import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.filtergroup.GroupData;
 import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.filtergroup.MultiSectionInfo;
 import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.makeup.MakeupData;
@@ -32,7 +33,8 @@ import java.util.Map;
  */
 
 public class FilterFactory {
-    static final String TAG = "FilterFactory";
+    private final static String TAG = "FilterFactory";
+    private static boolean VERBOSE = true;
     public static final String STICKER_TYPE_DOT = "D";
     public static final String STICKER_TYPE_VIGNETTE = "V";
 
@@ -53,6 +55,7 @@ public class FilterFactory {
             Object localObject1 = null;
             Object localObject2;
             if ("D".equals(str)) {
+                //动图
                 localObject2 = new DstickerDataBeanExt();
                 localObject1 = localObject2;
                 JSONArray localJSONArray2 = localJSONObject2.getJSONArray("alignIndexLst");
@@ -66,6 +69,7 @@ public class FilterFactory {
                 ((DstickerDataBeanExt) localObject2).leftIndex = localJSONObject2.getInt("leftIndex");
                 ((DstickerDataBeanExt) localObject2).rightIndex = localJSONObject2.getInt("rightIndex");
             } else {
+                //Vignette 小插图
                 if (!"V".equals(str)) {
                     continue;
                 }
@@ -73,7 +77,7 @@ public class FilterFactory {
                 localObject1 = localObject2;
                 ((DStickerVignetteBean) localObject2).showTop = (localJSONObject2.getInt("showTop") == 1);
             }
-            DstickerDataBean dstickerDataBean= ((DstickerDataBean) localObject1);
+            DstickerDataBean dstickerDataBean = ((DstickerDataBean) localObject1);
             dstickerDataBean.width = localJSONObject2.getInt("width");
             dstickerDataBean.height = localJSONObject2.getInt("height");
             dstickerDataBean.frames = localJSONObject2.getInt("frames");
@@ -93,6 +97,7 @@ public class FilterFactory {
 
     public static ChangeFaceInfo parseChangeFaceJson(String paramString)
             throws JSONException {
+        if (VERBOSE) Log.e(TAG, "parseChangeFaceJson");
         ChangeFaceInfo localChangeFaceInfo = new ChangeFaceInfo();
         JSONObject localJSONObject = new JSONObject(paramString);
 
@@ -116,6 +121,7 @@ public class FilterFactory {
 
     public static SwitchFaceInfo parseSwitchFaceJson(String paramString)
             throws JSONException {
+        if (VERBOSE) Log.e(TAG, "parseSwitchFaceJson");
         SwitchFaceInfo localSwitchFaceInfo = new SwitchFaceInfo();
         JSONObject localJSONObject = new JSONObject(paramString);
 
@@ -147,6 +153,7 @@ public class FilterFactory {
 
     public static DecorateFaceBean parseDecorateFaceJson(String paramString)
             throws JSONException {
+        if (VERBOSE) Log.e(TAG, "parseDecorateFaceJson");
         DecorateFaceBean locala = new DecorateFaceBean();
         JSONObject localJSONObject = new JSONObject(paramString);
 
@@ -176,6 +183,7 @@ public class FilterFactory {
 
     public static ChangeFaceInfo readChangeFaceInfo(String paramString)
             throws IOException, JSONException {
+        if (VERBOSE) Log.e(TAG, "readChangeFaceInfo");
         File localFile1 = new File(paramString, "params.txt");
         String str = IOUtils.convertStreamToString(new FileInputStream(localFile1));
         ChangeFaceInfo localChangeFaceInfo = parseChangeFaceJson(str);
@@ -188,6 +196,7 @@ public class FilterFactory {
 
     public static DynamicStickerData readDynamicStickerData(String paramString)
             throws IOException, JSONException {
+        if (VERBOSE) Log.e(TAG, "readDynamicStickerData");
         File localFile = new File(paramString, "params.txt");
         String str = IOUtils.convertStreamToString(new FileInputStream(localFile));
         return parseStickerJson(str);
@@ -195,6 +204,7 @@ public class FilterFactory {
 
     public static SwitchFaceInfo readSwitchFaceData(String paramString)
             throws IOException, JSONException {
+        if (VERBOSE) Log.e(TAG, "readSwitchFaceData");
         File localFile1 = new File(paramString, "params.txt");
         String str = IOUtils.convertStreamToString(new FileInputStream(localFile1));
         SwitchFaceInfo localSwitchFaceInfo = parseSwitchFaceJson(str);
@@ -207,6 +217,7 @@ public class FilterFactory {
 
     public static DecorateFaceBean readDecorateFaceData(String paramString)
             throws IOException, JSONException {
+        if (VERBOSE) Log.e(TAG, "readDecorateFaceData");
         File localFile1 = new File(paramString, "params.txt");
         String str = IOUtils.convertStreamToString(new FileInputStream(localFile1));
         DecorateFaceBean locala = parseDecorateFaceJson(str);
@@ -217,6 +228,7 @@ public class FilterFactory {
 
     public static MultiSectionInfo parseMultiSectionData(String paramString1, String paramString2)
             throws JSONException, IOException {
+        if(VERBOSE) Log.e(TAG,"parseMultiSectionData");
         MultiSectionInfo localMultiSectionInfo = new MultiSectionInfo();
 
         JSONObject localJSONObject1 = new JSONObject(paramString2);
@@ -294,6 +306,7 @@ public class FilterFactory {
 
     public static MultiSectionInfo readMultiSectionData(String paramString)
             throws IOException, JSONException {
+        if(VERBOSE) Log.e(TAG,"readMultiSectionData");
         File localFile = new File(paramString, "params.txt");
         String str = IOUtils.convertStreamToString(new FileInputStream(localFile));
         return parseMultiSectionData(paramString, str);
@@ -301,6 +314,7 @@ public class FilterFactory {
 
     public static MultiTriangleInfo readMultiTriangleInfo(String paramString)
             throws IOException, JSONException {
+        if(VERBOSE) Log.e(TAG,"readMultiTriangleInfo");
         File localFile = new File(paramString, "params.txt");
         String str = IOUtils.convertStreamToString(new FileInputStream(localFile));
         return g(str);
@@ -308,6 +322,7 @@ public class FilterFactory {
 
     static MultiTriangleInfo g(String paramString)
             throws JSONException {
+        if(VERBOSE) Log.e(TAG,"g");
         MultiTriangleInfo localMultiTriangleInfo = new MultiTriangleInfo();
         JSONObject localJSONObject1 = new JSONObject(paramString);
         localMultiTriangleInfo.eI = new ArrayList();
@@ -361,6 +376,7 @@ public class FilterFactory {
     static GroupData a(String paramString, JSONObject paramJSONObject)
             throws JSONException, IOException {
         GroupData locala = new GroupData();
+        if(VERBOSE) Log.e(TAG,"a");
         locala.name = paramJSONObject.getString("foldername");
         locala.cN = paramJSONObject.getInt("maxcount");
         locala.ee = paramJSONObject.getInt("resloadtype");
@@ -396,6 +412,7 @@ public class FilterFactory {
 
     static DstickerDataBean parseDstickerDataBean(JSONObject paramJSONObject)
             throws JSONException {
+        if(VERBOSE) Log.e(TAG,"parseDstickerDataBean");
         String str = paramJSONObject.getString("type");
         DstickerDataBean localObject1 = null;
         DstickerDataBean localObject2;
@@ -434,6 +451,7 @@ public class FilterFactory {
 
     public static MakeupData parseMakeUpInfo(String paramString, JSONObject paramJSONObject)
             throws IOException, JSONException {
+        if(VERBOSE) Log.e(TAG,"parseMakeUpInfo");
         MakeupData locala = new MakeupData();
         locala.resloadtype = paramJSONObject.getInt("resloadtype");
         locala.foldername = paramJSONObject.getString("foldername");
@@ -485,6 +503,7 @@ public class FilterFactory {
     }
 
     public static MultiTriangleInfo photoInfoToMultiTriangleInfo(String paramString, PointF[] paramArrayOfPointF) {
+        if(VERBOSE) Log.e(TAG,"photoInfoToMultiTriangleInfo");
         MultiTriangleInfo localMultiTriangleInfo = new MultiTriangleInfo();
         MultiTriangleInfo.a locala = new MultiTriangleInfo.a();
         locala.eq = IOUtils.extractFileName(paramString);
@@ -509,6 +528,7 @@ public class FilterFactory {
     }
 
     public static boolean isOriginFilter(String paramString) {
+        if(VERBOSE) Log.e(TAG,"isOriginFilter");
         String str1 = "//default\n\nprecision mediump float;\nuniform sampler2D inputImageTexture;\nvarying highp vec2 textureCoordinate;\n\n\nvoid main()\n{\n\n    gl_FragColor = texture2D(inputImageTexture, textureCoordinate);\n\n}\n\n";
 
         String str2 = "precision lowp float;\n\nvarying highp vec2 textureCoordinate;\n\nuniform sampler2D inputImageTexture;\nuniform sampler2D inputImageTexture2;\n\nvoid main()\n{\n\ngl_FragColor = texture2D(inputImageTexture, textureCoordinate);\n\n}\n";

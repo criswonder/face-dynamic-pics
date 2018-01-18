@@ -9,7 +9,7 @@ import java.util.LinkedList;
 
 import com.martin.ads.omoshiroilib.R;
 import com.martin.ads.omoshiroilib.debug.removeit.GlobalConfig;
-import com.martin.ads.omoshiroilib.flyu.openglfilter.detector.UnnamedA;
+import com.martin.ads.omoshiroilib.flyu.openglfilter.detector.FacePointWrapper;
 import com.martin.ads.omoshiroilib.util.ShaderUtils;
 
 /**
@@ -28,7 +28,7 @@ public class GPUImageFilter {
     public int aS;
     public int aT;
     private boolean aU;
-    protected UnnamedA aV = new UnnamedA();
+    protected FacePointWrapper aV = new FacePointWrapper();
     protected int aW;
     protected int aX;
     protected boolean aY = false;
