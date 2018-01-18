@@ -8,18 +8,18 @@ import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.filtergroup.GPUIma
 
 public class DynamicStickerMulti extends GPUImageFilterGroup {
     static final String TAG = "DynamicStickerMulti";
-    String db;
+    String mFileDir;
     DynamicStickerData dc;
 
-    public DynamicStickerMulti(String paramString, DynamicStickerData paramDynamicStickerData) {
-        this.db = paramString;
-        this.dc = paramDynamicStickerData;
-        for (DstickerDataBean locala : paramDynamicStickerData.cK) {
-            String str = "file://" + paramString + "/" + locala.name;
-            if ((locala instanceof DstickerDataBeanExt)) {
-                addFilter(new DynamicStickerDot(str, (DstickerDataBeanExt) locala));
-            } else if ((locala instanceof DStickerVignetteBean)) {
-                addFilter(new DynamicStickerVignette(str, (DStickerVignetteBean) locala));
+    public DynamicStickerMulti(String fileDir, DynamicStickerData dynamicStickerData) {
+        this.mFileDir = fileDir;
+        this.dc = dynamicStickerData;
+        for (DstickerDataBean stickerBean : dynamicStickerData.dstickerDataBeanList) {
+            String str = "file://" + fileDir + "/" + stickerBean.folderName;
+            if ((stickerBean instanceof DstickerDataBeanExt)) {
+                addFilter(new DynamicStickerDot(str, (DstickerDataBeanExt) stickerBean));
+            } else if ((stickerBean instanceof DStickerVignetteBean)) {
+                addFilter(new DynamicStickerVignette(str, (DStickerVignetteBean) stickerBean));
             }
         }
     }

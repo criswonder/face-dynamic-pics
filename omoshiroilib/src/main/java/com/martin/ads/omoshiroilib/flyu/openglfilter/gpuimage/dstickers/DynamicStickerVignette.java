@@ -50,7 +50,7 @@ public class DynamicStickerVignette extends DynamicStickerBase
             float f2 = f1 / this.aT;
             if (this.aY)
             {
-                if (this.dd.dr)
+                if (this.dd.showTop)
                 {
                     a(this.de, new float[] { 0.0F, 1.0F - f2 });
                     a(this.df, new float[] { 1.0F, 1.0F });
@@ -61,7 +61,7 @@ public class DynamicStickerVignette extends DynamicStickerBase
                     a(this.df, new float[] { 1.0F, f2 });
                 }
             }
-            else if (!this.dd.dr)
+            else if (!this.dd.showTop)
             {
                 a(this.de, new float[] { 0.0F, 1.0F - f2 });
                 a(this.df, new float[] { 1.0F, 1.0F });

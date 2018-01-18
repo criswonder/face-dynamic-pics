@@ -4,7 +4,6 @@ package com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.makeup;
 import android.graphics.PointF;
 import android.opengl.GLES20;
 
-import com.lemon.faceu.sdk.utils.JniEntry;
 import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.base.GPUImageFilterE;
 import com.martin.ads.omoshiroilib.flyu.ysj.OmoshiroiNative;
 
@@ -12,7 +11,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created by Ads on 2017/6/6.
@@ -34,14 +32,14 @@ public class MakeUpFilter extends GPUImageFilterE {
         super(paramString, "attribute vec4 position;\nattribute vec4 inputTextureCoordinate;\n \nvarying vec2 textureCoordinate;\n \nvoid main()\n{\n    gl_Position = position;\n    textureCoordinate = inputTextureCoordinate.xy;\n}", "varying highp vec2 textureCoordinate;\n \nuniform sampler2D inputImageTexture;\n \nvoid main()\n{\n     gl_FragColor = texture2D(inputImageTexture, textureCoordinate);\n}");
         this.db = paramString;
         this.ei = parama;
-        if (this.ei.ep == 1) {
+        if (this.ei.resloadtype == 1) {
             F();
         }
         int i = 0;
         for (Iterator localIterator = this.ei.eo.iterator(); localIterator.hasNext(); ) {
             MakeupData.a locala = (MakeupData.a) localIterator.next();
-            if (locala.er.length > i) {
-                i = locala.er.length;
+            if (locala.vertexIndexes.length > i) {
+                i = locala.vertexIndexes.length;
             }
         }
         MakeupData.a locala;
@@ -51,7 +49,7 @@ public class MakeUpFilter extends GPUImageFilterE {
         Iterator localIterator;
         for (localIterator = this.ei.eo.iterator(); localIterator.hasNext(); ) {
             locala = (MakeupData.a) localIterator.next();
-            j(this.db + "/" + locala.eq);
+            j(this.db + "/" + locala.res);
         }
         for (localIterator = this.ei.eo.iterator(); localIterator.hasNext(); ) {
             locala = (MakeupData.a) localIterator.next();
@@ -97,7 +95,7 @@ public class MakeUpFilter extends GPUImageFilterE {
         Object localObject1 = paramArrayOfPointF;
         if (paramInt1 != 0) {
             PointF[][] arrayOfPointF1 = new PointF[5][114];
-            int i = Math.min(paramInt1, this.ei.cN);
+            int i = Math.min(paramInt1, this.ei.maxcount);
             PointF[] arrayOfPointF3;
             for (int j = 0; j < 5; j++) {
                 PointF[] localObject2 = arrayOfPointF1[j];
@@ -113,7 +111,7 @@ public class MakeUpFilter extends GPUImageFilterE {
             for (int j = 0; j < i; j++) {
                 MakeupData.a localObject2 = (MakeupData.a) this.ei.eo.get(j);
                 arrayOfPointF3 = arrayOfPointF1[j];
-                for (MakeupData.b localb : ((MakeupData.a) localObject2).es) {
+                for (MakeupData.b localb : ((MakeupData.a) localObject2).facePointOffset) {
                     arrayOfPointF3[localb.ew] = a(paramArrayOfPointF[j], localb);
                 }
                 PointF cur=paramArrayOfPointF[j][46];
@@ -178,13 +176,13 @@ public class MakeUpFilter extends GPUImageFilterE {
         if (this.aV.h == 0) {
             return;
         }
-        int i = Math.min(this.aV.h, this.ei.cN);
+        int i = Math.min(this.aV.h, this.ei.maxcount);
         for (int j = 0; j < i; j++) {
             i(this.ek, j + 1);
             PointF[] arrayOfPointF = this.aV.i[j];
             MakeupData.a locala = (MakeupData.a) this.ei.eo.get(j);
 
-            int[] arrayOfInt = locala.er;
+            int[] arrayOfInt = locala.vertexIndexes;
             this.el.position(0);
             for (int k = 0; k < arrayOfInt.length; k++) {
                 PointF localPointF;

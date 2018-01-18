@@ -25,8 +25,8 @@ public class GPUImageMultiSectionGroup  extends GPUImageFilterGroupBase
 {
     static final String TAG = "GPUImageMultiSectionGroup";
     String db;
-    MultiSectionInfo dC;
-    Map<String, GPUImageFilter> dD;
+    MultiSectionInfo mMultiSectionInfo;
+    Map<String, GPUImageFilter> stringGPUImageFilterMap;
     List<GPUImageFilter> dE;
     List<GPUImageFilter> dF;
     String dG;
@@ -36,8 +36,8 @@ public class GPUImageMultiSectionGroup  extends GPUImageFilterGroupBase
     public GPUImageMultiSectionGroup(String paramString, MultiSectionInfo paramMultiSectionInfo)
     {
         this.db = paramString;
-        this.dC = paramMultiSectionInfo;
-        this.dD = new HashMap();
+        this.mMultiSectionInfo = paramMultiSectionInfo;
+        this.stringGPUImageFilterMap = new HashMap();
 
         this.dE = new ArrayList();
         this.dF = new ArrayList();
@@ -47,7 +47,7 @@ public class GPUImageMultiSectionGroup  extends GPUImageFilterGroupBase
     public void l()
     {
         super.l();
-        for (Map.Entry localEntry : this.dC.dJ.entrySet())
+        for (Map.Entry localEntry : this.mMultiSectionInfo.dJ.entrySet())
         {
             Object localObject1 = ((MultiSectionInfo.a)localEntry.getValue()).dQ;
             Object localObject2;
@@ -78,7 +78,7 @@ public class GPUImageMultiSectionGroup  extends GPUImageFilterGroupBase
                 {
                     localObject3 = (MakeupData)localObject1;
                     localObject4 = new MakeUpFilter(((MultiSectionInfo.a)localEntry.getValue()).dP, (MakeupData) localObject3);
-                    if (2 == ((MakeupData)localObject3).ep)
+                    if (2 == ((MakeupData)localObject3).resloadtype)
                     {
                         ((MakeUpFilter)localObject4).F();
                         ((MakeUpFilter)localObject4).init();
@@ -90,16 +90,16 @@ public class GPUImageMultiSectionGroup  extends GPUImageFilterGroupBase
                     localObject2 = new GPUImageFilter();
                 }
             }
-            this.dD.put((String)localEntry.getKey(), (GPUImageFilter)localObject2);
+            this.stringGPUImageFilterMap.put((String)localEntry.getKey(), (GPUImageFilter)localObject2);
         }
-        this.dD.put("__empty__", new GPUImageFilter());
+        this.stringGPUImageFilterMap.put("__empty__", new GPUImageFilter());
         for (int i = 0; i < this.dE.size(); i++) {
             ((GPUImageFilter)this.dE.get(i)).init();
         }
         for (int i = 0; i < this.dF.size(); i++) {
             ((GPUImageFilter)this.dF.get(i)).init();
         }
-        this.dG = this.dC.dM;
+        this.dG = this.mMultiSectionInfo.dM;
         this.dH = System.currentTimeMillis();
         P();
         Q();
@@ -125,12 +125,12 @@ public class GPUImageMultiSectionGroup  extends GPUImageFilterGroupBase
             }
         }
         List localList;
-        MultiSectionInfo.b localObject1 = (MultiSectionInfo.b)this.dC.dK.get(this.dG);
+        MultiSectionInfo.b localObject1 = (MultiSectionInfo.b)this.mMultiSectionInfo.dK.get(this.dG);
         for (Object localObject2 = ((MultiSectionInfo.b)localObject1).dT.iterator(); ((Iterator)localObject2).hasNext();)
         {
             String localObject3 = (String)((Iterator)localObject2).next();
-            GPUImageFilter localGPUImageFilter = (GPUImageFilter)this.dD.get(localObject3);
-            MultiSectionInfo.a locala = (MultiSectionInfo.a)this.dC.dJ.get(localObject3);
+            GPUImageFilter localGPUImageFilter = (GPUImageFilter)this.stringGPUImageFilterMap.get(localObject3);
+            MultiSectionInfo.a locala = (MultiSectionInfo.a)this.mMultiSectionInfo.dJ.get(localObject3);
 
             localArrayList.add(localGPUImageFilter);
             if (!localGPUImageFilter.isInitialized())
@@ -199,7 +199,7 @@ public class GPUImageMultiSectionGroup  extends GPUImageFilterGroupBase
         }
         if (null != this.bJ)
         {
-            MultiSectionInfo.b localObject = (MultiSectionInfo.b)this.dC.dK.get(this.dG);
+            MultiSectionInfo.b localObject = (MultiSectionInfo.b)this.mMultiSectionInfo.dK.get(this.dG);
             this.bJ.onTipsAndCountChanged(i, ((MultiSectionInfo.b)localObject).bP, -1 == ((MultiSectionInfo.b)localObject).dS ? 65535 : ((MultiSectionInfo.b)localObject).dS);
         }
     }
@@ -218,7 +218,7 @@ public class GPUImageMultiSectionGroup  extends GPUImageFilterGroupBase
             localObject = (GPUImageFilter)localIterator.next();
             ((GPUImageFilter)localObject).destroy();
         }
-        for (localIterator = this.dD.entrySet().iterator(); localIterator.hasNext();)
+        for (localIterator = this.stringGPUImageFilterMap.entrySet().iterator(); localIterator.hasNext();)
         {
             localObject = (Map.Entry)localIterator.next();
             ((GPUImageFilter)((Map.Entry)localObject).getValue()).destroy();
@@ -241,7 +241,7 @@ public class GPUImageMultiSectionGroup  extends GPUImageFilterGroupBase
             localObject2 = (GPUImageFilter)((Iterator)localObject1).next();
             ((GPUImageFilter)localObject2).releaseNoGLESRes();
         }
-        for (localObject1 = this.dD.entrySet().iterator(); ((Iterator)localObject1).hasNext();)
+        for (localObject1 = this.stringGPUImageFilterMap.entrySet().iterator(); ((Iterator)localObject1).hasNext();)
         {
             localObject2 = (Map.Entry)((Iterator)localObject1).next();
             ((GPUImageFilter)((Map.Entry)localObject2).getValue()).releaseNoGLESRes();
@@ -254,7 +254,7 @@ public class GPUImageMultiSectionGroup  extends GPUImageFilterGroupBase
     {
         super.z();
 
-        Map localMap = (Map)this.dC.dL.get(this.dG);
+        Map localMap = (Map)this.mMultiSectionInfo.dL.get(this.dG);
         if ((!FilterCompat.noFaceuAssist) && (null == localMap)) {
             throw new RuntimeException("section state is null");
         }

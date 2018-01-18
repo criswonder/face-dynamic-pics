@@ -11,10 +11,10 @@ import java.util.List;
  */
 
 public class MakeupData{
-    public int cN;
-    public String name;
+    public int maxcount;
+    public String foldername;
     public List<a> eo;
-    public int ep;
+    public int resloadtype;
 
     public static class b
     {
@@ -27,9 +27,9 @@ public class MakeupData{
 
     public static class a
     {
-        public String eq;
-        public int[] er;
-        public b[] es;
+        public String res;
+        public int[] vertexIndexes;
+        public b[] facePointOffset;
         public PointF[] et;
         public PointF[] eu;
         public boolean ev;

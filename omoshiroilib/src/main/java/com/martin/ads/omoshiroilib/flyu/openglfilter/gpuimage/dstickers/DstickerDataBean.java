@@ -5,15 +5,15 @@ package com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.dstickers;
  */
 public class DstickerDataBean
 {
-    public int cN;
+    public int maxcount;
     public int width;
     public int height;
-    public int dg;
-    public String name;
-    public int dh;
-    public int di;
-    public boolean dj;
-    public boolean dk;
-    public String bS;
-    public boolean dl;
+    public int frames;
+    public String folderName;
+    public int frameDuration;
+    public int triggerType;
+    public boolean looping;
+    public boolean showUtilFinish;
+    public String audio;
+    public boolean alignAudio;
 }

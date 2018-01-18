@@ -23,7 +23,7 @@ public class ShapeChangeFilter extends GPUImageFilterE
     static final String dX = "uniform float parameter;";
     GroupData dY;
     String bV;
-    PointF cA = new PointF(0.0F, 0.0F);
+    PointF pointF = new PointF(0.0F, 0.0F);
     int[] cB;
     int[] dZ;
     int ea;
@@ -115,7 +115,7 @@ public class ShapeChangeFilter extends GPUImageFilterE
         {
             GroupData.b locala = (GroupData.b)this.dY.cv.get(k);
             if (locala.cx >= i) {
-                a(this.cB[k], this.cA);
+                a(this.cB[k], this.pointF);
             } else {
                 b(this.cB[k], locala.cx, locala.cy);
             }

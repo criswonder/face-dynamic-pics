@@ -44,7 +44,7 @@ public class FilterFactory {
         localDynamicStickerData.cL = (localJSONObject1.optInt("looping") == 1);
         localDynamicStickerData.cM = localJSONObject1.optString("tips");
         localDynamicStickerData.cN = localJSONObject1.optInt("count", 5);
-        localDynamicStickerData.cK = new ArrayList();
+        localDynamicStickerData.dstickerDataBeanList = new ArrayList();
 
         JSONArray localJSONArray1 = localJSONObject1.getJSONArray("itemList");
         for (int i = 0; i < localJSONArray1.length(); i++) {
@@ -56,37 +56,37 @@ public class FilterFactory {
                 localObject2 = new DstickerDataBeanExt();
                 localObject1 = localObject2;
                 JSONArray localJSONArray2 = localJSONObject2.getJSONArray("alignIndexLst");
-                ((DstickerDataBeanExt) localObject2).dm = new int[localJSONArray2.length()];
+                ((DstickerDataBeanExt) localObject2).alignIndexLst = new int[localJSONArray2.length()];
                 for (int j = 0; j < localJSONArray2.length(); j++) {
-                    ((DstickerDataBeanExt) localObject2).dm[j] = localJSONArray2.getInt(j);
+                    ((DstickerDataBeanExt) localObject2).alignIndexLst[j] = localJSONArray2.getInt(j);
                 }
-                ((DstickerDataBeanExt) localObject2).dn = localJSONObject2.getInt("alignX");
-                ((DstickerDataBeanExt) localObject2).jdField_do = localJSONObject2.getInt("alignY");
+                ((DstickerDataBeanExt) localObject2).alignX = localJSONObject2.getInt("alignX");
+                ((DstickerDataBeanExt) localObject2).alignY = localJSONObject2.getInt("alignY");
                 ((DstickerDataBeanExt) localObject2).scaleWidth = localJSONObject2.getInt("scaleWidth");
-                ((DstickerDataBeanExt) localObject2).dp = localJSONObject2.getInt("leftIndex");
-                ((DstickerDataBeanExt) localObject2).dq = localJSONObject2.getInt("rightIndex");
+                ((DstickerDataBeanExt) localObject2).leftIndex = localJSONObject2.getInt("leftIndex");
+                ((DstickerDataBeanExt) localObject2).rightIndex = localJSONObject2.getInt("rightIndex");
             } else {
                 if (!"V".equals(str)) {
                     continue;
                 }
                 localObject2 = new DStickerVignetteBean();
                 localObject1 = localObject2;
-                ((DStickerVignetteBean) localObject2).dr = (localJSONObject2.getInt("showTop") == 1);
+                ((DStickerVignetteBean) localObject2).showTop = (localJSONObject2.getInt("showTop") == 1);
             }
             DstickerDataBean dstickerDataBean= ((DstickerDataBean) localObject1);
             dstickerDataBean.width = localJSONObject2.getInt("width");
             dstickerDataBean.height = localJSONObject2.getInt("height");
-            dstickerDataBean.dg = localJSONObject2.getInt("frames");
-            dstickerDataBean.name = localJSONObject2.getString("folderName");
-            dstickerDataBean.dh = localJSONObject2.getInt("frameDuration");
-            dstickerDataBean.di = localJSONObject2.getInt("triggerType");
-            dstickerDataBean.dj = (localJSONObject2.getInt("looping") == 1);
-            dstickerDataBean.dk = (localJSONObject2.getInt("showUtilFinish") == 1);
-            dstickerDataBean.bS = localJSONObject2.optString("audio");
-            dstickerDataBean.dl = (localJSONObject2.optInt("alignAudio", 0) == 1);
-            dstickerDataBean.cN = 5;
+            dstickerDataBean.frames = localJSONObject2.getInt("frames");
+            dstickerDataBean.folderName = localJSONObject2.getString("folderName");
+            dstickerDataBean.frameDuration = localJSONObject2.getInt("frameDuration");
+            dstickerDataBean.triggerType = localJSONObject2.getInt("triggerType");
+            dstickerDataBean.looping = (localJSONObject2.getInt("looping") == 1);
+            dstickerDataBean.showUtilFinish = (localJSONObject2.getInt("showUtilFinish") == 1);
+            dstickerDataBean.audio = localJSONObject2.optString("audio");
+            dstickerDataBean.alignAudio = (localJSONObject2.optInt("alignAudio", 0) == 1);
+            dstickerDataBean.maxcount = 5;
 
-            localDynamicStickerData.cK.add(dstickerDataBean);
+            localDynamicStickerData.dstickerDataBeanList.add(dstickerDataBean);
         }
         return localDynamicStickerData;
     }
@@ -233,7 +233,7 @@ public class FilterFactory {
 
             localObject2 = localJSONObject2.getString("type");
             if ("dsticker".equals(localObject2)) {
-                ((MultiSectionInfo.a) localObject1).dQ = a(localJSONObject2.getJSONObject("data"));
+                ((MultiSectionInfo.a) localObject1).dQ = parseDstickerDataBean(localJSONObject2.getJSONObject("data"));
             } else if ("shapechange".equals(localObject2)) {
                 ((MultiSectionInfo.a) localObject1).dQ = a(paramString1, localJSONObject2.getJSONObject("data"));
             } else if ("makeup".equals(localObject2)) {
@@ -394,7 +394,7 @@ public class FilterFactory {
         return locala;
     }
 
-    static DstickerDataBean a(JSONObject paramJSONObject)
+    static DstickerDataBean parseDstickerDataBean(JSONObject paramJSONObject)
             throws JSONException {
         String str = paramJSONObject.getString("type");
         DstickerDataBean localObject1 = null;
@@ -403,31 +403,31 @@ public class FilterFactory {
             localObject2 = new DstickerDataBeanExt();
             localObject1 = localObject2;
             JSONArray localJSONArray = paramJSONObject.getJSONArray("alignIndexLst");
-            ((DstickerDataBeanExt) localObject2).dm = new int[localJSONArray.length()];
+            ((DstickerDataBeanExt) localObject2).alignIndexLst = new int[localJSONArray.length()];
             for (int i = 0; i < localJSONArray.length(); i++) {
-                ((DstickerDataBeanExt) localObject2).dm[i] = localJSONArray.getInt(i);
+                ((DstickerDataBeanExt) localObject2).alignIndexLst[i] = localJSONArray.getInt(i);
             }
-            ((DstickerDataBeanExt) localObject2).dn = paramJSONObject.getInt("alignX");
-            ((DstickerDataBeanExt) localObject2).jdField_do = paramJSONObject.getInt("alignY");
+            ((DstickerDataBeanExt) localObject2).alignX = paramJSONObject.getInt("alignX");
+            ((DstickerDataBeanExt) localObject2).alignY = paramJSONObject.getInt("alignY");
             ((DstickerDataBeanExt) localObject2).scaleWidth = paramJSONObject.getInt("scaleWidth");
-            ((DstickerDataBeanExt) localObject2).dp = paramJSONObject.getInt("leftIndex");
-            ((DstickerDataBeanExt) localObject2).dq = paramJSONObject.getInt("rightIndex");
+            ((DstickerDataBeanExt) localObject2).leftIndex = paramJSONObject.getInt("leftIndex");
+            ((DstickerDataBeanExt) localObject2).rightIndex = paramJSONObject.getInt("rightIndex");
         } else if ("V".equals(str)) {
             localObject2 = new DStickerVignetteBean();
             localObject1 = localObject2;
-            ((DStickerVignetteBean) localObject2).dr = (paramJSONObject.getInt("showTop") == 1);
+            ((DStickerVignetteBean) localObject2).showTop = (paramJSONObject.getInt("showTop") == 1);
         }
         localObject1.width = paramJSONObject.getInt("width");
         localObject1.height = paramJSONObject.getInt("height");
-        localObject1.dg = paramJSONObject.getInt("frames");
-        localObject1.name = paramJSONObject.getString("folderName");
-        localObject1.dh = paramJSONObject.getInt("frameDuration");
-        localObject1.di = paramJSONObject.getInt("triggerType");
-        localObject1.dj = (paramJSONObject.getInt("looping") == 1);
-        localObject1.dk = (paramJSONObject.getInt("showUtilFinish") == 1);
-        localObject1.bS = paramJSONObject.optString("audio");
-        localObject1.dl = (paramJSONObject.optInt("alignAudio", 0) == 1);
-        localObject1.cN = paramJSONObject.getInt("maxcount");
+        localObject1.frames = paramJSONObject.getInt("frames");
+        localObject1.folderName = paramJSONObject.getString("folderName");
+        localObject1.frameDuration = paramJSONObject.getInt("frameDuration");
+        localObject1.triggerType = paramJSONObject.getInt("triggerType");
+        localObject1.looping = (paramJSONObject.getInt("looping") == 1);
+        localObject1.showUtilFinish = (paramJSONObject.getInt("showUtilFinish") == 1);
+        localObject1.audio = paramJSONObject.optString("audio");
+        localObject1.alignAudio = (paramJSONObject.optInt("alignAudio", 0) == 1);
+        localObject1.maxcount = paramJSONObject.getInt("maxcount");
 
         return localObject1;
     }
@@ -435,40 +435,40 @@ public class FilterFactory {
     public static MakeupData parseMakeUpInfo(String paramString, JSONObject paramJSONObject)
             throws IOException, JSONException {
         MakeupData locala = new MakeupData();
-        locala.ep = paramJSONObject.getInt("resloadtype");
-        locala.name = paramJSONObject.getString("foldername");
-        locala.cN = paramJSONObject.getInt("maxcount");
+        locala.resloadtype = paramJSONObject.getInt("resloadtype");
+        locala.foldername = paramJSONObject.getString("foldername");
+        locala.maxcount = paramJSONObject.getInt("maxcount");
         JSONArray localJSONArray1 = paramJSONObject.getJSONArray("triangles");
-        locala.cN = Math.min(localJSONArray1.length(), locala.cN);
+        locala.maxcount = Math.min(localJSONArray1.length(), locala.maxcount);
 
         locala.eo = new ArrayList();
-        for (int i = 0; i < locala.cN; i++) {
+        for (int i = 0; i < locala.maxcount; i++) {
             MakeupData.a locala1 = new MakeupData.a();
             JSONObject localJSONObject = localJSONArray1.getJSONObject(i);
 
-            locala1.eq = localJSONObject.getString("res");
+            locala1.res = localJSONObject.getString("res");
             JSONArray localJSONArray2 = localJSONObject.getJSONArray("vertexIndexes");
-            locala1.er = new int[localJSONArray2.length()];
+            locala1.vertexIndexes = new int[localJSONArray2.length()];
             for (int j = 0; j < localJSONArray2.length(); j++) {
-                locala1.er[j] = localJSONArray2.getInt(j);
+                locala1.vertexIndexes[j] = localJSONArray2.getInt(j);
             }
             JSONArray localJSONArray3 = localJSONObject.optJSONArray("facePointOffset");
             if (null != localJSONArray3) {
                 if (localJSONArray3.length() % 5 != 0) {
                     throw new JSONException("facePointOffset is not multiple of 5");
                 }
-                locala1.es = new MakeupData.b[localJSONArray3.length() / 5];
-                for (int k = 0; k < locala1.es.length; k++) {
+                locala1.facePointOffset = new MakeupData.b[localJSONArray3.length() / 5];
+                for (int k = 0; k < locala1.facePointOffset.length; k++) {
                     MakeupData.b localb = new MakeupData.b();
                     localb.ew = localJSONArray3.getInt(5 * k);
                     localb.ex = localJSONArray3.getInt(5 * k + 1);
                     localb.ey = ((float) localJSONArray3.getDouble(5 * k + 2));
                     localb.ez = localJSONArray3.getInt(5 * k + 3);
                     localb.eA = ((float) localJSONArray3.getDouble(5 * k + 4));
-                    locala1.es[k] = localb;
+                    locala1.facePointOffset[k] = localb;
                 }
             } else {
-                locala1.es = new MakeupData.b[0];
+                locala1.facePointOffset = new MakeupData.b[0];
             }
             JSONArray localJSONArray4 = localJSONObject.getJSONArray("resFacePoints");
             if (localJSONArray4.length() != 212) {

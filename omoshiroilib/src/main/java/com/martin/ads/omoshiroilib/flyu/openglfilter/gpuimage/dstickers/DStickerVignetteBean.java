@@ -6,6 +6,6 @@ package com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.dstickers;
 
 public class DStickerVignetteBean extends DstickerDataBean
 {
-    public boolean dr;
+    public boolean showTop;
 }
 

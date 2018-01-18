@@ -5,10 +5,10 @@ package com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.dstickers;
  */
 
 public class DstickerDataBeanExt extends DstickerDataBean {
-    public int[] dm;
-    public int dn;
-    public int jdField_do;
+    public int[] alignIndexLst;
+    public int alignX;
+    public int alignY;
     public int scaleWidth;
-    public int dp;
-    public int dq;
+    public int leftIndex;
+    public int rightIndex;
 }

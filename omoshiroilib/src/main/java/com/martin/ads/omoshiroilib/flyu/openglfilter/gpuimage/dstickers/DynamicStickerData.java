@@ -11,7 +11,7 @@ import java.util.List;
 
 public class DynamicStickerData extends AbsData
 {
-    public List<DstickerDataBean> cK;
+    public List<DstickerDataBean> dstickerDataBeanList;
     public String bS;
     public boolean cL;
     public String cM;
@@ -19,7 +19,7 @@ public class DynamicStickerData extends AbsData
 
     public DynamicStickerData()
     {
-        this.cK = new ArrayList();
+        this.dstickerDataBeanList = new ArrayList();
     }
 
     public String m()

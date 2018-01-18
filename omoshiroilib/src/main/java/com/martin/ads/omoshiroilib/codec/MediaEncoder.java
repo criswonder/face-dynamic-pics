@@ -265,7 +265,7 @@ public abstract class MediaEncoder implements Runnable {
         Log.d(TAG, "encode: " + this.getClass().getSimpleName() + " " + mIsCapturing);
         if (!mIsCapturing) return;
         final ByteBuffer[] inputBuffers = mMediaCodec.getInputBuffers();
-        Log.e(TAG,"andymao->encode "+Thread.currentThread().getName());
+//        Log.e(TAG,"andymao->encode "+Thread.currentThread().getName());
         while (mIsCapturing) {
             final int inputBufferIndex = mMediaCodec.dequeueInputBuffer(TIMEOUT_USEC);
             Log.d(TAG, "encode: " + this.getClass().getSimpleName() + " " + inputBufferIndex);
@@ -377,7 +377,7 @@ public abstract class MediaEncoder implements Runnable {
                     // write encoded data to muxer(need to adjust presentationTimeUs.
                     mBufferInfo.presentationTimeUs = getPTSUs();
                     Log.e(TAG, this.getClass().getSimpleName() + " drain pts=" + mBufferInfo.presentationTimeUs);
-                    Log.e(TAG,"andymao->write sample "+Thread.currentThread().getName());
+//                    Log.e(TAG,"andymao->write sample "+Thread.currentThread().getName());
                     muxer.writeSampleData(mTrackIndex, encodedData, mBufferInfo);
                     prevOutputPTSUs = mBufferInfo.presentationTimeUs;
                 }

@@ -31,8 +31,8 @@ public class DynamicStickerDot extends DynamicStickerBase
         this.cU = paramb;
 
         this.cY = this.cU.scaleWidth;
-        this.cZ = this.cU.dn;
-        this.da = this.cU.jdField_do;
+        this.cZ = this.cU.alignX;
+        this.da = this.cU.alignY;
         this.bi = (this.bj = this.bk = 50);
     }
 
@@ -62,18 +62,18 @@ public class DynamicStickerDot extends DynamicStickerBase
     protected void d(int var1) {
         super.d(var1);
         this.cU.scaleWidth = (int)(this.cY + this.g(this.bi) * this.cY);
-        this.cU.dn = (int)(this.cZ + this.g(this.bj) * this.cZ);
-        this.cU.jdField_do = (int)(this.da + this.g(this.bk) * this.da);
+        this.cU.alignX = (int)(this.cZ + this.g(this.bj) * this.cZ);
+        this.cU.alignY = (int)(this.da + this.g(this.bk) * this.da);
         if(this.cU.scaleWidth == 0) {
             this.cU.scaleWidth = 1;
         }
 
-        int var2 = Math.min(this.aV.h, this.cU.cN);
+        int var2 = Math.min(this.aV.h, this.cU.maxcount);
         GLES20.glUniform1i(this.cR, var2);
         GLES20.glUniform1i(this.cS, this.aY?1:0);
 
         for(int var3 = 0; var3 < var2; ++var3) {
-            float var4 = (float)this.a(this.aV.i[var3][this.cU.dq].x, this.aV.i[var3][this.cU.dq].y, this.aV.i[var3][this.cU.dp].x, this.aV.i[var3][this.cU.dp].y) / (float)this.cU.scaleWidth;
+            float var4 = (float)this.a(this.aV.i[var3][this.cU.rightIndex].x, this.aV.i[var3][this.cU.rightIndex].y, this.aV.i[var3][this.cU.leftIndex].x, this.aV.i[var3][this.cU.leftIndex].y) / (float)this.cU.scaleWidth;
             float var5 = var4 * (float)this.cU.width;
             float var6 = var5 * (float)this.cU.height / (float)this.cU.width;
             float var8 = 0.0F;
@@ -89,15 +89,15 @@ public class DynamicStickerDot extends DynamicStickerBase
             float var13 = 0.0F;
 
             int var14;
-            for(var14 = 0; var14 < this.cU.dm.length; ++var14) {
-                var12 += this.g(var3, this.cU.dm[var14]);
-                var13 += this.h(var3, this.cU.dm[var14]);
+            for(var14 = 0; var14 < this.cU.alignIndexLst.length; ++var14) {
+                var12 += this.g(var3, this.cU.alignIndexLst[var14]);
+                var13 += this.h(var3, this.cU.alignIndexLst[var14]);
             }
 
-            var12 /= (float)this.cU.dm.length;
-            var13 /= (float)this.cU.dm.length;
-            var14 = this.cU.width / 2 - this.cU.dn;
-            int var15 = this.cU.height / 2 - this.cU.jdField_do;
+            var12 /= (float)this.cU.alignIndexLst.length;
+            var13 /= (float)this.cU.alignIndexLst.length;
+            var14 = this.cU.width / 2 - this.cU.alignX;
+            int var15 = this.cU.height / 2 - this.cU.alignY;
             float var16 = (float)var14 * 1.0F / (float)this.cU.width * var5;
             float var17 = (float)var15 * 1.0F / (float)this.cU.height * var6;
             float var18;

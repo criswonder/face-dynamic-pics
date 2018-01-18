@@ -395,7 +395,7 @@ public class GLRender implements GLSurfaceView.Renderer , IFaceDetector.FaceDete
 
         mGroupBase.draw(lastProcessFilter.getLastTextureId(), fbo.getFrameBuffer(), mGLCubeBuffer, mGLTextureBuffer);
         fbo.unbind();
-        lastProcessFilter.setSavedTextureId(fbo.getFrameBufferTextureId());
+        lastProcessFilter.setSavedTextureId(fbo.getFrameBufferTextureId());//保存的这个textureid会给VideoEncoder线程共享
         screenDrawer.onFilterChanged(surfaceWidth,surfaceHeight);
         screenDrawer.onDrawFrame(fbo.getFrameBufferTextureId());
         runAll(mRunOnDrawEnd);
@@ -512,7 +512,8 @@ public class GLRender implements GLSurfaceView.Renderer , IFaceDetector.FaceDete
 
     public void startRecording() {
         try {
-            File vidFolder=GlobalConfig.context.getExternalCacheDir();
+            File vidFolder=new File("/sdcard/av_framework/");
+//            File vidFolder=GlobalConfig.context.getExternalCacheDir();
             if (!vidFolder.exists())
                 vidFolder.mkdirs();
             outputPath=vidFolder.getAbsolutePath()+FileUtils.getVidName();

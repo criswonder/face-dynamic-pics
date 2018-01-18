@@ -36,7 +36,7 @@ public class DynamicStickerBase extends GPUImageFilterE {
         super(paramString2, paramString3);
         this.cE = paramString1;
         this.cF = parama;
-        this.bh = this.cF.name;
+        this.bh = this.cF.folderName;
 
         String str = this.cE.substring("file://".length());
         Pair localPair = MResFileReaderBase.tryGetMergeFile(str);
@@ -56,11 +56,11 @@ public class DynamicStickerBase extends GPUImageFilterE {
             }
         }
         this.cC = -1;
-        if ((!MiscUtils.isNilOrNull(this.cF.bS)) &&
+        if ((!MiscUtils.isNilOrNull(this.cF.audio)) &&
                 (this.cE.startsWith("file://"))) {
             String str = this.cE.substring("file://".length());
-            a(Uri.parse(str + "/" + this.cF.bS));
-            b(this.cF.dj);
+            a(Uri.parse(str + "/" + this.cF.audio));
+            b(this.cF.looping);
         }
     }
 
@@ -78,14 +78,14 @@ public class DynamicStickerBase extends GPUImageFilterE {
             stop();
             return;
         }
-        if (((1 != this.cF.di) || (!this.aV.b())) && ((0 != this.cF.di) ||
-                (!this.aV.c())) && (2 != this.cF.di)) {
-            if (3 != this.cF.di) {
+        if (((1 != this.cF.triggerType) || (!this.aV.b())) && ((0 != this.cF.triggerType) ||
+                (!this.aV.c())) && (2 != this.cF.triggerType)) {
+            if (3 != this.cF.triggerType) {
 
             }
         }
         int i = this.aV.d() ? 1 : 0;
-        if ((i == 0) && (!this.cF.dk)) {
+        if ((i == 0) && (!this.cF.showUtilFinish)) {
             this.cJ = 0;
             stop();
             this.cI = -1L;
@@ -107,9 +107,9 @@ public class DynamicStickerBase extends GPUImageFilterE {
         if (this.cI == -1L) {
             this.cI = System.currentTimeMillis();
         }
-        int j = (int) ((System.currentTimeMillis() - this.cI) / this.cF.dh);
-        if (j >= this.cF.dg) {
-            if (!this.cF.dj) {
+        int j = (int) ((System.currentTimeMillis() - this.cI) / this.cF.frameDuration);
+        if (j >= this.cF.frames) {
+            if (!this.cF.looping) {
                 this.cI = -1L;
                 this.cC = -1;
                 this.cH = -1;
@@ -125,7 +125,7 @@ public class DynamicStickerBase extends GPUImageFilterE {
         if (this.cH == j) {
             return;
         }
-        if ((j == 0) && (this.cF.dl)) {
+        if ((j == 0) && (this.cF.alignAudio)) {
             r();
         }
         Bitmap localBitmap = null;
@@ -133,7 +133,7 @@ public class DynamicStickerBase extends GPUImageFilterE {
             localBitmap = this.cG.loadBitmapAtIndex(j);
         }
         if (null == localBitmap) {
-            String str1 = String.format(this.cF.name + "_%03d.png", new Object[]{Integer.valueOf(j)});
+            String str1 = String.format(this.cF.folderName + "_%03d.png", new Object[]{Integer.valueOf(j)});
             if (this.cE.startsWith("file://")) {
                 String str2 = this.cE.substring("file://".length()) + "/" + str1;
 
@@ -152,7 +152,7 @@ public class DynamicStickerBase extends GPUImageFilterE {
     }
 
     public int n() {
-        return this.cF.cN;
+        return this.cF.maxcount;
     }
 
     public void onDestroy() {
