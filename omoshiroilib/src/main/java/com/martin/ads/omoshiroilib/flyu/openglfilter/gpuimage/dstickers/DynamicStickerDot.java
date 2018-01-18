@@ -73,13 +73,13 @@ public class DynamicStickerDot extends DynamicStickerBase
         GLES20.glUniform1i(this.cS, this.aY?1:0);
 
         for(int var3 = 0; var3 < var2; ++var3) {
-            float var4 = (float)this.a(this.aV.i[var3][this.cU.rightIndex].x, this.aV.i[var3][this.cU.rightIndex].y, this.aV.i[var3][this.cU.leftIndex].x, this.aV.i[var3][this.cU.leftIndex].y) / (float)this.cU.scaleWidth;
+            float var4 = (float)this.a(this.aV.pointArray[var3][this.cU.rightIndex].x, this.aV.pointArray[var3][this.cU.rightIndex].y, this.aV.pointArray[var3][this.cU.leftIndex].x, this.aV.pointArray[var3][this.cU.leftIndex].y) / (float)this.cU.scaleWidth;
             float var5 = var4 * (float)this.cU.width;
             float var6 = var5 * (float)this.cU.height / (float)this.cU.width;
             float var8 = 0.0F;
             float var9 = -1.0F;
-            float var10 = this.aV.i[var3][43].x - this.aV.i[var3][46].x;
-            float var11 = this.aV.i[var3][43].y - this.aV.i[var3][46].y;
+            float var10 = this.aV.pointArray[var3][43].x - this.aV.pointArray[var3][46].x;
+            float var11 = this.aV.pointArray[var3][43].y - this.aV.pointArray[var3][46].y;
             float var7 = (float)Math.acos((double)(var8 * var10 + var9 * var11) / Math.sqrt((double)(var8 * var8 + var9 * var9)) / Math.sqrt((double)(var10 * var10 + var11 * var11)));
             if(var8 > var10) {
                 var7 = -var7;

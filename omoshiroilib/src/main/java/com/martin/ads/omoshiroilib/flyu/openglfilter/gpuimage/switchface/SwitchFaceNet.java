@@ -89,8 +89,8 @@ public class SwitchFaceNet extends GPUImageFilterE
             {
                 float f2 = 0.0F;
                 float f3 = -1.0F;
-                float f4 = this.aV.i[j][43].x - this.aV.i[j][46].x;
-                float f5 = this.aV.i[j][43].y - this.aV.i[j][46].y;
+                float f4 = this.aV.pointArray[j][43].x - this.aV.pointArray[j][46].x;
+                float f5 = this.aV.pointArray[j][43].y - this.aV.pointArray[j][46].y;
                 float f1 = (float)Math.acos((f2 * f4 + f3 * f5) / Math.sqrt(f2 * f2 + f3 * f3) / Math.sqrt(f4 * f4 + f5 * f5));
                 if (f2 > f4) {
                     f1 = -f1;

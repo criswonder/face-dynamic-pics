@@ -3,9 +3,7 @@ package com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.multitriangle;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.opengl.GLES20;
-import android.util.Log;
 
-import com.lemon.faceu.sdk.utils.JniEntry;
 import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.base.GPUImageFilterE;
 import com.martin.ads.omoshiroilib.flyu.ysj.OmoshiroiNative;
 
@@ -124,7 +122,7 @@ public class DrawMultiTriangleNet extends GPUImageFilterE
         for (int j = 0; j < i; j++)
         {
             i(this.ek, j + 1);
-            PointF[] arrayOfPointF = this.aV.i[j];
+            PointF[] arrayOfPointF = this.aV.pointArray[j];
             MultiTriangleInfo.a locala = (MultiTriangleInfo.a)this.eC.eI.get(j);
 
             this.el.position(0);
@@ -133,14 +131,14 @@ public class DrawMultiTriangleNet extends GPUImageFilterE
 
             float f2 = 0.0F;
             float f3 = -1.0F;
-            float f4 = this.aV.i[j][43].x - this.aV.i[j][46].x;
-            float f5 = this.aV.i[j][43].y - this.aV.i[j][46].y;
+            float f4 = this.aV.pointArray[j][43].x - this.aV.pointArray[j][46].x;
+            float f5 = this.aV.pointArray[j][43].y - this.aV.pointArray[j][46].y;
             float f1 = (float)Math.acos((f2 * f4 + f3 * f5) / Math.sqrt(f2 * f2 + f3 * f3) / Math.sqrt(f4 * f4 + f5 * f5));
             if (f2 > f4) {
                 f1 = -f1;
             }
-            float f6 = this.aV.i[j][46].x;
-            float f7 = this.aV.i[j][46].y;
+            float f6 = this.aV.pointArray[j][46].x;
+            float f7 = this.aV.pointArray[j][46].y;
 
             Matrix localMatrix1 = new Matrix();
             localMatrix1.setValues(new float[] { 1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F });

@@ -242,11 +242,11 @@ public class GPUImageFilterE extends GPUImageAudioFilter
     protected void b(int paramInt1, int paramInt2, int paramInt3)
     {
         float[] arrayOfFloat = new float[2];
-        arrayOfFloat[0] = (this.aV.i[paramInt2][paramInt3].x / this.aW);
+        arrayOfFloat[0] = (this.aV.pointArray[paramInt2][paramInt3].x / this.aW);
         if (this.aY) {
-            arrayOfFloat[1] = (1.0F - this.aV.i[paramInt2][paramInt3].y / this.aX);
+            arrayOfFloat[1] = (1.0F - this.aV.pointArray[paramInt2][paramInt3].y / this.aX);
         } else {
-            arrayOfFloat[1] = (this.aV.i[paramInt2][paramInt3].y / this.aX);
+            arrayOfFloat[1] = (this.aV.pointArray[paramInt2][paramInt3].y / this.aX);
         }
         GLES20.glUniform2fv(paramInt1, 1, arrayOfFloat, 0);
     }

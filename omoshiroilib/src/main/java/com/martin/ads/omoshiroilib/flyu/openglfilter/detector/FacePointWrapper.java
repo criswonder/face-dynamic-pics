@@ -8,14 +8,14 @@ import android.graphics.PointF;
 
 public class FacePointWrapper {
     public int h = 0;
-    public PointF[][] i = (PointF[][])null;
+    public PointF[][] pointArray = (PointF[][])null;
     double j = 0.0D;
     boolean k = false;
 
     public void a(int paramInt, PointF[][] paramArrayOfPointF)
     {
         this.h = paramInt;
-        this.i = paramArrayOfPointF;
+        this.pointArray = paramArrayOfPointF;
     }
 
     public boolean b()
@@ -23,7 +23,7 @@ public class FacePointWrapper {
         this.k = false;
         if (this.h > 0)
         {
-            PointF[] arrayOfPointF = this.i[0];
+            PointF[] arrayOfPointF = this.pointArray[0];
             double d1 = Math.sqrt(
                     Math.pow((arrayOfPointF[39].x + arrayOfPointF[36].x) * 0.5D - arrayOfPointF[43].x, 2.0D) +
                             Math.pow((arrayOfPointF[39].y + arrayOfPointF[36].y) * 0.5D - arrayOfPointF[43].y, 2.0D));
@@ -41,7 +41,7 @@ public class FacePointWrapper {
 
     public boolean c()
     {
-        if (null == this.i[0]) {
+        if (null == this.pointArray[0]) {
             return false;
         }
         return a(93, 87) > a(90, 84) * 0.8D;
@@ -49,13 +49,13 @@ public class FacePointWrapper {
 
     double a(int paramInt1, int paramInt2)
     {
-        return Math.sqrt(Math.pow(this.i[0][paramInt1].x - this.i[0][paramInt2].x, 2.0D) +
-                Math.pow(this.i[0][paramInt1].y - this.i[0][paramInt2].y, 2.0D));
+        return Math.sqrt(Math.pow(this.pointArray[0][paramInt1].x - this.pointArray[0][paramInt2].x, 2.0D) +
+                Math.pow(this.pointArray[0][paramInt1].y - this.pointArray[0][paramInt2].y, 2.0D));
     }
 
     public boolean d()
     {
-        if (null == this.i[0]) {
+        if (null == this.pointArray[0]) {
             return false;
         }
         float f1 = (float)a(93, 87);

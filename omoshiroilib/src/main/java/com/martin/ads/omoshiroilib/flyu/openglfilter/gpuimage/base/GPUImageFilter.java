@@ -85,15 +85,15 @@ public class GPUImageFilter {
 
     protected float g(int paramInt1, int paramInt2)
     {
-        return this.aV.i[paramInt1][paramInt2].x;
+        return this.aV.pointArray[paramInt1][paramInt2].x;
     }
 
     protected float h(int paramInt1, int paramInt2)
     {
         if (!this.aY) {
-            return this.aV.i[paramInt1][paramInt2].y;
+            return this.aV.pointArray[paramInt1][paramInt2].y;
         }
-        return this.aX - this.aV.i[paramInt1][paramInt2].y;
+        return this.aX - this.aV.pointArray[paramInt1][paramInt2].y;
     }
 
     public void l()

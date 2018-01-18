@@ -179,7 +179,7 @@ public class MakeUpFilter extends GPUImageFilterE {
         int i = Math.min(this.aV.h, this.ei.maxcount);
         for (int j = 0; j < i; j++) {
             i(this.ek, j + 1);
-            PointF[] arrayOfPointF = this.aV.i[j];
+            PointF[] arrayOfPointF = this.aV.pointArray[j];
             MakeupData.a locala = (MakeupData.a) this.ei.eo.get(j);
 
             int[] arrayOfInt = locala.vertexIndexes;

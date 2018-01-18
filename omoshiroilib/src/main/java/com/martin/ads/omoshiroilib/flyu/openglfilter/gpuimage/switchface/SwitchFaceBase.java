@@ -2,9 +2,7 @@ package com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.switchface;
 
 import android.graphics.PointF;
 import android.opengl.GLES20;
-import android.util.Log;
 
-import com.lemon.faceu.sdk.utils.JniEntry;
 import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.base.GPUImageFilterE;
 import com.martin.ads.omoshiroilib.flyu.ysj.OmoshiroiNative;
 
@@ -112,8 +110,8 @@ public abstract class SwitchFaceBase  extends GPUImageFilterE
         for (int i = 0; i < U(); i++)
         {
             i(this.eX, i + 1);
-            PointF[] arrayOfPointF1 = this.aV.i[i];
-            PointF[] arrayOfPointF2 = this.aV.i[V()[i]];
+            PointF[] arrayOfPointF1 = this.aV.pointArray[i];
+            PointF[] arrayOfPointF2 = this.aV.pointArray[V()[i]];
 
             this.el.position(0);
             for (int j = 0; j < eV.length; j++)
