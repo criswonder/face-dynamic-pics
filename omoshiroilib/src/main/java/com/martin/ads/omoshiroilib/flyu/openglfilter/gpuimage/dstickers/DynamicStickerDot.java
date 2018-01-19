@@ -36,13 +36,13 @@ public class DynamicStickerDot extends DynamicStickerBase
         this.bi = (this.bj = this.bk = 50);
     }
 
-    protected int k() {
+    protected int createProgram() {
         return OmoshiroiNative.loadDStickerDotFilter();
     }
 
-    public void l()
+    public void locationInit()
     {
-        super.l();
+        super.locationInit();
         this.cQ = GLES20.glGetUniformLocation(getProgram(), "inputImageTexture2");
         this.cR = GLES20.glGetUniformLocation(getProgram(), "faceCnt");
         this.cS = GLES20.glGetUniformLocation(getProgram(), "flipSticker");
@@ -68,18 +68,18 @@ public class DynamicStickerDot extends DynamicStickerBase
             this.cU.scaleWidth = 1;
         }
 
-        int var2 = Math.min(this.aV.h, this.cU.maxcount);
+        int var2 = Math.min(this.facePointWrapper.faceCount, this.cU.maxcount);
         GLES20.glUniform1i(this.cR, var2);
-        GLES20.glUniform1i(this.cS, this.aY?1:0);
+        GLES20.glUniform1i(this.cS, this.needFlip ?1:0);
 
         for(int var3 = 0; var3 < var2; ++var3) {
-            float var4 = (float)this.a(this.aV.pointArray[var3][this.cU.rightIndex].x, this.aV.pointArray[var3][this.cU.rightIndex].y, this.aV.pointArray[var3][this.cU.leftIndex].x, this.aV.pointArray[var3][this.cU.leftIndex].y) / (float)this.cU.scaleWidth;
+            float var4 = (float)this.a(this.facePointWrapper.pointArray[var3][this.cU.rightIndex].x, this.facePointWrapper.pointArray[var3][this.cU.rightIndex].y, this.facePointWrapper.pointArray[var3][this.cU.leftIndex].x, this.facePointWrapper.pointArray[var3][this.cU.leftIndex].y) / (float)this.cU.scaleWidth;
             float var5 = var4 * (float)this.cU.width;
             float var6 = var5 * (float)this.cU.height / (float)this.cU.width;
             float var8 = 0.0F;
             float var9 = -1.0F;
-            float var10 = this.aV.pointArray[var3][43].x - this.aV.pointArray[var3][46].x;
-            float var11 = this.aV.pointArray[var3][43].y - this.aV.pointArray[var3][46].y;
+            float var10 = this.facePointWrapper.pointArray[var3][43].x - this.facePointWrapper.pointArray[var3][46].x;
+            float var11 = this.facePointWrapper.pointArray[var3][43].y - this.facePointWrapper.pointArray[var3][46].y;
             float var7 = (float)Math.acos((double)(var8 * var10 + var9 * var11) / Math.sqrt((double)(var8 * var8 + var9 * var9)) / Math.sqrt((double)(var10 * var10 + var11 * var11)));
             if(var8 > var10) {
                 var7 = -var7;
@@ -102,7 +102,7 @@ public class DynamicStickerDot extends DynamicStickerBase
             float var17 = (float)var15 * 1.0F / (float)this.cU.height * var6;
             float var18;
             float var19;
-            if(!this.aY) {
+            if(!this.needFlip) {
                 var18 = var12 + var16;
                 var19 = var13 + var17;
             } else {
@@ -112,7 +112,7 @@ public class DynamicStickerDot extends DynamicStickerBase
 
             Matrix var20 = new Matrix();
             var20.setValues(new float[]{1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F});
-            if(this.aY) {
+            if(this.needFlip) {
                 var20.setRotate(-((float)((double)(var7 * 180.0F) / 3.141592653589793D)), var12, var13);
             } else {
                 var20.setRotate((float)((double)(var7 * 180.0F) / 3.141592653589793D), var12, var13);
@@ -121,20 +121,20 @@ public class DynamicStickerDot extends DynamicStickerBase
             var20.getValues(this.cX);
             float var21 = this.cX[0] * var18 + this.cX[1] * var19 + this.cX[2];
             float var22 = this.cX[3] * var18 + this.cX[4] * var19 + this.cX[5];
-            float var23 = 1.0F * (float)this.aX / (float)this.aW;
+            float var23 = 1.0F * (float)this.mOutputHeight / (float)this.mOutputWidth;
             android.opengl.Matrix.setIdentityM(this.cV, 0);
             android.opengl.Matrix.scaleM(this.cW, 0, this.cV, 0, var23, 1.0F, 1.0F);
-            android.opengl.Matrix.translateM(this.cV, 0, this.cW, 0, var21 / (float)this.aW / var23, var22 / (float)this.aX, 0.0F);
-            if(this.aY) {
+            android.opengl.Matrix.translateM(this.cV, 0, this.cW, 0, var21 / (float)this.mOutputWidth / var23, var22 / (float)this.mOutputHeight, 0.0F);
+            if(this.needFlip) {
                 android.opengl.Matrix.rotateM(this.cW, 0, this.cV, 0, (float)((double)(var7 * 180.0F) / 3.141592653589793D), 0.0F, 0.0F, 1.0F);
             } else {
                 android.opengl.Matrix.rotateM(this.cW, 0, this.cV, 0, -((float)((double)(var7 * 180.0F) / 3.141592653589793D)), 0.0F, 0.0F, 1.0F);
             }
 
-            android.opengl.Matrix.translateM(this.cV, 0, this.cW, 0, -var21 / (float)this.aW / var23, -var22 / (float)this.aX, 0.0F);
+            android.opengl.Matrix.translateM(this.cV, 0, this.cW, 0, -var21 / (float)this.mOutputWidth / var23, -var22 / (float)this.mOutputHeight, 0.0F);
             android.opengl.Matrix.scaleM(this.cW, 0, this.cV, 0, 1.0F / var23, 1.0F, 1.0F);
-            this.a(this.cO[var3], new float[]{var21 / (float)this.aW, var22 / (float)this.aX});
-            this.a(this.cP[var3], new float[]{var5 / (float)this.aW, var6 / (float)this.aX});
+            this.setFloatArray(this.cO[var3], new float[]{var21 / (float)this.mOutputWidth, var22 / (float)this.mOutputHeight});
+            this.setFloatArray(this.cP[var3], new float[]{var5 / (float)this.mOutputWidth, var6 / (float)this.mOutputHeight});
             this.setUniformMatrix4f(this.cT[var3], this.cW);
         }
 

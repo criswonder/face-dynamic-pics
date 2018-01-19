@@ -36,7 +36,7 @@ public class DynamicStickerBase extends GPUImageFilterE {
         super(paramString2, paramString3);
         this.cE = paramString1;
         this.cF = parama;
-        this.bh = this.cF.folderName;
+        this.name = this.cF.folderName;
 
         String str = this.cE.substring("file://".length());
         Pair localPair = MResFileReaderBase.tryGetMergeFile(str);
@@ -45,8 +45,8 @@ public class DynamicStickerBase extends GPUImageFilterE {
         }
     }
 
-    public void l() {
-        super.l();
+    public void locationInit() {
+        super.locationInit();
         if (null != this.cG) {
             try {
                 this.cG.init();
@@ -59,7 +59,7 @@ public class DynamicStickerBase extends GPUImageFilterE {
         if ((!MiscUtils.isNilOrNull(this.cF.audio)) &&
                 (this.cE.startsWith("file://"))) {
             String str = this.cE.substring("file://".length());
-            a(Uri.parse(str + "/" + this.cF.audio));
+            setAudioUri(Uri.parse(str + "/" + this.cF.audio));
             b(this.cF.looping);
         }
     }
@@ -73,18 +73,18 @@ public class DynamicStickerBase extends GPUImageFilterE {
 
     protected void z() {
         super.z();
-        if (this.aV.h <= 0) {
+        if (this.facePointWrapper.faceCount <= 0) {
             this.cI = -1L;
             stop();
             return;
         }
-        if (((1 != this.cF.triggerType) || (!this.aV.b())) && ((0 != this.cF.triggerType) ||
-                (!this.aV.c())) && (2 != this.cF.triggerType)) {
+        if (((1 != this.cF.triggerType) || (!this.facePointWrapper.b())) && ((0 != this.cF.triggerType) ||
+                (!this.facePointWrapper.c())) && (2 != this.cF.triggerType)) {
             if (3 != this.cF.triggerType) {
 
             }
         }
-        int i = this.aV.d() ? 1 : 0;
+        int i = this.facePointWrapper.d() ? 1 : 0;
         if ((i == 0) && (!this.cF.showUtilFinish)) {
             this.cJ = 0;
             stop();

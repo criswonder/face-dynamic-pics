@@ -18,7 +18,7 @@ public class MMediaMuxer {
     private boolean started;
 
     public MMediaMuxer(File outputFile) {
-        // Create a MediaMuxer.  We can't add the video track and start() the muxer here,
+        // Create setAudioUri MediaMuxer.  We can't add the video track and start() the muxer here,
         // because our MediaFormat doesn't have the Magic Goodies.  These can only be
         // obtained from the encoder after it has started processing data.
         try {

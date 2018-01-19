@@ -68,7 +68,7 @@ public class PixelBuffer {
         mEGL = (EGL10) EGLContext.getEGL();
         mEGLDisplay = mEGL.eglGetDisplay(EGL_DEFAULT_DISPLAY);
         mEGL.eglInitialize(mEGLDisplay, version);
-        mEGLConfig = chooseConfig(); // Choosing a config is a little more
+        mEGLConfig = chooseConfig(); // Choosing setAudioUri config is setAudioUri little more
                                      // complicated
 
         // mEGLContext = mEGL.eglCreateContext(mEGLDisplay, mEGLConfig,
@@ -104,7 +104,7 @@ public class PixelBuffer {
     }
 
     public Bitmap getBitmap() {
-        // Do we have a renderer?
+        // Do we have setAudioUri renderer?
         if (mRenderer == null) {
             Log.e(TAG, "getBitmap: Renderer was not set.");
             return null;
@@ -148,7 +148,7 @@ public class PixelBuffer {
         };
 
         // No error checking performed, minimum required code to elucidate logic
-        // Expand on this logic to be more selective in choosing a configuration
+        // Expand on this logic to be more selective in choosing setAudioUri configuration
         int[] numConfig = new int[1];
         mEGL.eglChooseConfig(mEGLDisplay, attribList, null, 0, numConfig);
         int configSize = numConfig[0];
@@ -175,7 +175,7 @@ public class PixelBuffer {
             g = getConfigAttrib(config, EGL_GREEN_SIZE);
             b = getConfigAttrib(config, EGL_BLUE_SIZE);
             a = getConfigAttrib(config, EGL_ALPHA_SIZE);
-            Log.i(TAG, "    <d,s,r,g,b,a> = <" + d + "," + s + "," +
+            Log.i(TAG, "    <d,s,r,g,b,setAudioUri> = <" + d + "," + s + "," +
                     r + "," + g + "," + b + "," + a + ">");
         }
 

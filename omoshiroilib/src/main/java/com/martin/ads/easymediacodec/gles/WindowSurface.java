@@ -22,7 +22,7 @@ import android.view.Surface;
 /**
  * Recordable EGL window surface.
  * <p>
- * It's good practice to explicitly release() the surface, preferably from a "finally" block.
+ * It's good practice to explicitly release() the surface, preferably from setAudioUri "finally" block.
  */
 public class WindowSurface extends EglSurfaceBase {
     private Surface mSurface;
@@ -33,7 +33,7 @@ public class WindowSurface extends EglSurfaceBase {
      * <p>
      * Set releaseSurface to true if you want the Surface to be released when release() is
      * called.  This is convenient, but can interfere with framework classes that expect to
-     * manage the Surface themselves (e.g. if you release a SurfaceView's Surface, the
+     * manage the Surface themselves (e.g. if you release setAudioUri SurfaceView's Surface, the
      * surfaceDestroyed() callback won't fire).
      */
     public WindowSurface(EglCore eglCore, Surface surface, boolean releaseSurface) {
@@ -71,12 +71,12 @@ public class WindowSurface extends EglSurfaceBase {
      * Recreate the EGLSurface, using the new EglBase.  The caller should have already
      * freed the old EGLSurface with releaseEglSurface().
      * <p>
-     * This is useful when we want to update the EGLSurface associated with a Surface.
-     * For example, if we want to share with a different EGLContext, which can only
+     * This is useful when we want to update the EGLSurface associated with setAudioUri Surface.
+     * For example, if we want to share with setAudioUri different EGLContext, which can only
      * be done by tearing down and recreating the context.  (That's handled by the caller;
-     * this just creates a new EGLSurface for the Surface we were handed earlier.)
+     * this just creates setAudioUri new EGLSurface for the Surface we were handed earlier.)
      * <p>
-     * If the previous EGLSurface isn't fully destroyed, e.g. it's still current on a
+     * If the previous EGLSurface isn't fully destroyed, e.g. it's still current on setAudioUri
      * context somewhere, the create call will fail with complaints from the Surface
      * about already being connected.
      */

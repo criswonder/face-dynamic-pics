@@ -21,38 +21,38 @@ public class ShapeChangeFilter extends GPUImageFilterE
     static final String TAG = "ShapeChangeFilter";
     static final String dW = "#define parameter";
     static final String dX = "uniform float parameter;";
-    GroupData dY;
-    String bV;
+    GroupData mGroupData;
+    String mFragmentStr;
     PointF pointF = new PointF(0.0F, 0.0F);
-    int[] cB;
-    int[] dZ;
-    int ea;
-    int cr;
-    int cs;
+    int[] muLocations;
+    int[] muAngleLocations;
+    int muOrientationLoction;
+    int muDetectLocation;
+    int muTimeLocation;
     float ct;
     float cu;
     boolean eb = false;
-    int ec = -1;
+    int muParameterLocation = -1;
 
-    public ShapeChangeFilter(String paramString, GroupData parama)
+    public ShapeChangeFilter(String fragmentStr, GroupData parama)
     {
-        super(paramString, "attribute vec4 position;\nattribute vec4 inputTextureCoordinate;\n \nvarying vec2 textureCoordinate;\n \nvoid main()\n{\n    gl_Position = position;\n    textureCoordinate = inputTextureCoordinate.xy;\n}", parama.bN);
-        this.bV = paramString;
-        this.dY = parama;
-        this.fragmentSource = l(this.fragmentSource);
-        this.bh = this.dY.name;
-        for (int i = 0; i < this.dY.ed.size(); i++) {
-            j(this.bV + "/" + (String)this.dY.ed.get(i));
+        super(fragmentStr, "attribute vec4 position;\nattribute vec4 inputTextureCoordinate;\n \nvarying vec2 textureCoordinate;\n \nvoid main()\n{\n    gl_Position = position;\n    textureCoordinate = inputTextureCoordinate.xy;\n}", parama.glsl);
+        this.mFragmentStr = fragmentStr;
+        this.mGroupData = parama;
+        this.fragmentSource = seeIfNeedDefineParameter(this.fragmentSource);
+        this.name = this.mGroupData.name;
+        for (int i = 0; i < this.mGroupData.resList.size(); i++) {
+            j(this.mFragmentStr + "/" + (String)this.mGroupData.resList.get(i));
         }
-        if (!MiscUtils.isNilOrNull(this.dY.bS)) {
-            a(Uri.parse(this.bV + "/" + this.dY.bS));
+        if (!MiscUtils.isNilOrNull(this.mGroupData.audio)) {
+            setAudioUri(Uri.parse(this.mFragmentStr + "/" + this.mGroupData.audio));
         }
-        if (1 == this.dY.ee) {
+        if (1 == this.mGroupData.resloadtype) {
             F();
         }
     }
 
-    String l(String paramString)
+    String seeIfNeedDefineParameter(String paramString)
     {
         if (paramString.contains("#define parameter"))
         {
@@ -67,28 +67,28 @@ public class ShapeChangeFilter extends GPUImageFilterE
         return paramString;
     }
 
-    public void l()
+    public void locationInit()
     {
-        super.l();
+        super.locationInit();
 
-        this.cB = new int[this.dY.cv.size()];
-        for (int i = 0; i < this.dY.cv.size(); i++) {
-            this.cB[i] = GLES20.glGetUniformLocation(getProgram(), "location" + i);
+        this.muLocations = new int[this.mGroupData.pointIndexArray.size()];
+        for (int i = 0; i < this.mGroupData.pointIndexArray.size(); i++) {
+            this.muLocations[i] = GLES20.glGetUniformLocation(getProgram(), "location" + i);
         }
-        this.dZ = new int[this.dY.cN];
-        for (int i = 0; i < this.dY.cN; i++) {
-            this.dZ[i] = GLES20.glGetUniformLocation(getProgram(), "angle" + i);
+        this.muAngleLocations = new int[this.mGroupData.maxcount];
+        for (int i = 0; i < this.mGroupData.maxcount; i++) {
+            this.muAngleLocations[i] = GLES20.glGetUniformLocation(getProgram(), "angle" + i);
         }
-        this.ea = GLES20.glGetUniformLocation(getProgram(), "m_orientation");
-        this.cr = GLES20.glGetUniformLocation(getProgram(), "m_detect");
-        this.cs = GLES20.glGetUniformLocation(getProgram(), "m_time");
-        this.ec = GLES20.glGetUniformLocation(getProgram(), "parameter");
+        this.muOrientationLoction = GLES20.glGetUniformLocation(getProgram(), "m_orientation");
+        this.muDetectLocation = GLES20.glGetUniformLocation(getProgram(), "m_detect");
+        this.muTimeLocation = GLES20.glGetUniformLocation(getProgram(), "m_time");
+        this.muParameterLocation = GLES20.glGetUniformLocation(getProgram(), "parameter");
     }
 
     protected void d(int paramInt)
     {
         super.d(paramInt);
-        int i = Math.min(this.aV.h, this.dY.cN);
+        int i = Math.min(this.facePointWrapper.faceCount, this.mGroupData.maxcount);
 
         int j = 0;
         switch (this.ba)
@@ -105,64 +105,64 @@ public class ShapeChangeFilter extends GPUImageFilterE
             case 3:
                 j = 2;
         }
-        if (-1 != this.ea) {
-            i(this.ea, j);
+        if (-1 != this.muOrientationLoction) {
+            setInt(this.muOrientationLoction, j);
         }
-        if (-1 != this.ec) {
-            setFloat(this.ec, this.bi * 0.01F);
+        if (-1 != this.muParameterLocation) {
+            setFloat(this.muParameterLocation, this.bi * 0.01F);
         }
-        for (int k = 0; k < this.cB.length; k++)
+        for (int k = 0; k < this.muLocations.length; k++)
         {
-            GroupData.b locala = (GroupData.b)this.dY.cv.get(k);
-            if (locala.cx >= i) {
-                a(this.cB[k], this.pointF);
+            GroupData.Point locala = (GroupData.Point)this.mGroupData.pointIndexArray.get(k);
+            if (locala.x >= i) {
+                setPointF(this.muLocations[k], this.pointF);
             } else {
-                b(this.cB[k], locala.cx, locala.cy);
+                b(this.muLocations[k], locala.x, locala.y);
             }
         }
-        for (int k = 0; k < this.dZ.length; k++) {
+        for (int k = 0; k < this.muAngleLocations.length; k++) {
             if (k >= i)
             {
-                a(this.dZ[k], new PointF(0.0F, 0.0F));
+                setPointF(this.muAngleLocations[k], new PointF(0.0F, 0.0F));
             }
             else
             {
                 float f2 = 0.0F;
                 float f3 = -1.0F;
-                float f4 = this.aV.pointArray[k][43].x - this.aV.pointArray[k][46].x;
-                float f5 = this.aV.pointArray[k][43].y - this.aV.pointArray[k][46].y;
+                float f4 = this.facePointWrapper.pointArray[k][43].x - this.facePointWrapper.pointArray[k][46].x;
+                float f5 = this.facePointWrapper.pointArray[k][43].y - this.facePointWrapper.pointArray[k][46].y;
                 float f1 = (float)Math.acos((f2 * f4 + f3 * f5) / Math.sqrt(f2 * f2 + f3 * f3) / Math.sqrt(f4 * f4 + f5 * f5));
                 if (f2 > f4) {
                     f1 = -f1;
                 }
-                a(this.dZ[k], new PointF(
+                setPointF(this.muAngleLocations[k], new PointF(
                         (float)Math.sin(-f1 + 1.5707963267948966D), (float)Math.cos(-f1 + 1.5707963267948966D)));
             }
         }
-        if ((-1 != this.cs) && (-1 != this.cr))
+        if ((-1 != this.muTimeLocation) && (-1 != this.muDetectLocation))
         {
             if (i > 0)
             {
                 if (this.cu >= 1.9F) {
-                    this.cu = this.dY.bO[0];
+                    this.cu = this.mGroupData.timeparam[0];
                 } else {
                     this.cu = 1.0F;
                 }
-                if (((this.dY.di == 1) && (this.aV.b())) || ((this.dY.di == 0) &&
-                        (this.aV.c())) || (this.dY.di == 2))
+                if (((this.mGroupData.triggerType == 1) && (this.facePointWrapper.b())) || ((this.mGroupData.triggerType == 0) &&
+                        (this.facePointWrapper.c())) || (this.mGroupData.triggerType == 2))
                 {
                     this.cu = 2.1F;
                     start();
-                    if (this.ct >= this.dY.bO[2]) {
-                        this.cu = this.dY.bO[3];
+                    if (this.ct >= this.mGroupData.timeparam[2]) {
+                        this.cu = this.mGroupData.timeparam[3];
                     }
                 }
                 else
                 {
-                    if (this.dY.bQ == 1) {
+                    if (this.mGroupData.soundPlayMode == 1) {
                         stop();
                     }
-                    this.cu += this.dY.bO[4];
+                    this.cu += this.mGroupData.timeparam[4];
                 }
             }
             else
@@ -171,10 +171,10 @@ public class ShapeChangeFilter extends GPUImageFilterE
                 this.ct = 0.0F;
                 stop();
             }
-            if (this.cu >= this.dY.bO[5])
+            if (this.cu >= this.mGroupData.timeparam[5])
             {
-                this.ct += E() * this.dY.bO[6];
-                if (this.ct > this.dY.bO[7])
+                this.ct += E() * this.mGroupData.timeparam[6];
+                if (this.ct > this.mGroupData.timeparam[7])
                 {
                     this.ct = 0.0F;
                     this.cu = 1.0F;
@@ -185,8 +185,8 @@ public class ShapeChangeFilter extends GPUImageFilterE
             {
                 this.ct = 0.0F;
             }
-            setFloat(this.cs, this.ct);
-            setFloat(this.cr, this.cu);
+            setFloat(this.muTimeLocation, this.ct);
+            setFloat(this.muDetectLocation, this.cu);
         }
     }
 
@@ -208,12 +208,12 @@ public class ShapeChangeFilter extends GPUImageFilterE
 
     public int n()
     {
-        return this.dY.cN;
+        return this.mGroupData.maxcount;
     }
 
     public boolean B()
     {
-        return 2 != this.dY.ee;
+        return 2 != this.mGroupData.resloadtype;
     }
 
     public boolean R()
@@ -228,7 +228,7 @@ public class ShapeChangeFilter extends GPUImageFilterE
         localArrayList.add(str);
         try
         {
-            IOUtils.writeLinesToFile(this.bV, "glsl", localArrayList);
+            IOUtils.writeLinesToFile(this.mFragmentStr, "glsl", localArrayList);
         }
         catch (IOException localIOException)
         {

@@ -9,7 +9,7 @@ package com.martin.ads.omoshiroilib.codec;
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *  You may obtain setAudioUri copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -249,7 +249,7 @@ public abstract class MediaEncoder implements Runnable {
     protected void signalEndOfInputStream() {
         if (DEBUG) Log.d(TAG, "sending EOS to encoder");
         // signalEndOfInputStream is only avairable for video encoding with surface
-        // and equivalent sending a empty buffer with BUFFER_FLAG_END_OF_STREAM flag.
+        // and equivalent sending setAudioUri empty buffer with BUFFER_FLAG_END_OF_STREAM flag.
 //		mMediaCodec.signalEndOfInputStream();	// API >= 18
         encode(null, 0, getPTSUs());
     }
@@ -355,7 +355,7 @@ public abstract class MediaEncoder implements Runnable {
             } else {
                 final ByteBuffer encodedData = encoderOutputBuffers[encoderStatus];
                 if (encodedData == null) {
-                    // this never should come...may be a MediaCodec internal error
+                    // this never should come...may be setAudioUri MediaCodec internal error
                     throw new RuntimeException("encoderOutputBuffer " + encoderStatus + " was null");
                 }
                 if ((mBufferInfo.flags & MediaCodec.BUFFER_FLAG_CODEC_CONFIG) != 0) {

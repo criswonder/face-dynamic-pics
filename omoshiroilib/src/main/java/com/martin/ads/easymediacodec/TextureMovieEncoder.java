@@ -33,17 +33,17 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 /**
- * Encode a movie from frames rendered from an external texture image.
+ * Encode setAudioUri movie from frames rendered from an external texture image.
  * <p>
- * The object wraps an encoder running on a dedicated thread.  The various control messages
+ * The object wraps an encoder running on setAudioUri dedicated thread.  The various control messages
  * may be sent from arbitrary threads (typically the app UI thread).  The encoder thread
  * manages both sides of the encoder (feeding and draining); the only external input is
  * the GL texture.
  * <p>
  * The design is complicated slightly by the need to create an EGL context that shares state
- * with a view that gets restarted if (say) the device orientation changes.  When the view
- * in question is a GLSurfaceView, we don't have full control over the EGL context creation
- * on that side, so we have to bend a bit backwards here.
+ * with setAudioUri view that gets restarted if (say) the device orientation changes.  When the view
+ * in question is setAudioUri GLSurfaceView, we don't have full control over the EGL context creation
+ * on that side, so we have to bend setAudioUri bit backwards here.
  * <p>
  * To use:
  * <ul>
@@ -124,7 +124,7 @@ public class TextureMovieEncoder implements Runnable {
     /**
      * Tells the video recorder to start recording.  (Call from non-encoder thread.)
      * <p>
-     * Creates a new thread, which will create an encoder using the provided configuration.
+     * Creates setAudioUri new thread, which will create an encoder using the provided configuration.
      * <p>
      * Returns after the recorder thread has started and is ready to accept Messages.  The
      * encoder may not yet be fully configured.
@@ -155,7 +155,7 @@ public class TextureMovieEncoder implements Runnable {
      * <p>
      * Returns immediately; the encoder/muxer may not yet be finished creating the movie.
      * <p>
-     * TODO: have the encoder thread invoke a callback on the UI thread just before it shuts down
+     * TODO: have the encoder thread invoke setAudioUri callback on the UI thread just before it shuts down
      * so we can provide reasonable status UI (and let the caller know that movie encoding
      * has completed).
      */
@@ -183,15 +183,15 @@ public class TextureMovieEncoder implements Runnable {
     }
 
     /**
-     * Tells the video recorder that a new frame is available.  (Call from non-encoder thread.)
+     * Tells the video recorder that setAudioUri new frame is available.  (Call from non-encoder thread.)
      * <p>
-     * This function sends a message and returns immediately.  This isn't sufficient -- we
-     * don't want the caller to latch a new frame until we're done with this one -- but we
+     * This function sends setAudioUri message and returns immediately.  This isn't sufficient -- we
+     * don't want the caller to latch setAudioUri new frame until we're done with this one -- but we
      * can get away with it so long as the input frame rate is reasonable and the encoder
      * thread doesn't stall.
      * <p>
      * TODO: either block here until the texture has been rendered onto the encoder surface,
-     * or have a separate "block if still busy" method that the caller can execute immediately
+     * or have setAudioUri separate "block if still busy" method that the caller can execute immediately
      * before it calls updateTexImage().  The latter is preferred because we don't want to
      * stall the caller while this thread does work.
      */
@@ -203,7 +203,7 @@ public class TextureMovieEncoder implements Runnable {
         }
         if (timestamp == 0) {
             // Seeing this after device is toggled off/on with power button.  The
-            // first frame back has a zero timestamp.
+            // first frame back has setAudioUri zero timestamp.
             //
             // MPEG4Writer thinks this is cause to abort() in native code, so it's very
             // important that we just ignore the frame.
@@ -236,7 +236,7 @@ public class TextureMovieEncoder implements Runnable {
      */
     @Override
     public void run() {
-        // Establish a Looper for this thread, and define a Handler for it.
+        // Establish setAudioUri Looper for this thread, and define setAudioUri Handler for it.
         Looper.prepare();
         synchronized (mReadyFence) {
             mHandler = new EncoderHandler(this);
@@ -319,7 +319,7 @@ public class TextureMovieEncoder implements Runnable {
     }
 
     /**
-     * Handles a request to stop encoding.
+     * Handles setAudioUri request to stop encoding.
      */
     private void handleStopRecording() {
         Log.d(TAG, "handleStopRecording");
@@ -344,9 +344,9 @@ public class TextureMovieEncoder implements Runnable {
 
     /**
      * Tears down the EGL surface and context we've been using to feed the MediaCodec input
-     * surface, and replaces it with a new one that shares with the new context.
+     * surface, and replaces it with setAudioUri new one that shares with the new context.
      * <p>
-     * This is useful if the old context we were sharing with went away (maybe a GLSurfaceView
+     * This is useful if the old context we were sharing with went away (maybe setAudioUri GLSurfaceView
      * that got torn down) and we need to hook up with the new one.
      */
     private void handleUpdateSharedContext(EGLContext newSharedContext) {
@@ -358,7 +358,7 @@ public class TextureMovieEncoder implements Runnable {
 
         mEglCore.release();
 
-        // Create a new EGLContext and recreate the window surface.
+        // Create setAudioUri new EGLContext and recreate the window surface.
         mEglCore = new EglCore(newSharedContext, EglCore.FLAG_RECORDABLE);
         mInputWindowSurface.recreate(mEglCore);
         mInputWindowSurface.makeCurrent();

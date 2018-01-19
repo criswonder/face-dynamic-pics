@@ -232,45 +232,45 @@ public class FilterFactory {
         MultiSectionInfo localMultiSectionInfo = new MultiSectionInfo();
 
         JSONObject localJSONObject1 = new JSONObject(paramString2);
-        JSONArray localJSONArray1 = localJSONObject1.getJSONArray("filterlist");
+        JSONArray jsonArray = localJSONObject1.getJSONArray("filterlist");
         localMultiSectionInfo.dJ = new HashMap();
-        Object localObject1;
-        Object localObject2;
-        for (int i = 0; i < localJSONArray1.length(); i++) {
-            JSONObject localJSONObject2 = localJSONArray1.getJSONObject(i);
-            localObject1 = new MultiSectionInfo.a();
-            ((MultiSectionInfo.a) localObject1).dN = localJSONObject2.getString("name");
-            ((MultiSectionInfo.a) localObject1).dP = (paramString1 + "/" + ((MultiSectionInfo.a) localObject1).dN);
-            ((MultiSectionInfo.a) localObject1).dO = (localJSONObject2.getInt("reload") == 1);
+        Object section;
+        Object type;
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject filterJSONObject = jsonArray.getJSONObject(i);
+            section = new MultiSectionInfo.Filter();
+            ((MultiSectionInfo.Filter) section).name = filterJSONObject.getString("name");
+            ((MultiSectionInfo.Filter) section).dP = (paramString1 + "/" + ((MultiSectionInfo.Filter) section).name);
+            ((MultiSectionInfo.Filter) section).reload = (filterJSONObject.getInt("reload") == 1);
 
-            localObject2 = localJSONObject2.getString("type");
-            if ("dsticker".equals(localObject2)) {
-                ((MultiSectionInfo.a) localObject1).dQ = parseDstickerDataBean(localJSONObject2.getJSONObject("data"));
-            } else if ("shapechange".equals(localObject2)) {
-                ((MultiSectionInfo.a) localObject1).dQ = a(paramString1, localJSONObject2.getJSONObject("data"));
-            } else if ("makeup".equals(localObject2)) {
-                ((MultiSectionInfo.a) localObject1).dQ = parseMakeUpInfo(paramString1, localJSONObject2.getJSONObject("data"));
+            type = filterJSONObject.getString("type");
+            if ("dsticker".equals(type)) {
+                ((MultiSectionInfo.Filter) section).data = parseDstickerDataBean(filterJSONObject.getJSONObject("data"));
+            } else if ("shapechange".equals(type)) {
+                ((MultiSectionInfo.Filter) section).data = parseShapeChangeData(paramString1, filterJSONObject.getJSONObject("data"));
+            } else if ("makeup".equals(type)) {
+                ((MultiSectionInfo.Filter) section).data = parseMakeUpInfo(paramString1, filterJSONObject.getJSONObject("data"));
             }
-            localMultiSectionInfo.dJ.put(((MultiSectionInfo.a) localObject1).dN, (MultiSectionInfo.a) localObject1);
+            localMultiSectionInfo.dJ.put(((MultiSectionInfo.Filter) section).name, (MultiSectionInfo.Filter) section);
         }
         JSONArray localJSONArray2 = localJSONObject1.getJSONArray("sections");
-        localMultiSectionInfo.dK = new HashMap();
+        localMultiSectionInfo.sectionsMap = new HashMap();
         Object localObject3;
         int m;
         for (int j = 0; j < localJSONArray2.length(); j++) {
-            localObject1 = new MultiSectionInfo.b();
-            localObject2 = localJSONArray2.getJSONObject(j);
+            section = new MultiSectionInfo.Section();
+            type = localJSONArray2.getJSONObject(j);
 
-            ((MultiSectionInfo.b) localObject1).dR = ((JSONObject) localObject2).getString("sectionname");
-            ((MultiSectionInfo.b) localObject1).bP = ((JSONObject) localObject2).getString("tips");
-            ((MultiSectionInfo.b) localObject1).dS = ((JSONObject) localObject2).getInt("duration");
-            ((MultiSectionInfo.b) localObject1).dT = new ArrayList();
+            ((MultiSectionInfo.Section) section).sectionname = ((JSONObject) type).getString("sectionname");
+            ((MultiSectionInfo.Section) section).tips = ((JSONObject) type).getString("tips");
+            ((MultiSectionInfo.Section) section).duration = ((JSONObject) type).getInt("duration");
+            ((MultiSectionInfo.Section) section).filterlist = new ArrayList();
 
-            localObject3 = ((JSONObject) localObject2).getJSONArray("filterlist");
+            localObject3 = ((JSONObject) type).getJSONArray("filterlist");
             for (m = 0; m < ((JSONArray) localObject3).length(); m++) {
-                ((MultiSectionInfo.b) localObject1).dT.add(((JSONArray) localObject3).getString(m));
+                ((MultiSectionInfo.Section) section).filterlist.add(((JSONArray) localObject3).getString(m));
             }
-            localMultiSectionInfo.dK.put(((MultiSectionInfo.b) localObject1).dR, (MultiSectionInfo.b) localObject1);
+            localMultiSectionInfo.sectionsMap.put(((MultiSectionInfo.Section) section).sectionname, (MultiSectionInfo.Section) section);
         }
         JSONArray localJSONArray3;
         if (!FilterCompat.noFaceuAssist) {
@@ -283,11 +283,11 @@ public class FilterFactory {
         }
         localMultiSectionInfo.dL = new HashMap();
         for (int k = 0; k < localJSONArray3.length(); k++) {
-            localObject2 = localJSONArray3.getJSONObject(k);
-            localObject3 = ((JSONObject) localObject2).getString("oldsection");
-            m = ((JSONObject) localObject2).getInt("triggerType");
-            String str = ((JSONObject) localObject2).getString("newsection");
-            int n = ((JSONObject) localObject2).optInt("sectionduration", 0);
+            type = localJSONArray3.getJSONObject(k);
+            localObject3 = ((JSONObject) type).getString("oldsection");
+            m = ((JSONObject) type).getInt("triggerType");
+            String str = ((JSONObject) type).getString("newsection");
+            int n = ((JSONObject) type).optInt("sectionduration", 0);
             Map localObject4;
             if (localMultiSectionInfo.dL.containsKey(localObject3)) {
                 localObject4 = (Map) localMultiSectionInfo.dL.get(localObject3);
@@ -373,40 +373,40 @@ public class FilterFactory {
         return localMultiTriangleInfo;
     }
 
-    static GroupData a(String paramString, JSONObject paramJSONObject)
+    static GroupData parseShapeChangeData(String paramString, JSONObject paramJSONObject)
             throws JSONException, IOException {
         GroupData locala = new GroupData();
-        if(VERBOSE) Log.e(TAG,"a");
+        if(VERBOSE) Log.e(TAG,"parseShapeChangeData");
         locala.name = paramJSONObject.getString("foldername");
-        locala.cN = paramJSONObject.getInt("maxcount");
-        locala.ee = paramJSONObject.getInt("resloadtype");
-        locala.bS = paramJSONObject.getString("audio");
-        locala.bQ = paramJSONObject.getInt("soundPlayMode");
-        locala.di = paramJSONObject.getInt("triggerType");
+        locala.maxcount = paramJSONObject.getInt("maxcount");
+        locala.resloadtype = paramJSONObject.getInt("resloadtype");
+        locala.audio = paramJSONObject.getString("audio");
+        locala.soundPlayMode = paramJSONObject.getInt("soundPlayMode");
+        locala.triggerType = paramJSONObject.getInt("triggerType");
 
-        locala.cv = new ArrayList();
+        locala.pointIndexArray = new ArrayList();
         JSONArray localJSONArray1 = paramJSONObject.getJSONArray("pointindexarray");
         for (int i = 0; i < localJSONArray1.length(); i++) {
             JSONArray localJSONArray3 = localJSONArray1.getJSONArray(i);
             for (int k = 0; k < localJSONArray3.length(); k++) {
-                GroupData.b locala1 = new GroupData.b();
-                locala1.cx = i;
-                locala1.cy = localJSONArray3.getInt(k);
-                locala.cv.add(locala1);
+                GroupData.Point point = new GroupData.Point();
+                point.x = i;
+                point.y = localJSONArray3.getInt(k);
+                locala.pointIndexArray.add(point);
             }
         }
-        locala.bO = new float[8];
+        locala.timeparam = new float[8];
         JSONArray localJSONArray2 = paramJSONObject.getJSONArray("timeparam");
         for (int j = 0; j < 8; j++) {
-            locala.bO[j] = ((float) localJSONArray2.getDouble(j));
+            locala.timeparam[j] = ((float) localJSONArray2.getDouble(j));
         }
         JSONArray localJSONArray4 = paramJSONObject.getJSONArray("reslist");
-        locala.ed = new ArrayList();
+        locala.resList = new ArrayList();
         for (int k = 0; k < localJSONArray4.length(); k++) {
-            locala.ed.add(localJSONArray4.getString(k));
+            locala.resList.add(localJSONArray4.getString(k));
         }
         File localFile = new File(paramString + "/" + locala.name, "glsl");
-        locala.bN = IOUtils.convertStreamToString(new FileInputStream(localFile));
+        locala.glsl = IOUtils.convertStreamToString(new FileInputStream(localFile));
         return locala;
     }
 

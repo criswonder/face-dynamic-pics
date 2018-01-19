@@ -3,7 +3,6 @@ package com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.base;
 
 import android.graphics.PointF;
 import android.opengl.GLES20;
-import android.util.Log;
 
 import com.martin.ads.omoshiroilib.constant.Rotation;
 import com.martin.ads.omoshiroilib.flyu.openglfilter.common.FilterCompat;
@@ -176,7 +175,7 @@ public abstract class GPUImageFilterGroupBase extends GPUImageAudioFilter
                 localGPUImageFilter.onDraw(j, this.bF, this.bG);
             }
             if (null != this.bK) {
-                this.bK.onSingleFilterDrawed(this.aS, this.aT);
+                this.bK.onSingleFilterDrawed(this.surfaceWidth, this.surfaceHeight);
             }
             if (m != 0)
             {
@@ -190,11 +189,11 @@ public abstract class GPUImageFilterGroupBase extends GPUImageAudioFilter
         }
     }
 
-    public PointF[][] setFaceDetResult(int paramInt1, PointF[][] paramArrayOfPointF, int paramInt2, int paramInt3)
+    public PointF[][] setFaceDetResult(int faceCount, PointF[][] paramArrayOfPointF, int outPutWith, int outputHeight)
     {
-        super.setFaceDetResult(paramInt1, paramArrayOfPointF, paramInt2, paramInt3);
+        super.setFaceDetResult(faceCount, paramArrayOfPointF, outPutWith, outputHeight);
         for (GPUImageFilter localGPUImageFilter : H()) {
-            paramArrayOfPointF = localGPUImageFilter.setFaceDetResult(paramInt1, paramArrayOfPointF, paramInt2, paramInt3);
+            paramArrayOfPointF = localGPUImageFilter.setFaceDetResult(faceCount, paramArrayOfPointF, outPutWith, outputHeight);
         }
         return paramArrayOfPointF;
     }

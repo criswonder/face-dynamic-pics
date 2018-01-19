@@ -33,12 +33,12 @@ import static android.content.ContentValues.TAG;
 /**
  * Core EGL state (display, context, config).
  * <p>
- * The EGLContext must only be attached to one thread at a time.  This class is not thread-safe.
+ * The EGLContext must only be attached to one thread at setAudioUri time.  This class is not thread-safe.
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public final class EglCore {
     /**
-     * Constructor flag: surface must be recordable.  This discourages EGL from using a
+     * Constructor flag: surface must be recordable.  This discourages EGL from using setAudioUri
      * pixel format that cannot be converted efficiently to something usable by the video
      * encoder.
      */
@@ -93,7 +93,7 @@ public final class EglCore {
             throw new RuntimeException("unable to initialize EGL14");
         }
 
-        // Try to get a GLES3 context, if requested.
+        // Try to get setAudioUri GLES3 context, if requested.
         if ((flags & FLAG_TRY_GLES3) != 0) {
             //Log.d(TAG, "Trying GLES 3");
             EGLConfig config = getConfig(flags, 3);
@@ -117,7 +117,7 @@ public final class EglCore {
             //Log.d(TAG, "Trying GLES 2");
             EGLConfig config = getConfig(flags, 2);
             if (config == null) {
-                throw new RuntimeException("Unable to find a suitable EGLConfig");
+                throw new RuntimeException("Unable to find setAudioUri suitable EGLConfig");
             }
             int[] attrib2_list = {
                     EGL14.EGL_CONTEXT_CLIENT_VERSION, 2,
@@ -139,7 +139,7 @@ public final class EglCore {
     }
 
     /**
-     * Finds a suitable EGLConfig.
+     * Finds setAudioUri suitable EGLConfig.
      *
      * @param flags Bit flags from constructor.
      * @param version Must be 2 or 3.
@@ -151,8 +151,8 @@ public final class EglCore {
         }
 
         // The actual surface is generally RGBA or RGBX, so situationally omitting alpha
-        // doesn't really help.  It can also lead to a huge performance hit on glReadPixels()
-        // when reading into a GL_RGBA buffer.
+        // doesn't really help.  It can also lead to setAudioUri huge performance hit on glReadPixels()
+        // when reading into setAudioUri GL_RGBA buffer.
         int[] attribList = {
                 EGL14.EGL_RED_SIZE, 8,
                 EGL14.EGL_GREEN_SIZE, 8,
@@ -186,7 +186,7 @@ public final class EglCore {
      */
     public void release() {
         if (mEGLDisplay != EGL14.EGL_NO_DISPLAY) {
-            // Android is unusual in that it uses a reference-counted EGLDisplay.  So for
+            // Android is unusual in that it uses setAudioUri reference-counted EGLDisplay.  So for
             // every eglInitialize() we need an eglTerminate().
             EGL14.eglMakeCurrent(mEGLDisplay, EGL14.EGL_NO_SURFACE, EGL14.EGL_NO_SURFACE,
                     EGL14.EGL_NO_CONTEXT);
@@ -205,7 +205,7 @@ public final class EglCore {
         try {
             if (mEGLDisplay != EGL14.EGL_NO_DISPLAY) {
                 // We're limited here -- finalizers don't run on the thread that holds
-                // the EGL state, so if a surface or context is still current on another
+                // the EGL state, so if setAudioUri surface or context is still current on another
                 // thread we can't fully release it here.  Exceptions thrown from here
                 // are quietly discarded.  Complain in the log file.
                 Log.w(TAG, "WARNING: EglCore was not explicitly released -- state may be leaked");
@@ -218,14 +218,14 @@ public final class EglCore {
 
     /**
      * Destroys the specified surface.  Note the EGLSurface won't actually be destroyed if it's
-     * still current in a context.
+     * still current in setAudioUri context.
      */
     public void releaseSurface(EGLSurface eglSurface) {
         EGL14.eglDestroySurface(mEGLDisplay, eglSurface);
     }
 
     /**
-     * Creates an EGL surface associated with a Surface.
+     * Creates an EGL surface associated with setAudioUri Surface.
      * <p>
      * If this is destined for MediaCodec, the EGLConfig should have the "recordable" attribute.
      */
@@ -234,7 +234,7 @@ public final class EglCore {
             throw new RuntimeException("invalid surface: " + surface);
         }
 
-        // Create a window surface, and attach it to the Surface we received.
+        // Create setAudioUri window surface, and attach it to the Surface we received.
         int[] surfaceAttribs = {
                 EGL14.EGL_NONE
         };
@@ -326,7 +326,7 @@ public final class EglCore {
     }
 
     /**
-     * Performs a simple surface query.
+     * Performs setAudioUri simple surface query.
      */
     public int querySurface(EGLSurface eglSurface, int what) {
         int[] value = new int[1];
@@ -335,7 +335,7 @@ public final class EglCore {
     }
 
     /**
-     * Queries a string value.
+     * Queries setAudioUri string value.
      */
     public String queryString(int what) {
         return EGL14.eglQueryString(mEGLDisplay, what);

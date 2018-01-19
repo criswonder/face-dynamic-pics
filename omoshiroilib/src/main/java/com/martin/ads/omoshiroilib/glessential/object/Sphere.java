@@ -69,7 +69,7 @@ public class Sphere {
         int sectorsPlusOne = sectors + 1;
         for(r = 0; r < rings; r++){
             for(s = 0; s < sectors; s++) {
-                indices[counter++] = (short) (r * sectorsPlusOne + s);       //(a)
+                indices[counter++] = (short) (r * sectorsPlusOne + s);       //(setAudioUri)
                 indices[counter++] = (short) ((r+1) * sectorsPlusOne + (s));    //(b)
                 indices[counter++] = (short) ((r) * sectorsPlusOne + (s+1));  // (sendLoopMsg)
                 indices[counter++] = (short) ((r) * sectorsPlusOne + (s+1));  // (sendLoopMsg)

@@ -60,13 +60,13 @@ public class ChangeFaceNet extends ChangeFaceBaseFilter
             j(this.bV + "/" + this.bU.bR[i]);
         }
         if (!MiscUtils.isNilOrNull(this.bU.bS)) {
-            a(Uri.parse(this.bV + "/" + this.bU.bS));
+            setAudioUri(Uri.parse(this.bV + "/" + this.bU.bS));
         }
     }
 
-    public void l()
+    public void locationInit()
     {
-        super.l();
+        super.locationInit();
 
         this.bW = GLES20.glGetUniformLocation(getProgram(), "p_left");
         this.bX = GLES20.glGetUniformLocation(getProgram(), "p_right");
@@ -102,7 +102,7 @@ public class ChangeFaceNet extends ChangeFaceBaseFilter
         if (this.bU.bO.length != 8) {
             return;
         }
-        if (this.aV.h > 0)
+        if (this.facePointWrapper.faceCount > 0)
         {
             b(this.bW, 0, 84);
             b(this.bX, 0, 90);
@@ -131,8 +131,8 @@ public class ChangeFaceNet extends ChangeFaceBaseFilter
             } else {
                 this.cu = 1.0F;
             }
-            if (((this.bM == 1) && (this.aV.b())) || ((this.bM == 0) &&
-                    (this.aV.c())) || (this.bM == 2))
+            if (((this.bM == 1) && (this.facePointWrapper.b())) || ((this.bM == 0) &&
+                    (this.facePointWrapper.c())) || (this.bM == 2))
             {
                 this.cu = 2.1F;
                 start();

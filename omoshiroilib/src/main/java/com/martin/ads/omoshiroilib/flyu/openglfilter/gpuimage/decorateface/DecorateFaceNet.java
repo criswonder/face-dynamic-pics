@@ -27,9 +27,9 @@ public class DecorateFaceNet  extends GPUImageFilterE
         F();
     }
 
-    public void l()
+    public void locationInit()
     {
-        super.l();
+        super.locationInit();
 
         this.cB = new int[this.cz.cv.size()];
         for (int i = 0; i < this.cz.cv.size(); i++) {
@@ -43,8 +43,8 @@ public class DecorateFaceNet  extends GPUImageFilterE
         for (int i = 0; i < this.cB.length; i++)
         {
             DecorateFaceBean.a locala = (DecorateFaceBean.a)this.cz.cv.get(i);
-            if (locala.cx >= this.aV.h) {
-                a(this.cB[i], this.cA);
+            if (locala.cx >= this.facePointWrapper.faceCount) {
+                setPointF(this.cB[i], this.cA);
             } else {
                 b(this.cB[i], locala.cx, locala.cy);
             }

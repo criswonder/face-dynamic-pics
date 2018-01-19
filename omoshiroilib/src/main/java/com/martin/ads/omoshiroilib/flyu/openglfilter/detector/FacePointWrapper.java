@@ -7,21 +7,21 @@ import android.graphics.PointF;
  */
 
 public class FacePointWrapper {
-    public int h = 0;
+    public int faceCount = 0;
     public PointF[][] pointArray = (PointF[][])null;
     double j = 0.0D;
     boolean k = false;
 
     public void a(int paramInt, PointF[][] paramArrayOfPointF)
     {
-        this.h = paramInt;
+        this.faceCount = paramInt;
         this.pointArray = paramArrayOfPointF;
     }
 
     public boolean b()
     {
         this.k = false;
-        if (this.h > 0)
+        if (this.faceCount > 0)
         {
             PointF[] arrayOfPointF = this.pointArray[0];
             double d1 = Math.sqrt(

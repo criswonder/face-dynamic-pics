@@ -44,20 +44,20 @@ public class GPUImageMultiSectionGroup  extends GPUImageFilterGroupBase
         this.dw = new ArrayList();
     }
 
-    public void l()
+    public void locationInit()
     {
-        super.l();
+        super.locationInit();
         for (Map.Entry localEntry : this.mMultiSectionInfo.dJ.entrySet())
         {
-            Object localObject1 = ((MultiSectionInfo.a)localEntry.getValue()).dQ;
+            Object localObject1 = ((MultiSectionInfo.Filter)localEntry.getValue()).data;
             Object localObject2;
             if ((localObject1 instanceof DstickerDataBeanExt))
             {
-                localObject2 = new DynamicStickerDot("file://" + ((MultiSectionInfo.a)localEntry.getValue()).dP, (DstickerDataBeanExt)localObject1);
+                localObject2 = new DynamicStickerDot("file://" + ((MultiSectionInfo.Filter)localEntry.getValue()).dP, (DstickerDataBeanExt)localObject1);
             }
             else if ((localObject1 instanceof DStickerVignetteBean))
             {
-                localObject2 = new DynamicStickerVignette("file://" + ((MultiSectionInfo.a)localEntry.getValue()).dP, (DStickerVignetteBean)localObject1);
+                localObject2 = new DynamicStickerVignette("file://" + ((MultiSectionInfo.Filter)localEntry.getValue()).dP, (DStickerVignetteBean)localObject1);
             }
             else
             {
@@ -66,8 +66,8 @@ public class GPUImageMultiSectionGroup  extends GPUImageFilterGroupBase
                 if ((localObject1 instanceof GroupData))
                 {
                     localObject3 = (GroupData)localObject1;
-                    localObject4 = new ShapeChangeFilter(((MultiSectionInfo.a)localEntry.getValue()).dP, (GroupData) localObject1);
-                    if (2 == ((GroupData)localObject3).ee)
+                    localObject4 = new ShapeChangeFilter(((MultiSectionInfo.Filter)localEntry.getValue()).dP, (GroupData) localObject1);
+                    if (2 == ((GroupData)localObject3).resloadtype)
                     {
                         ((ShapeChangeFilter)localObject4).F();
                         ((ShapeChangeFilter)localObject4).init();
@@ -77,7 +77,7 @@ public class GPUImageMultiSectionGroup  extends GPUImageFilterGroupBase
                 else if ((localObject1 instanceof MakeupData))
                 {
                     localObject3 = (MakeupData)localObject1;
-                    localObject4 = new MakeUpFilter(((MultiSectionInfo.a)localEntry.getValue()).dP, (MakeupData) localObject3);
+                    localObject4 = new MakeUpFilter(((MultiSectionInfo.Filter)localEntry.getValue()).dP, (MakeupData) localObject3);
                     if (2 == ((MakeupData)localObject3).resloadtype)
                     {
                         ((MakeUpFilter)localObject4).F();
@@ -125,20 +125,20 @@ public class GPUImageMultiSectionGroup  extends GPUImageFilterGroupBase
             }
         }
         List localList;
-        MultiSectionInfo.b localObject1 = (MultiSectionInfo.b)this.mMultiSectionInfo.dK.get(this.dG);
-        for (Object localObject2 = ((MultiSectionInfo.b)localObject1).dT.iterator(); ((Iterator)localObject2).hasNext();)
+        MultiSectionInfo.Section localObject1 = (MultiSectionInfo.Section)this.mMultiSectionInfo.sectionsMap.get(this.dG);
+        for (Object localObject2 = ((MultiSectionInfo.Section)localObject1).filterlist.iterator(); ((Iterator)localObject2).hasNext();)
         {
             String localObject3 = (String)((Iterator)localObject2).next();
             GPUImageFilter localGPUImageFilter = (GPUImageFilter)this.stringGPUImageFilterMap.get(localObject3);
-            MultiSectionInfo.a locala = (MultiSectionInfo.a)this.mMultiSectionInfo.dJ.get(localObject3);
+            MultiSectionInfo.Filter locala = (MultiSectionInfo.Filter)this.mMultiSectionInfo.dJ.get(localObject3);
 
             localArrayList.add(localGPUImageFilter);
             if (!localGPUImageFilter.isInitialized())
             {
                 localGPUImageFilter.init();
-                localGPUImageFilter.onOutputSizeChanged(this.aS, this.aT);
+                localGPUImageFilter.onOutputSizeChanged(this.surfaceWidth, this.surfaceHeight);
             }
-            if ((null != locala) && (locala.dO)) {
+            if ((null != locala) && (locala.reload)) {
                 localGPUImageFilter.A();
             }
             if (this.bc) {
@@ -199,8 +199,8 @@ public class GPUImageMultiSectionGroup  extends GPUImageFilterGroupBase
         }
         if (null != this.bJ)
         {
-            MultiSectionInfo.b localObject = (MultiSectionInfo.b)this.mMultiSectionInfo.dK.get(this.dG);
-            this.bJ.onTipsAndCountChanged(i, ((MultiSectionInfo.b)localObject).bP, -1 == ((MultiSectionInfo.b)localObject).dS ? 65535 : ((MultiSectionInfo.b)localObject).dS);
+            MultiSectionInfo.Section localObject = (MultiSectionInfo.Section)this.mMultiSectionInfo.sectionsMap.get(this.dG);
+            this.bJ.onTipsAndCountChanged(i, ((MultiSectionInfo.Section)localObject).tips, -1 == ((MultiSectionInfo.Section)localObject).duration ? 65535 : ((MultiSectionInfo.Section)localObject).duration);
         }
     }
 
@@ -262,22 +262,22 @@ public class GPUImageMultiSectionGroup  extends GPUImageFilterGroupBase
         {
             String str = null;
             MultiSectionInfo.c localc;
-            if (this.aV.c())
+            if (this.facePointWrapper.c())
             {
                 localc = (MultiSectionInfo.c)localMap.get(Integer.valueOf(0));
                 str = null == localc ? null : localc.dU;
             }
-            else if (this.aV.b())
+            else if (this.facePointWrapper.b())
             {
                 localc = (MultiSectionInfo.c)localMap.get(Integer.valueOf(1));
                 str = null == localc ? null : localc.dU;
             }
-            else if (this.aV.d())
+            else if (this.facePointWrapper.d())
             {
                 localc = (MultiSectionInfo.c)localMap.get(Integer.valueOf(3));
                 str = null == localc ? null : localc.dU;
             }
-            else if (this.aV.h > 0)
+            else if (this.facePointWrapper.faceCount > 0)
             {
                 localc = (MultiSectionInfo.c)localMap.get(Integer.valueOf(2));
                 str = null == localc ? null : localc.dU;

@@ -20,7 +20,7 @@ public class GLOESTexture {
         textureLoaded=false;
     }
 
-    //only call once for a single video texture (camera, media_decoder,etc.)
+    //only call once for setAudioUri single video texture (camera, media_decoder,etc.)
     public void loadTexture(){
         if(textureLoaded) return;
         int[] textures = new int[1];

@@ -34,7 +34,7 @@ import java.io.IOException;
  * producer side doesn't get backed up.
  * <p>
  * This class is not thread-safe, with one exception: it is valid to use the input surface
- * on one thread, and drain the output on a different thread.
+ * on one thread, and drain the output on setAudioUri different thread.
  */
 
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -65,8 +65,8 @@ public class VideoEncoderCore extends EncoderCore {
         format.setInteger(MediaFormat.KEY_I_FRAME_INTERVAL, IFRAME_INTERVAL);
         if (VERBOSE) Log.d(TAG, "format: " + format);
 
-        // Create a MediaCodec encoder, and configure it with our format.  Get a Surface
-        // we can use for input and wrap it with a class that handles the EGL work.
+        // Create setAudioUri MediaCodec encoder, and configure it with our format.  Get setAudioUri Surface
+        // we can use for input and wrap it with setAudioUri class that handles the EGL work.
         mEncoder = MediaCodec.createEncoderByType(MIME_TYPE);
         mEncoder.configure(format, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE);
 

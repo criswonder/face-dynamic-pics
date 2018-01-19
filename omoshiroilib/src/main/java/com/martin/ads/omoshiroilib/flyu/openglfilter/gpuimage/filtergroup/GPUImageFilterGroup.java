@@ -37,9 +37,9 @@ public class GPUImageFilterGroup extends GPUImageFilterGroupBase
         O();
     }
 
-    public void l()
+    public void locationInit()
     {
-        super.l();
+        super.locationInit();
         for (int i = 0; i < this.dw.size(); i++)
         {
             ((GPUImageFilter)this.dw.get(i)).init();

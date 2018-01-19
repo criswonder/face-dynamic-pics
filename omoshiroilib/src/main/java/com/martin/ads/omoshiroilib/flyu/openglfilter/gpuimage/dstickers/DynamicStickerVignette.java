@@ -23,14 +23,14 @@ public class DynamicStickerVignette extends DynamicStickerBase
         this.dd = paramc;
     }
 
-    protected int k()
+    protected int createProgram()
     {
         return OmoshiroiNative.loadDStickerVignetteFilter();
     }
 
-    public void l()
+    public void locationInit()
     {
-        super.l();
+        super.locationInit();
         this.cQ = GLES20.glGetUniformLocation(getProgram(), "inputImageTexture2");
         this.cR = GLES20.glGetUniformLocation(getProgram(), "faceCnt");
         this.cS = GLES20.glGetUniformLocation(getProgram(), "flipSticker");
@@ -42,34 +42,34 @@ public class DynamicStickerVignette extends DynamicStickerBase
     {
         super.d(paramInt);
 
-        GLES20.glUniform1i(this.cR, this.aV.h > 0 ? 1 : 0);
-        GLES20.glUniform1i(this.cS, this.aY ? 1 : 0);
-        if (this.aV.h > 0)
+        GLES20.glUniform1i(this.cR, this.facePointWrapper.faceCount > 0 ? 1 : 0);
+        GLES20.glUniform1i(this.cS, this.needFlip ? 1 : 0);
+        if (this.facePointWrapper.faceCount > 0)
         {
-            float f1 = this.aS * this.dd.height * 1.0F / this.dd.width;
-            float f2 = f1 / this.aT;
-            if (this.aY)
+            float f1 = this.surfaceWidth * this.dd.height * 1.0F / this.dd.width;
+            float f2 = f1 / this.surfaceHeight;
+            if (this.needFlip)
             {
                 if (this.dd.showTop)
                 {
-                    a(this.de, new float[] { 0.0F, 1.0F - f2 });
-                    a(this.df, new float[] { 1.0F, 1.0F });
+                    setFloatArray(this.de, new float[] { 0.0F, 1.0F - f2 });
+                    setFloatArray(this.df, new float[] { 1.0F, 1.0F });
                 }
                 else
                 {
-                    a(this.de, new float[] { 0.0F, 0.0F });
-                    a(this.df, new float[] { 1.0F, f2 });
+                    setFloatArray(this.de, new float[] { 0.0F, 0.0F });
+                    setFloatArray(this.df, new float[] { 1.0F, f2 });
                 }
             }
             else if (!this.dd.showTop)
             {
-                a(this.de, new float[] { 0.0F, 1.0F - f2 });
-                a(this.df, new float[] { 1.0F, 1.0F });
+                setFloatArray(this.de, new float[] { 0.0F, 1.0F - f2 });
+                setFloatArray(this.df, new float[] { 1.0F, 1.0F });
             }
             else
             {
-                a(this.de, new float[] { 0.0F, 0.0F });
-                a(this.df, new float[] { 1.0F, f2 });
+                setFloatArray(this.de, new float[] { 0.0F, 0.0F });
+                setFloatArray(this.df, new float[] { 1.0F, f2 });
             }
         }
         if (this.cC != -1)

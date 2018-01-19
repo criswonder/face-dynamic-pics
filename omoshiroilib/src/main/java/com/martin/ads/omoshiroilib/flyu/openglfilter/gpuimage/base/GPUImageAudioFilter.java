@@ -38,10 +38,10 @@ public class GPUImageAudioFilter extends GPUImageFilter
 
     protected void h(String paramString)
     {
-        a(Uri.parse("android.resource://" + GlobalConfig.context + "/raw/" + paramString));
+        setAudioUri(Uri.parse("android.resource://" + GlobalConfig.context + "/raw/" + paramString));
     }
 
-    public void a(Uri paramUri)
+    public void setAudioUri(Uri paramUri)
     {
         this.L = paramUri;
     }

@@ -36,7 +36,7 @@ import static android.content.ContentValues.TAG;
 /**
  * Common base class for EGL surfaces.
  * <p>
- * There can be multiple surfaces associated with a single context.
+ * There can be multiple surfaces associated with setAudioUri single context.
  */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class EglSurfaceBase {
@@ -52,9 +52,9 @@ public class EglSurfaceBase {
     }
 
     /**
-     * Creates a window surface.
+     * Creates setAudioUri window surface.
      * <p>
-     * @param surface May be a Surface or SurfaceTexture.
+     * @param surface May be setAudioUri Surface or SurfaceTexture.
      */
     public void createWindowSurface(Object surface) {
         if (mEGLSurface != EGL14.EGL_NO_SURFACE) {
@@ -82,7 +82,7 @@ public class EglSurfaceBase {
     /**
      * Returns the surface's width, in pixels.
      * <p>
-     * If this is called on a window surface, and the underlying surface is in the process
+     * If this is called on setAudioUri window surface, and the underlying surface is in the process
      * of changing size, we may not see the new size right away (e.g. in the "surfaceChanged"
      * callback).  The size should match after the next buffer swap.
      */
@@ -152,7 +152,7 @@ public class EglSurfaceBase {
     }
 
     /**
-     * Saves the EGL surface to a file.
+     * Saves the EGL surface to setAudioUri file.
      * <p>
      * Expects that this object's EGL surface is current.
      */
@@ -161,8 +161,8 @@ public class EglSurfaceBase {
             throw new RuntimeException("Expected EGL context/surface is not current");
         }
 
-        // glReadPixels fills in a "direct" ByteBuffer with what is essentially big-endian RGBA
-        // data (i.e. a byte of red, followed by a byte of green...).  While the Bitmap
+        // glReadPixels fills in setAudioUri "direct" ByteBuffer with what is essentially big-endian RGBA
+        // data (i.e. setAudioUri byte of red, followed by setAudioUri byte of green...).  While the Bitmap
         // constructor that takes an int[] wants little-endian ARGB (blue/red swapped), the
         // Bitmap "copy pixels" method wants the same format GL provides.
         //

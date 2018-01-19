@@ -69,12 +69,12 @@ public class MakeUpFilter extends GPUImageFilterE {
         }
     }
 
-    protected int k() {
+    protected int createProgram() {
         return OmoshiroiNative.loadMakeUpFilter();
     }
 
-    public void l() {
-        super.l();
+    public void locationInit() {
+        super.locationInit();
 
         this.ej = GLES20.glGetAttribLocation(getProgram(), "inputTextureCoordinate2");
         this.ek = GLES20.glGetUniformLocation(getProgram(), "drawMask");
@@ -91,11 +91,11 @@ public class MakeUpFilter extends GPUImageFilterE {
         return localPointF;
     }
 
-    public PointF[][] setFaceDetResult(int paramInt1, PointF[][] paramArrayOfPointF, int paramInt2, int paramInt3) {
+    public PointF[][] setFaceDetResult(int faceCount, PointF[][] paramArrayOfPointF, int outputWidth, int outputHeight) {
         Object localObject1 = paramArrayOfPointF;
-        if (paramInt1 != 0) {
+        if (faceCount != 0) {
             PointF[][] arrayOfPointF1 = new PointF[5][114];
-            int i = Math.min(paramInt1, this.ei.maxcount);
+            int i = Math.min(faceCount, this.ei.maxcount);
             PointF[] arrayOfPointF3;
             for (int j = 0; j < 5; j++) {
                 PointF[] localObject2 = arrayOfPointF1[j];
@@ -128,7 +128,7 @@ public class MakeUpFilter extends GPUImageFilterE {
                     arrayOfPointF3[(106 +pp)].y = cur.y + f3;
                 }
             }
-            super.setFaceDetResult(paramInt1, arrayOfPointF1, paramInt2, paramInt3);
+            super.setFaceDetResult(faceCount, arrayOfPointF1, outputWidth, outputHeight);
 
             int j = ((MakeupData.a) this.ei.eo.get(0)).ev ? 1 : 0;
             int m;
@@ -159,7 +159,7 @@ public class MakeUpFilter extends GPUImageFilterE {
                 localObject1 = arrayOfPointF2;
             }
         } else {
-            super.setFaceDetResult(paramInt1, paramArrayOfPointF, paramInt2, paramInt3);
+            super.setFaceDetResult(faceCount, paramArrayOfPointF, outputWidth, outputHeight);
             localObject1 = paramArrayOfPointF;
         }
         return (PointF[][]) localObject1;
@@ -168,26 +168,26 @@ public class MakeUpFilter extends GPUImageFilterE {
     protected void d(int paramInt) {
         super.d(paramInt);
 
-        i(this.ek, 0);
+        setInt(this.ek, 0);
     }
 
     protected void e(int paramInt) {
         super.e(paramInt);
-        if (this.aV.h == 0) {
+        if (this.facePointWrapper.faceCount == 0) {
             return;
         }
-        int i = Math.min(this.aV.h, this.ei.maxcount);
+        int i = Math.min(this.facePointWrapper.faceCount, this.ei.maxcount);
         for (int j = 0; j < i; j++) {
-            i(this.ek, j + 1);
-            PointF[] arrayOfPointF = this.aV.pointArray[j];
+            setInt(this.ek, j + 1);
+            PointF[] arrayOfPointF = this.facePointWrapper.pointArray[j];
             MakeupData.a locala = (MakeupData.a) this.ei.eo.get(j);
 
             int[] arrayOfInt = locala.vertexIndexes;
             this.el.position(0);
             for (int k = 0; k < arrayOfInt.length; k++) {
                 PointF localPointF;
-                if ((this.aY) && (!this.aZ)) {
-                    localPointF = a(arrayOfPointF[arrayOfInt[k]].x, this.aT - arrayOfPointF[arrayOfInt[k]].y);
+                if ((this.needFlip) && (!this.aZ)) {
+                    localPointF = a(arrayOfPointF[arrayOfInt[k]].x, this.surfaceHeight - arrayOfPointF[arrayOfInt[k]].y);
                 } else {
                     localPointF = a(arrayOfPointF[arrayOfInt[k]].x, arrayOfPointF[arrayOfInt[k]].y);
                 }
@@ -197,10 +197,10 @@ public class MakeUpFilter extends GPUImageFilterE {
             this.en.position(0);
             for (int k = 0; k < arrayOfInt.length; k++) {
                 int m = arrayOfInt[k];
-                if (!this.aY) {
-                    this.em.put(arrayOfPointF[m].x / this.aS).put(arrayOfPointF[m].y / this.aT);
+                if (!this.needFlip) {
+                    this.em.put(arrayOfPointF[m].x / this.surfaceWidth).put(arrayOfPointF[m].y / this.surfaceHeight);
                 } else {
-                    this.em.put(arrayOfPointF[m].x / this.aS).put(1.0F - arrayOfPointF[m].y / this.aT);
+                    this.em.put(arrayOfPointF[m].x / this.surfaceWidth).put(1.0F - arrayOfPointF[m].y / this.surfaceHeight);
                 }
                 if (m >= 106) {
                     this.en.put(locala.eu[(m - 106)].x).put(locala.eu[(m - 106)].y);
@@ -209,17 +209,17 @@ public class MakeUpFilter extends GPUImageFilterE {
                 }
             }
             this.em.position(0);
-            GLES20.glVertexAttribPointer(this.aR, 2, 5126, false, 0, this.em);
+            GLES20.glVertexAttribPointer(this.maInputTextureCoordinateLocation, 2, 5126, false, 0, this.em);
 
-            GLES20.glEnableVertexAttribArray(this.aR);
+            GLES20.glEnableVertexAttribArray(this.maInputTextureCoordinateLocation);
             if (paramInt != -1) {
                 GLES20.glActiveTexture(33984);
                 GLES20.glBindTexture(y(), paramInt);
-                GLES20.glUniform1i(this.aQ, 0);
+                GLES20.glUniform1i(this.muInputImageTextureLocation, 0);
             }
             this.el.position(0);
-            GLES20.glVertexAttribPointer(this.aP, 2, 5126, false, 0, this.el);
-            GLES20.glEnableVertexAttribArray(this.aP);
+            GLES20.glVertexAttribPointer(this.maPostionLocation, 2, 5126, false, 0, this.el);
+            GLES20.glEnableVertexAttribArray(this.maPostionLocation);
             this.en.position(0);
             GLES20.glVertexAttribPointer(this.ej, 2, 5126, false, 0, this.en);
 
@@ -227,9 +227,9 @@ public class MakeUpFilter extends GPUImageFilterE {
 
             GLES20.glDrawArrays(4, 0, arrayOfInt.length);
 
-            GLES20.glDisableVertexAttribArray(this.aR);
+            GLES20.glDisableVertexAttribArray(this.maInputTextureCoordinateLocation);
 
-            GLES20.glDisableVertexAttribArray(this.aP);
+            GLES20.glDisableVertexAttribArray(this.maPostionLocation);
             GLES20.glDisableVertexAttribArray(this.ej);
         }
     }

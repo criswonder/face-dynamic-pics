@@ -62,9 +62,9 @@ public class GPUImageFilterE extends GPUImageAudioFilter
         }
     }
 
-    public void l()
+    public void locationInit()
     {
-        super.l();
+        super.locationInit();
         if (null != this.by) {
             try
             {
@@ -116,8 +116,8 @@ public class GPUImageFilterE extends GPUImageAudioFilter
 
     public void onOutputSizeChanged(int paramInt1, int paramInt2)
     {
-        this.aS = paramInt1;
-        this.aT = paramInt2;
+        this.surfaceWidth = paramInt1;
+        this.surfaceHeight = paramInt2;
     }
 
     public void onDraw(int paramInt, FloatBuffer paramFloatBuffer1, FloatBuffer paramFloatBuffer2)
@@ -242,11 +242,11 @@ public class GPUImageFilterE extends GPUImageAudioFilter
     protected void b(int paramInt1, int paramInt2, int paramInt3)
     {
         float[] arrayOfFloat = new float[2];
-        arrayOfFloat[0] = (this.aV.pointArray[paramInt2][paramInt3].x / this.aW);
-        if (this.aY) {
-            arrayOfFloat[1] = (1.0F - this.aV.pointArray[paramInt2][paramInt3].y / this.aX);
+        arrayOfFloat[0] = (this.facePointWrapper.pointArray[paramInt2][paramInt3].x / this.mOutputWidth);
+        if (this.needFlip) {
+            arrayOfFloat[1] = (1.0F - this.facePointWrapper.pointArray[paramInt2][paramInt3].y / this.mOutputHeight);
         } else {
-            arrayOfFloat[1] = (this.aV.pointArray[paramInt2][paramInt3].y / this.aX);
+            arrayOfFloat[1] = (this.facePointWrapper.pointArray[paramInt2][paramInt3].y / this.mOutputHeight);
         }
         GLES20.glUniform2fv(paramInt1, 1, arrayOfFloat, 0);
     }
@@ -254,8 +254,8 @@ public class GPUImageFilterE extends GPUImageAudioFilter
     protected PointF a(float paramFloat1, float paramFloat2)
     {
         PointF localPointF = new PointF();
-        localPointF.x = (2.0F * paramFloat1 / this.aW - 1.0F);
-        localPointF.y = (2.0F * (1.0F - paramFloat2 / this.aX) - 1.0F);
+        localPointF.x = (2.0F * paramFloat1 / this.mOutputWidth - 1.0F);
+        localPointF.y = (2.0F * (1.0F - paramFloat2 / this.mOutputHeight) - 1.0F);
         return localPointF;
     }
 

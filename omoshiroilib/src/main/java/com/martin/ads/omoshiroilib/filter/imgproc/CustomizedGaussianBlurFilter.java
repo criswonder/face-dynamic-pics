@@ -85,7 +85,7 @@ public class CustomizedGaussianBlurFilter extends AbsFilter {
             return "";
         }
 
-        // First, generate the normal Gaussian weights for a given sigma
+        // First, generate the normal Gaussian weights for setAudioUri given sigma
         double[] standardGaussianWeights = new double[blurRadius + 2];
         double sumOfWeights = 0.0;
         for (int currentGaussianWeightIndex = 0; currentGaussianWeightIndex < blurRadius + 1; currentGaussianWeightIndex++)
@@ -152,7 +152,7 @@ public class CustomizedGaussianBlurFilter extends AbsFilter {
             return "";
         }
 
-        // First, generate the normal Gaussian weights for a given sigma
+        // First, generate the normal Gaussian weights for setAudioUri given sigma
         double[] standardGaussianWeights = new double[blurRadius + 2];
         double sumOfWeights = 0.0;
         for (int currentGaussianWeightIndex = 0; currentGaussianWeightIndex < blurRadius + 1; currentGaussianWeightIndex++) {
@@ -234,8 +234,8 @@ public class CustomizedGaussianBlurFilter extends AbsFilter {
     public static CustomizedGaussianBlurFilter initWithBlurRadiusInPixels(int blurRadiusInPixels) {
         // 7.0 is the limit for blur size for hardcoded varying offsets
         int calculatedSampleRadius = 0;
-        if (blurRadiusInPixels >= 1){ // Avoid a divide-by-zero error here{
-            // Calculate the number of pixels to sample from by setting a bottom limit for the contribution of the outermost pixel
+        if (blurRadiusInPixels >= 1){ // Avoid setAudioUri divide-by-zero error here{
+            // Calculate the number of pixels to sample from by setting setAudioUri bottom limit for the contribution of the outermost pixel
             double minimumWeightToFindEdgeOfSamplingArea = 1.0/256.0;
             calculatedSampleRadius = (int) Math.floor(Math.sqrt(-2.0 * Math.pow(blurRadiusInPixels, 2.0) * Math.log(minimumWeightToFindEdgeOfSamplingArea *
                     Math.sqrt(2.0 * Math.PI * Math.pow(blurRadiusInPixels, 2.0))) ));

@@ -41,14 +41,14 @@ public abstract class SwitchFaceBase  extends GPUImageFilterE
         i("exchangefacealpha.png");
     }
 
-    protected int k()
+    protected int createProgram()
     {
         return OmoshiroiNative.loadSwitchFilterBase();
     }
 
-    public void l()
+    public void locationInit()
     {
-        super.l();
+        super.locationInit();
 
         this.eX = GLES20.glGetUniformLocation(getProgram(), "drawMask");
         this.fa = GLES20.glGetAttribLocation(getProgram(), "inputTextureCoordinate2");
@@ -60,7 +60,7 @@ public abstract class SwitchFaceBase  extends GPUImageFilterE
         for (int i = 0; i < eV.length; i++)
         {
             int j = eV[i];
-            if (!this.aY) {
+            if (!this.needFlip) {
                 this.fe.put(eW[(2 * j)]).put(eW[(2 * j + 1)]);
             } else {
                 this.fe.put(eW[(2 * j)]).put(1.0F - eW[(2 * j + 1)]);
@@ -72,8 +72,8 @@ public abstract class SwitchFaceBase  extends GPUImageFilterE
     {
         super.d(paramInt);
 
-        i(this.eX, 0);
-        i(this.eZ, this.aV.h);
+        setInt(this.eX, 0);
+        setInt(this.eZ, this.facePointWrapper.faceCount);
 
         int i = 0;
         switch (this.ba)
@@ -91,7 +91,7 @@ public abstract class SwitchFaceBase  extends GPUImageFilterE
                 i = 2;
         }
         if (-1 != this.eY) {
-            i(this.eY, i);
+            setInt(this.eY, i);
         }
     }
 
@@ -104,21 +104,21 @@ public abstract class SwitchFaceBase  extends GPUImageFilterE
     protected void e(int paramInt)
     {
         super.e(paramInt);
-        if (this.aV.h < T()) {
+        if (this.facePointWrapper.faceCount < T()) {
             return;
         }
         for (int i = 0; i < U(); i++)
         {
-            i(this.eX, i + 1);
-            PointF[] arrayOfPointF1 = this.aV.pointArray[i];
-            PointF[] arrayOfPointF2 = this.aV.pointArray[V()[i]];
+            setInt(this.eX, i + 1);
+            PointF[] arrayOfPointF1 = this.facePointWrapper.pointArray[i];
+            PointF[] arrayOfPointF2 = this.facePointWrapper.pointArray[V()[i]];
 
             this.el.position(0);
             for (int j = 0; j < eV.length; j++)
             {
                 PointF localPointF;
-                if ((this.aY) && (!this.aZ)) {
-                    localPointF = a(arrayOfPointF1[eV[j]].x, this.aT - arrayOfPointF1[eV[j]].y);
+                if ((this.needFlip) && (!this.aZ)) {
+                    localPointF = a(arrayOfPointF1[eV[j]].x, this.surfaceHeight - arrayOfPointF1[eV[j]].y);
                 } else {
                     localPointF = a(arrayOfPointF1[eV[j]].x, arrayOfPointF1[eV[j]].y);
                 }
@@ -126,33 +126,33 @@ public abstract class SwitchFaceBase  extends GPUImageFilterE
             }
             this.fc.position(0);
             for (int j = 0; j < eV.length; j++) {
-                if (!this.aY) {
-                    this.fc.put(arrayOfPointF1[eV[j]].x / this.aS).put(arrayOfPointF1[eV[j]].y / this.aT);
+                if (!this.needFlip) {
+                    this.fc.put(arrayOfPointF1[eV[j]].x / this.surfaceWidth).put(arrayOfPointF1[eV[j]].y / this.surfaceHeight);
                 } else {
-                    this.fc.put(arrayOfPointF1[eV[j]].x / this.aS).put(1.0F - arrayOfPointF1[eV[j]].y / this.aT);
+                    this.fc.put(arrayOfPointF1[eV[j]].x / this.surfaceWidth).put(1.0F - arrayOfPointF1[eV[j]].y / this.surfaceHeight);
                 }
             }
             this.fd.position(0);
             for (int j = 0; j < eV.length; j++) {
-                if (!this.aY) {
-                    this.fd.put(arrayOfPointF2[eV[j]].x / this.aS).put(arrayOfPointF2[eV[j]].y / this.aT);
+                if (!this.needFlip) {
+                    this.fd.put(arrayOfPointF2[eV[j]].x / this.surfaceWidth).put(arrayOfPointF2[eV[j]].y / this.surfaceHeight);
                 } else {
-                    this.fd.put(arrayOfPointF2[eV[j]].x / this.aS).put(1.0F - arrayOfPointF2[eV[j]].y / this.aT);
+                    this.fd.put(arrayOfPointF2[eV[j]].x / this.surfaceWidth).put(1.0F - arrayOfPointF2[eV[j]].y / this.surfaceHeight);
                 }
             }
             this.fc.position(0);
-            GLES20.glVertexAttribPointer(this.aR, 2, 5126, false, 0, this.fc);
+            GLES20.glVertexAttribPointer(this.maInputTextureCoordinateLocation, 2, 5126, false, 0, this.fc);
 
-            GLES20.glEnableVertexAttribArray(this.aR);
+            GLES20.glEnableVertexAttribArray(this.maInputTextureCoordinateLocation);
             if (paramInt != -1)
             {
                 GLES20.glActiveTexture(33984);
                 GLES20.glBindTexture(y(), paramInt);
-                GLES20.glUniform1i(this.aQ, 0);
+                GLES20.glUniform1i(this.muInputImageTextureLocation, 0);
             }
             this.el.position(0);
-            GLES20.glVertexAttribPointer(this.aP, 2, 5126, false, 0, this.el);
-            GLES20.glEnableVertexAttribArray(this.aP);
+            GLES20.glVertexAttribPointer(this.maPostionLocation, 2, 5126, false, 0, this.el);
+            GLES20.glEnableVertexAttribArray(this.maPostionLocation);
 
             this.fd.position(0);
             GLES20.glVertexAttribPointer(this.fb, 2, 5126, false, 0, this.fd);
@@ -164,9 +164,9 @@ public abstract class SwitchFaceBase  extends GPUImageFilterE
 
             GLES20.glDrawArrays(4, 0, eV.length);
 
-            GLES20.glDisableVertexAttribArray(this.aR);
+            GLES20.glDisableVertexAttribArray(this.maInputTextureCoordinateLocation);
 
-            GLES20.glDisableVertexAttribArray(this.aP);
+            GLES20.glDisableVertexAttribArray(this.maPostionLocation);
             GLES20.glDisableVertexAttribArray(this.fa);
             GLES20.glDisableVertexAttribArray(this.fb);
         }

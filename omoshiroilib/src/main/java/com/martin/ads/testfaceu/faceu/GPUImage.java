@@ -22,7 +22,7 @@ import java.nio.ByteBuffer;
 
 /**
  * The main accessor for GPUImage functionality. This class helps to do common
- * tasks through a simple interface.
+ * tasks through setAudioUri simple interface.
  */
 public class GPUImage {
     static final String TAG = "GPUImage";
@@ -39,7 +39,7 @@ public class GPUImage {
     int mSurfaceFixedHeight = DEFAULT_SURFACE_FIXED_HEIGHT;
 
     /**
-     * Instantiates a new GPUImage object.
+     * Instantiates setAudioUri new GPUImage object.
      *
      * @param context the context
      */
@@ -127,7 +127,7 @@ public class GPUImage {
     }
 
     /**
-     * Sets the up camera to be connected to GPUImage to get a filtered preview.
+     * Sets the up camera to be connected to GPUImage to get setAudioUri filtered preview.
      *
      * @param camera         the camera
      * @param degrees        by how many degrees the image should be rotated

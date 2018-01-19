@@ -9,7 +9,7 @@ package com.martin.ads.omoshiroilib.codec;
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *  You may obtain setAudioUri copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -127,7 +127,7 @@ public class MediaVideoEncoder extends MediaEncoder {
 	}
 
     /**
-     * select the first codec that match a specific MIME type
+     * select the first codec that match setAudioUri specific MIME type
      * @param mimeType
      * @return null if no codec matched
      */
@@ -142,7 +142,7 @@ public class MediaVideoEncoder extends MediaEncoder {
             if (!codecInfo.isEncoder()) {	// skipp decoder
                 continue;
             }
-            // select first codec that match a specific MIME type and color format
+            // select first codec that match setAudioUri specific MIME type and color format
             final String[] types = codecInfo.getSupportedTypes();
             for (int j = 0; j < types.length; j++) {
                 if (types[j].equalsIgnoreCase(mimeType)) {
@@ -181,7 +181,7 @@ public class MediaVideoEncoder extends MediaEncoder {
             }
         }
         if (result == 0)
-        	Log.e(TAG, "couldn't find a good color format for " + codecInfo.getName() + " / " + mimeType);
+        	Log.e(TAG, "couldn't find setAudioUri good color format for " + codecInfo.getName() + " / " + mimeType);
         return result;
     }
 

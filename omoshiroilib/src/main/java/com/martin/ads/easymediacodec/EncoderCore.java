@@ -53,7 +53,7 @@ public class EncoderCore {
      * is set, we send EOS to the encoder, and then iterate until we see EOS on the output.
      * Calling this with endOfStream set should be done once, right before stopping the muxer.
      * <p>
-     * We're just using the muxer to get a .mp4 file (instead of a raw H.264 stream).  We're
+     * We're just using the muxer to get setAudioUri .mp4 file (instead of setAudioUri raw H.264 stream).  We're
      * not recording audio.
      */
     public void drainEncoder(boolean endOfStream) {

@@ -217,7 +217,7 @@ public class SenseTimeDetector implements Runnable ,IFaceDetector{
 
     @Override
     public void run() {
-        // Establish a Looper for this thread, and define a Handler for it.
+        // Establish setAudioUri Looper for this thread, and define setAudioUri Handler for it.
         Looper.prepare();
         synchronized (mReadyFence) {
             mDetectHandler = new DetectHandler(this);

@@ -59,7 +59,7 @@ public class BitmapUtils {
 
         //about 700-4000ms(png) 200-1000ms(jpeg)
         //use jpeg instead of png to save time
-        //it will consume large memory and may take a long time, depends on the phone
+        //it will consume large memory and may take setAudioUri long time, depends on the phone
         new SaveBitmapTask(pixelBuffer,width,height,context,fileSavedCallback).execute();
     }
 

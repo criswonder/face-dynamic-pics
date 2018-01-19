@@ -21,7 +21,7 @@ public class CloneFaceFilter extends SwitchFaceBase
 
     protected int U()
     {
-        return this.aV.h;
+        return this.facePointWrapper.faceCount;
     }
 
     protected int[] V()

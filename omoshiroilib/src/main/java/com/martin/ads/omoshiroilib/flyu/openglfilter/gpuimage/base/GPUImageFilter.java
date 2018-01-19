@@ -21,26 +21,26 @@ public class GPUImageFilter {
     private final LinkedList<Runnable> aL;
     private String vertexSource;
     protected String fragmentSource;
-    protected int aO;
-    protected int aP;
-    protected int aQ;
-    protected int aR;
-    public int aS;
-    public int aT;
-    private boolean aU;
-    protected FacePointWrapper aV = new FacePointWrapper();
-    protected int aW;
-    protected int aX;
-    protected boolean aY = false;
+    protected int programId;
+    protected int maPostionLocation;
+    protected int muInputImageTextureLocation;
+    protected int maInputTextureCoordinateLocation;
+    public int surfaceWidth;
+    public int surfaceHeight;
+    private boolean mLocationInited;
+    protected FacePointWrapper facePointWrapper = new FacePointWrapper();
+    protected int mOutputWidth;
+    protected int mOutputHeight;
+    protected boolean needFlip = false;
     protected boolean aZ = false;
     protected int ba = 1;
     protected float[] bb;
     protected boolean bc = false;
-    private int bd;
-    private int be;
-    private int bf;
-    private int bg;
-    protected String bh = null;
+    private int muIsAndroidLocation;
+    private int muSurfaceWidthLocation;
+    private int muSurfaceHeightLocation;
+    private int muNeedFlipLocation;
+    protected String name = null;
     protected int bi = 0;
     protected int bj = 0;
     protected int bk = 0;
@@ -64,18 +64,18 @@ public class GPUImageFilter {
 
     public final void init()
     {
-        l();
-        this.aU = true;
+        locationInit();
+        this.mLocationInited = true;
         w();
     }
 
-    protected int k() {
+    protected int createProgram() {
         return ShaderUtils.createProgram(vertexSource, fragmentSource);
     }
 
     public void c(boolean paramBoolean)
     {
-        this.aY = paramBoolean;
+        this.needFlip = paramBoolean;
     }
 
     public void d(boolean paramBoolean)
@@ -85,43 +85,43 @@ public class GPUImageFilter {
 
     protected float g(int paramInt1, int paramInt2)
     {
-        return this.aV.pointArray[paramInt1][paramInt2].x;
+        return this.facePointWrapper.pointArray[paramInt1][paramInt2].x;
     }
 
     protected float h(int paramInt1, int paramInt2)
     {
-        if (!this.aY) {
-            return this.aV.pointArray[paramInt1][paramInt2].y;
+        if (!this.needFlip) {
+            return this.facePointWrapper.pointArray[paramInt1][paramInt2].y;
         }
-        return this.aX - this.aV.pointArray[paramInt1][paramInt2].y;
+        return this.mOutputHeight - this.facePointWrapper.pointArray[paramInt1][paramInt2].y;
     }
 
-    public void l()
+    public void locationInit()
     {
-        this.aO = k();
-        this.aP = GLES20.glGetAttribLocation(this.aO, "position");
-        this.aQ = GLES20.glGetUniformLocation(this.aO, "inputImageTexture");
-        this.aR = GLES20.glGetAttribLocation(this.aO, "inputTextureCoordinate");
+        this.programId = createProgram();
+        this.maPostionLocation = GLES20.glGetAttribLocation(this.programId, "position");
+        this.muInputImageTextureLocation = GLES20.glGetUniformLocation(this.programId, "inputImageTexture");
+        this.maInputTextureCoordinateLocation = GLES20.glGetAttribLocation(this.programId, "inputTextureCoordinate");
 
-        this.bd = GLES20.glGetUniformLocation(this.aO, "isAndroid");
-        this.be = GLES20.glGetUniformLocation(this.aO, "surfaceWidth");
-        this.bf = GLES20.glGetUniformLocation(this.aO, "surfaceHeight");
-        this.bg = GLES20.glGetUniformLocation(this.aO, "needFlip");
-        this.aU = true;
+        this.muIsAndroidLocation = GLES20.glGetUniformLocation(this.programId, "isAndroid");
+        this.muSurfaceWidthLocation = GLES20.glGetUniformLocation(this.programId, "surfaceWidth");
+        this.muSurfaceHeightLocation = GLES20.glGetUniformLocation(this.programId, "surfaceHeight");
+        this.muNeedFlipLocation = GLES20.glGetUniformLocation(this.programId, "needFlip");
+        this.mLocationInited = true;
     }
 
     public void w() {}
 
     public String x()
     {
-        return this.bh;
+        return this.name;
     }
 
-    public PointF[][] setFaceDetResult(int paramInt1, PointF[][] paramArrayOfPointF, int paramInt2, int paramInt3)
+    public PointF[][] setFaceDetResult(int faceCount, PointF[][] paramArrayOfPointF, int outputWidth, int outputHeight)
     {
-        this.aV.a(paramInt1, paramArrayOfPointF);
-        this.aW = paramInt2;
-        this.aX = paramInt3;
+        this.facePointWrapper.a(faceCount, paramArrayOfPointF);
+        this.mOutputWidth = outputWidth;
+        this.mOutputHeight = outputHeight;
         return paramArrayOfPointF;
     }
 
@@ -141,8 +141,8 @@ public class GPUImageFilter {
     {
         C();
 
-        this.aU = false;
-        GLES20.glDeleteProgram(this.aO);
+        this.mLocationInited = false;
+        GLES20.glDeleteProgram(this.programId);
         onDestroy();
     }
 
@@ -150,8 +150,8 @@ public class GPUImageFilter {
 
     public void onOutputSizeChanged(int paramInt1, int paramInt2)
     {
-        this.aS = paramInt1;
-        this.aT = paramInt2;
+        this.surfaceWidth = paramInt1;
+        this.surfaceHeight = paramInt2;
     }
 
     public int y()
@@ -162,28 +162,28 @@ public class GPUImageFilter {
     public void onDraw(int paramInt, FloatBuffer paramFloatBuffer1, FloatBuffer paramFloatBuffer2)
     {
         z();
-        GLES20.glUseProgram(this.aO);
+        GLES20.glUseProgram(this.programId);
         C();
-        if (!this.aU) {
+        if (!this.mLocationInited) {
             return;
         }
         paramFloatBuffer1.position(0);
-        GLES20.glVertexAttribPointer(this.aP, 2, 5126, false, 0, paramFloatBuffer1);
-        GLES20.glEnableVertexAttribArray(this.aP);
+        GLES20.glVertexAttribPointer(this.maPostionLocation, 2, 5126, false, 0, paramFloatBuffer1);
+        GLES20.glEnableVertexAttribArray(this.maPostionLocation);
         paramFloatBuffer2.position(0);
-        GLES20.glVertexAttribPointer(this.aR, 2, 5126, false, 0, paramFloatBuffer2);
+        GLES20.glVertexAttribPointer(this.maInputTextureCoordinateLocation, 2, 5126, false, 0, paramFloatBuffer2);
 
-        GLES20.glEnableVertexAttribArray(this.aR);
+        GLES20.glEnableVertexAttribArray(this.maInputTextureCoordinateLocation);
         if (paramInt != -1)
         {
             GLES20.glActiveTexture(33984);
             GLES20.glBindTexture(y(), paramInt);
-            GLES20.glUniform1i(this.aQ, 0);
+            GLES20.glUniform1i(this.muInputImageTextureLocation, 0);
         }
         d(paramInt);
         GLES20.glDrawArrays(5, 0, 4);
-        GLES20.glDisableVertexAttribArray(this.aP);
-        GLES20.glDisableVertexAttribArray(this.aR);
+        GLES20.glDisableVertexAttribArray(this.maPostionLocation);
+        GLES20.glDisableVertexAttribArray(this.maInputTextureCoordinateLocation);
 
         e(paramInt);
 
@@ -196,17 +196,17 @@ public class GPUImageFilter {
 
     protected void d(int paramInt)
     {
-        if (-1 != this.bd) {
-            i(this.bd, 1);
+        if (-1 != this.muIsAndroidLocation) {
+            setInt(this.muIsAndroidLocation, 1);
         }
-        if (-1 != this.be) {
-            i(this.be, this.aS);
+        if (-1 != this.muSurfaceWidthLocation) {
+            setInt(this.muSurfaceWidthLocation, this.surfaceWidth);
         }
-        if (-1 != this.bf) {
-            i(this.bf, this.aT);
+        if (-1 != this.muSurfaceHeightLocation) {
+            setInt(this.muSurfaceHeightLocation, this.surfaceHeight);
         }
-        if (-1 != this.bg) {
-            i(this.bg, this.aY ? 1 : 0);
+        if (-1 != this.muNeedFlipLocation) {
+            setInt(this.muNeedFlipLocation, this.needFlip ? 1 : 0);
         }
     }
 
@@ -239,15 +239,15 @@ public class GPUImageFilter {
 
     public boolean isInitialized()
     {
-        return this.aU;
+        return this.mLocationInited;
     }
 
     public int getProgram()
     {
-        return this.aO;
+        return this.programId;
     }
 
-    protected void i(int paramInt1, int paramInt2)
+    protected void setInt(int paramInt1, int paramInt2)
     {
         GLES20.glUniform1i(paramInt1, paramInt2);
     }
@@ -257,12 +257,12 @@ public class GPUImageFilter {
         GLES20.glUniform1f(paramInt, paramFloat);
     }
 
-    protected void a(int paramInt, float[] paramArrayOfFloat)
+    protected void setFloatArray(int paramInt, float[] paramArrayOfFloat)
     {
         GLES20.glUniform2fv(paramInt, 1, FloatBuffer.wrap(paramArrayOfFloat));
     }
 
-    protected void a(int paramInt, PointF paramPointF)
+    protected void setPointF(int paramInt, PointF paramPointF)
     {
         float[] arrayOfFloat = new float[2];
         arrayOfFloat[0] = paramPointF.x;

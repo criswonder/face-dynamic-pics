@@ -11,8 +11,8 @@ import java.util.Map;
 
 public class MultiSectionInfo extends AbsData {
     public static final String dI = "__empty__";
-    public Map<String, a> dJ;
-    public Map<String, b> dK;
+    public Map<String, Filter> dJ;
+    public Map<String, Section> sectionsMap;
     public Map<String, Map<Integer, c>> dL;
     public String dM;
 
@@ -32,19 +32,19 @@ public class MultiSectionInfo extends AbsData {
         public long dV;
     }
 
-    public static class b
+    public static class Section
     {
-        public String dR;
-        public String bP;
-        public int dS;
-        public List<String> dT;
+        public String sectionname;
+        public String tips;
+        public int duration;
+        public List<String> filterlist;
     }
 
-    public static class a
+    public static class Filter
     {
-        public String dN;
-        public boolean dO;
+        public String name;
+        public boolean reload;
         public String dP;
-        public Object dQ;
+        public Object data;
     }
 }

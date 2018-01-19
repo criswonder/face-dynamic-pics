@@ -8,19 +8,19 @@ import java.util.List;
 
 public class GroupData {
     public String name;
-    public String bN;
-    public int di;
-    public int cN;
-    public List<b> cv;
-    public List<String> ed;
-    public int ee;
-    public float[] bO;
-    public String bS;
-    public int bQ;
+    public String glsl;
+    public int triggerType;
+    public int maxcount;
+    public List<Point> pointIndexArray;
+    public List<String> resList;
+    public int resloadtype;
+    public float[] timeparam;
+    public String audio;
+    public int soundPlayMode;
 
-    public static class b
+    public static class Point
     {
-        public int cx;
-        public int cy;
+        public int x;
+        public int y;
     }
 }
