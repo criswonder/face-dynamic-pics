@@ -78,7 +78,8 @@ import javax.microedition.khronos.opengles.GL10;
  */
 
 public class GLRender implements GLSurfaceView.Renderer , IFaceDetector.FaceDetectorListener{
-    private static final String TAG = "GLRender";
+    private final String TAG = "GLRender";
+    private boolean VERBOSE = true;
     public static final boolean USE_OES_TEXTURE=false;
 
     private final static Logger log = LoggerFactory.getLogger();
@@ -399,6 +400,9 @@ public class GLRender implements GLSurfaceView.Renderer , IFaceDetector.FaceDete
 
         mGroupBase.draw(lastProcessFilter.getLastTextureId(), fbo.getFrameBuffer(), mGLCubeBuffer, mGLTextureBuffer);
         fbo.unbind();
+        if(VERBOSE) Log.w(TAG,"pointArray delimeter\n\n");
+
+
         lastProcessFilter.setSavedTextureId(fbo.getFrameBufferTextureId());//保存的这个textureid会给VideoEncoder线程共享
         screenDrawer.onFilterChanged(surfaceWidth,surfaceHeight);
         screenDrawer.onDrawFrame(fbo.getFrameBufferTextureId());

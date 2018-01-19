@@ -46,7 +46,7 @@ public class DecorateFaceNet  extends GPUImageFilterE
             if (locala.cx >= this.facePointWrapper.faceCount) {
                 setPointF(this.cB[i], this.cA);
             } else {
-                b(this.cB[i], locala.cx, locala.cy);
+                updateUniformValue(this.cB[i], locala.cx, locala.cy);
             }
         }
     }

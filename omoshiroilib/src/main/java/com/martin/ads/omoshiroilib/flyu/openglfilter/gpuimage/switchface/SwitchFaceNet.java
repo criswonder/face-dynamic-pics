@@ -80,7 +80,7 @@ public class SwitchFaceNet extends GPUImageFilterE
             if (locala.cx >= this.facePointWrapper.faceCount) {
                 setPointF(this.cB[j], this.cA);
             } else {
-                b(this.cB[j], locala.cx, locala.cy);
+                updateUniformValue(this.cB[j], locala.cx, locala.cy);
             }
         }
         for (int j = 0; j < this.dZ.length; j++) {

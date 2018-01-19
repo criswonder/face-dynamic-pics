@@ -118,7 +118,7 @@ public class ShapeChangeFilter extends GPUImageFilterE
             if (locala.x >= i) {
                 setPointF(this.muLocations[k], this.pointF);
             } else {
-                b(this.muLocations[k], locala.x, locala.y);
+                updateUniformValue(this.muLocations[k], locala.x, locala.y);
             }
         }
         for (int k = 0; k < this.muAngleLocations.length; k++) {

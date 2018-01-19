@@ -1,6 +1,11 @@
 package com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.base;
 
 import android.graphics.Bitmap;
+import android.graphics.PointF;
+import android.opengl.GLES20;
+import android.support.annotation.CallSuper;
+import android.util.Log;
+import android.util.Pair;
 
 import com.martin.ads.omoshiroilib.flyu.openglfilter.common.BitmapLoader;
 import com.martin.ads.omoshiroilib.flyu.openglfilter.common.ImageLoader;
@@ -9,11 +14,6 @@ import com.martin.ads.omoshiroilib.flyu.sdk.commoninterface.IImageLoader;
 import com.martin.ads.omoshiroilib.flyu.sdk.utils.IOUtils;
 import com.martin.ads.omoshiroilib.flyu.sdk.utils.MiscUtils;
 
-import android.graphics.PointF;
-import android.opengl.GLES20;
-import android.support.annotation.CallSuper;
-import android.util.Log;
-import android.util.Pair;
 import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.nio.FloatBuffer;
@@ -26,14 +26,13 @@ import java.util.List;
  */
 
 public class GPUImageFilterE extends GPUImageAudioFilter
-        implements IImageLoader.IAsyncLoadImgListener
-{
+        implements IImageLoader.IAsyncLoadImgListener {
     private final String TAG = "GPUImageFilterE";
     private boolean VERBOSE = true;
     final int bp = 2;
     final int bq = 3;
     final int br = 8;
-    static int[] bs = { 33987, 33988, 33989, 33990, 33991, 33992, 33993, 33994 };
+    static int[] bs = {33987, 33988, 33989, 33990, 33991, 33992, 33993, 33994};
     int[] bt = new int[8];
     int[] bu = new int[8];
     List<SoftReference<Bitmap>> bv = new ArrayList();
@@ -42,38 +41,30 @@ public class GPUImageFilterE extends GPUImageAudioFilter
     MResFileNameReader by = null;
     long bz = -1L;
 
-    public GPUImageFilterE(String paramString1, String paramString2)
-    {
+    public GPUImageFilterE(String paramString1, String paramString2) {
         this(null, paramString1, paramString2);
     }
 
-    public GPUImageFilterE(String paramString1, String paramString2, String paramString3)
-    {
+    public GPUImageFilterE(String paramString1, String paramString2, String paramString3) {
         super(paramString2, paramString3);
-        for (int i = 0; i < 8; i++)
-        {
+        for (int i = 0; i < 8; i++) {
             this.bu[i] = -1;
             this.bv.add(null);
         }
-        if (!MiscUtils.isNilOrNull(paramString1))
-        {
+        if (!MiscUtils.isNilOrNull(paramString1)) {
             Pair localPair = MResFileReaderBase.tryGetMergeFile(paramString1);
             if (null != localPair) {
-                this.by = new MResFileNameReader(paramString1 + "/" + (String)localPair.first, paramString1 + "/" + (String)localPair.second);
+                this.by = new MResFileNameReader(paramString1 + "/" + (String) localPair.first, paramString1 + "/" + (String) localPair.second);
             }
         }
     }
 
-    public void onInit()
-    {
+    public void onInit() {
         super.onInit();
         if (null != this.by) {
-            try
-            {
+            try {
                 this.by.init();
-            }
-            catch (IOException localIOException)
-            {
+            } catch (IOException localIOException) {
                 Log.e("GPUImageAudioFilter", "init res file name reader failed", localIOException);
                 this.by = null;
             }
@@ -84,20 +75,18 @@ public class GPUImageFilterE extends GPUImageAudioFilter
         G();
     }
 
-    protected float E()
-    {
+    protected float E() {
         if (-1L == this.bz) {
             return 0.0F;
         }
-        return (float)(System.currentTimeMillis() - this.bz) / 1000.0F;
+        return (float) (System.currentTimeMillis() - this.bz) / 1000.0F;
     }
 
-    public void onDestroy()
-    {
+    public void onDestroy() {
         super.onDestroy();
 
-        for(int var1 = 0; var1 < 8; ++var1) {
-            if(this.bu[var1] != -1) {
+        for (int var1 = 0; var1 < 8; ++var1) {
+            if (this.bu[var1] != -1) {
                 int[] var2 = new int[]{this.bu[var1]};
                 GLES20.glDeleteTextures(1, var2, 0);
                 this.bu[var1] = -1;
@@ -106,35 +95,31 @@ public class GPUImageFilterE extends GPUImageAudioFilter
             this.bv.set(var1, null);
         }
 
-        if(null != this.bw) {
+        if (null != this.bw) {
             Iterator var3 = this.bw.iterator();
 
-            while(var3.hasNext()) {
-                String var4 = (String)var3.next();
+            while (var3.hasNext()) {
+                String var4 = (String) var3.next();
                 ImageLoader.getImageLoaderImpl().cancelLoad(var4, this);
             }
         }
     }
 
-    public void onOutputSizeChanged(int paramInt1, int paramInt2)
-    {
+    public void onOutputSizeChanged(int paramInt1, int paramInt2) {
         this.surfaceWidth = paramInt1;
         this.surfaceHeight = paramInt2;
     }
 
-    public void onDraw(int paramInt, FloatBuffer paramFloatBuffer1, FloatBuffer paramFloatBuffer2)
-    {
+    public void onDraw(int paramInt, FloatBuffer paramFloatBuffer1, FloatBuffer paramFloatBuffer2) {
         super.onDraw(paramInt, paramFloatBuffer1, paramFloatBuffer2);
         this.bz = System.currentTimeMillis();
     }
 
     @CallSuper
-    protected void onDrawArraysPre(int paramInt)
-    {
+    protected void onDrawArraysPre(int paramInt) {
         super.onDrawArraysPre(paramInt);
         for (int i = 0; i < 8; i++) {
-            if (this.bu[i] != -1)
-            {
+            if (this.bu[i] != -1) {
                 GLES20.glActiveTexture(bs[i]);
                 GLES20.glBindTexture(3553, this.bu[i]);
                 GLES20.glUniform1i(this.bt[i], 3 + i);
@@ -142,128 +127,105 @@ public class GPUImageFilterE extends GPUImageAudioFilter
         }
     }
 
-    public void A()
-    {
+    public void A() {
         super.A();
         this.bz = -1L;
     }
 
-    public void F()
-    {
+    public void F() {
         this.bx = true;
     }
 
-    public void i(String paramString)
-    {
+    public void i(String paramString) {
         if (this.bw == null) {
             this.bw = new ArrayList();
         }
         this.bw.add("assets://" + paramString);
     }
 
-    public void j(String paramString)
-    {
+    public void j(String paramString) {
         if (this.bw == null) {
             this.bw = new ArrayList();
         }
         this.bw.add("file://" + paramString);
     }
 
-    public void G()
-    {
+    public void G() {
         if (this.bw == null) {
             return;
         }
         for (int i = 0; i < this.bw.size(); i++) {
-            if ((null != this.bv.get(i)) && (null != ((SoftReference)this.bv.get(i)).get()))
-            {
-                this.bu[i] = OpenGlUtils.loadTexture((Bitmap)((SoftReference)this.bv.get(i)).get(), -1, false);
-            }
-            else
-            {
+            if ((null != this.bv.get(i)) && (null != ((SoftReference) this.bv.get(i)).get())) {
+                this.bu[i] = OpenGlUtils.loadTexture((Bitmap) ((SoftReference) this.bv.get(i)).get(), -1, false);
+            } else {
                 Object localObject;
                 String str;
-                if (this.bx)
-                {
+                if (this.bx) {
                     localObject = aK;
-                    if (((String)this.bw.get(i)).startsWith("assets://"))
-                    {
+                    if (((String) this.bw.get(i)).startsWith("assets://")) {
                         str = (bw.get(i)).substring("assets://".length());
                         localObject = BitmapLoader.loadBitmapFromAssets(str);
-                    }
-                    else if (((String)this.bw.get(i)).startsWith("file://"))
-                    {
-                        str = ((String)this.bw.get(i)).substring("file://".length());
+                    } else if (((String) this.bw.get(i)).startsWith("file://")) {
+                        str = ((String) this.bw.get(i)).substring("file://".length());
                         if (null != this.by) {
                             localObject = this.by.loadBitmapForName(IOUtils.extractFileName(str));
                         } else {
                             localObject = BitmapLoader.loadBitmapFromFile(str);
                         }
-                    }
-                    else if (((String)this.bw.get(i)).startsWith("http://"))
-                    {
-                        if (null != this.by)
-                        {
-                            str = ((String)this.bw.get(i)).substring("http://".length());
+                    } else if (((String) this.bw.get(i)).startsWith("http://")) {
+                        if (null != this.by) {
+                            str = ((String) this.bw.get(i)).substring("http://".length());
                             localObject = this.by.loadBitmapForName(IOUtils.extractFileName(str));
                         }
                     }
-                    if (localObject == null)
-                    {
-                        Log.i("GPUImageAudioFilter", "filter res is null:" + (String)this.bw.get(i));
+                    if (localObject == null) {
+                        Log.i("GPUImageAudioFilter", "filter res is null:" + (String) this.bw.get(i));
                         localObject = aK;
                     }
-                    this.bu[i] = OpenGlUtils.loadTexture((Bitmap)localObject, -1, false);
-                }
-                else
-                {
+                    this.bu[i] = OpenGlUtils.loadTexture((Bitmap) localObject, -1, false);
+                } else {
                     this.bu[i] = OpenGlUtils.loadTexture(aK, -1, false);
-                    if (null != this.by)
-                    {
+                    if (null != this.by) {
                         localObject = this.by.getFileBuffer();
-                        if (((String)this.bw.get(i)).startsWith("http://")) {
-                            str = ((String)this.bw.get(i)).substring("http://".length());
+                        if (((String) this.bw.get(i)).startsWith("http://")) {
+                            str = ((String) this.bw.get(i)).substring("http://".length());
                         } else {
-                            str = ((String)this.bw.get(i)).substring("file://".length());
+                            str = ((String) this.bw.get(i)).substring("file://".length());
                         }
                         Pair localPair = this.by.getOffsetAndLength(IOUtils.extractFileName(str));
                         if (null != localPair) {
-                            ImageLoader.getImageLoaderImpl().asyncLoadImage((String)this.bw.get(i), (byte[])localObject, ((Integer)localPair.first)
-                                    .intValue(), ((Integer)localPair.second).intValue(), this);
+                            ImageLoader.getImageLoaderImpl().asyncLoadImage((String) this.bw.get(i), (byte[]) localObject, ((Integer) localPair.first)
+                                    .intValue(), ((Integer) localPair.second).intValue(), this);
                         }
-                    }
-                    else
-                    {
-                        ImageLoader.getImageLoaderImpl().asyncLoadImage((String)this.bw.get(i), this);
+                    } else {
+                        ImageLoader.getImageLoaderImpl().asyncLoadImage((String) this.bw.get(i), this);
                     }
                 }
             }
         }
     }
 
-    protected void b(int paramInt1, int paramInt2, int paramInt3)
-    {
-        if (VERBOSE) Log.e(TAG, "b will access face pointArray");
+    protected void updateUniformValue(int uniformLocation, int paramInt2, int face106PointIndex) {
+        if (VERBOSE) Log.d(TAG, "pointArray updateUniformValue() called with: uniformLocation = [" + uniformLocation
+                + "], paramInt2 = [" + paramInt2 + "], face106PointIndex = [" + face106PointIndex + "]");
         float[] arrayOfFloat = new float[2];
-        arrayOfFloat[0] = (this.facePointWrapper.pointArray[paramInt2][paramInt3].x / this.mOutputWidth);
+        arrayOfFloat[0] = (this.facePointWrapper.pointArray[paramInt2][face106PointIndex].x / this.mOutputWidth);
         if (this.needFlip) {
-            arrayOfFloat[1] = (1.0F - this.facePointWrapper.pointArray[paramInt2][paramInt3].y / this.mOutputHeight);
+            arrayOfFloat[1] = (1.0F - this.facePointWrapper.pointArray[paramInt2][face106PointIndex].y / this.mOutputHeight);
         } else {
-            arrayOfFloat[1] = (this.facePointWrapper.pointArray[paramInt2][paramInt3].y / this.mOutputHeight);
+            arrayOfFloat[1] = (this.facePointWrapper.pointArray[paramInt2][face106PointIndex].y / this.mOutputHeight);
         }
-        GLES20.glUniform2fv(paramInt1, 1, arrayOfFloat, 0);
+        GLES20.glUniform2fv(uniformLocation, 1, arrayOfFloat, 0);
     }
 
-    protected PointF a(float paramFloat1, float paramFloat2)
-    {
+    protected PointF a(float paramFloat1, float paramFloat2) {
         PointF localPointF = new PointF();
         localPointF.x = (2.0F * paramFloat1 / this.mOutputWidth - 1.0F);
         localPointF.y = (2.0F * (1.0F - paramFloat2 / this.mOutputHeight) - 1.0F);
         return localPointF;
     }
 
-    public void onLoadFinish(String paramString, Bitmap paramBitmap)
-    {
+    public void onLoadFinish(String paramString, Bitmap paramBitmap) {
         addTask(new e(this, paramString, paramBitmap));
     }
 
@@ -271,6 +233,7 @@ public class GPUImageFilterE extends GPUImageAudioFilter
         private GPUImageFilterE bC;
         private String bA;
         Bitmap bB;
+
         e(GPUImageFilterE var1, String var2, Bitmap var3) {
             this.bC = var1;
             this.bA = var2;
@@ -278,10 +241,10 @@ public class GPUImageFilterE extends GPUImageAudioFilter
         }
 
         public void run() {
-            for(int var1 = 0; var1 < this.bC.bw.size(); ++var1) {
-                if(((String)this.bC.bw.get(var1)).equals(this.bA)) {
+            for (int var1 = 0; var1 < this.bC.bw.size(); ++var1) {
+                if (((String) this.bC.bw.get(var1)).equals(this.bA)) {
                     this.bC.bv.set(var1, new SoftReference(this.bB));
-                    if(null != this.bB) {
+                    if (null != this.bB) {
                         int[] var2 = new int[]{this.bC.bu[var1]};
                         GLES20.glDeleteTextures(1, var2, 0);
                         this.bC.bu[var1] = OpenGlUtils.loadTexture(this.bB, -1, false);

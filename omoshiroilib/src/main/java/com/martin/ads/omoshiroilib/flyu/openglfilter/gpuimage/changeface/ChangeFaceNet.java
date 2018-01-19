@@ -13,7 +13,7 @@ public class ChangeFaceNet extends ChangeFaceBaseFilter
 {
     ChangeFaceInfo bU;
     String bV;
-    int bW;
+    int muLoc_p_left;
     int bX;
     int bY;
     int bZ;
@@ -68,7 +68,7 @@ public class ChangeFaceNet extends ChangeFaceBaseFilter
     {
         super.onInit();
 
-        this.bW = GLES20.glGetUniformLocation(getProgram(), "p_left");
+        this.muLoc_p_left = GLES20.glGetUniformLocation(getProgram(), "p_left");
         this.bX = GLES20.glGetUniformLocation(getProgram(), "p_right");
         this.bY = GLES20.glGetUniformLocation(getProgram(), "p_top");
         this.bZ = GLES20.glGetUniformLocation(getProgram(), "p_bottom");
@@ -104,28 +104,28 @@ public class ChangeFaceNet extends ChangeFaceBaseFilter
         }
         if (this.facePointWrapper.faceCount > 0)
         {
-            b(this.bW, 0, 84);
-            b(this.bX, 0, 90);
-            b(this.bY, 0, 87);
-            b(this.bZ, 0, 93);
-            b(this.ca, 0, 46);
-            b(this.cb, 0, 74);
-            b(this.cc, 0, 77);
-            b(this.cd, 0, 2);
-            b(this.ce, 0, 30);
-            b(this.cf, 0, 72);
-            b(this.cg, 0, 73);
-            b(this.ch, 0, 52);
-            b(this.ci, 0, 55);
-            b(this.cj, 0, 75);
-            b(this.ck, 0, 76);
-            b(this.cl, 0, 58);
-            b(this.cm, 0, 61);
-            b(this.cn, 0, 44);
+            updateUniformValue(this.muLoc_p_left, 0, 84);
+            updateUniformValue(this.bX, 0, 90);
+            updateUniformValue(this.bY, 0, 87);
+            updateUniformValue(this.bZ, 0, 93);
+            updateUniformValue(this.ca, 0, 46);
+            updateUniformValue(this.cb, 0, 74);
+            updateUniformValue(this.cc, 0, 77);
+            updateUniformValue(this.cd, 0, 2);
+            updateUniformValue(this.ce, 0, 30);
+            updateUniformValue(this.cf, 0, 72);
+            updateUniformValue(this.cg, 0, 73);
+            updateUniformValue(this.ch, 0, 52);
+            updateUniformValue(this.ci, 0, 55);
+            updateUniformValue(this.cj, 0, 75);
+            updateUniformValue(this.ck, 0, 76);
+            updateUniformValue(this.cl, 0, 58);
+            updateUniformValue(this.cm, 0, 61);
+            updateUniformValue(this.cn, 0, 44);
 
-            b(this.co, 0, 16);
-            b(this.cp, 0, 10);
-            b(this.cq, 0, 22);
+            updateUniformValue(this.co, 0, 16);
+            updateUniformValue(this.cp, 0, 10);
+            updateUniformValue(this.cq, 0, 22);
             if (this.cu >= 1.9F) {
                 this.cu = this.bU.bO[0];
             } else {
