@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.opengl.GLES20;
+import android.util.Log;
+
 import java.nio.FloatBuffer;
 import java.util.LinkedList;
 
@@ -17,8 +19,10 @@ import com.martin.ads.omoshiroilib.util.ShaderUtils;
  */
 
 public class GPUImageFilter {
+    private final String TAG = "GPUImageFilter";
+    private boolean VERBOSE = true;
     protected static final Bitmap aK = BitmapFactory.decodeResource(GlobalConfig.context.getResources(), R.drawable.filter_res_hold);
-    private final LinkedList<Runnable> aL;
+    private final LinkedList<Runnable> mRunnableList;
     private String vertexSource;
     protected String fragmentSource;
     protected int programId;
@@ -27,7 +31,7 @@ public class GPUImageFilter {
     protected int maInputTextureCoordinateLocation;
     public int surfaceWidth;
     public int surfaceHeight;
-    private boolean mLocationInited;
+    private boolean mIsInitialized;
     protected FacePointWrapper facePointWrapper = new FacePointWrapper();
     protected int mOutputWidth;
     protected int mOutputHeight;
@@ -52,7 +56,7 @@ public class GPUImageFilter {
 
     public GPUImageFilter(String paramString1, String paramString2)
     {
-        this.aL = new LinkedList();
+        this.mRunnableList = new LinkedList();
         this.vertexSource = paramString1;
         this.fragmentSource = paramString2;
     }
@@ -64,9 +68,9 @@ public class GPUImageFilter {
 
     public final void init()
     {
-        locationInit();
-        this.mLocationInited = true;
-        w();
+        onInit();
+        this.mIsInitialized = true;
+        onInitialized();
     }
 
     protected int createProgram() {
@@ -78,25 +82,27 @@ public class GPUImageFilter {
         this.needFlip = paramBoolean;
     }
 
-    public void d(boolean paramBoolean)
+    public void onDrawArraysPre(boolean paramBoolean)
     {
         this.aZ = paramBoolean;
     }
 
-    protected float g(int paramInt1, int paramInt2)
+    protected float faceMethoda(int paramInt1, int paramInt2)
     {
+        if (VERBOSE) Log.e(TAG, "faceMethoda will access face pointArray");
         return this.facePointWrapper.pointArray[paramInt1][paramInt2].x;
     }
 
-    protected float h(int paramInt1, int paramInt2)
+    protected float faceMethodb(int paramInt1, int paramInt2)
     {
+        if (VERBOSE) Log.e(TAG, "faceMethodb will access face pointArray");
         if (!this.needFlip) {
             return this.facePointWrapper.pointArray[paramInt1][paramInt2].y;
         }
         return this.mOutputHeight - this.facePointWrapper.pointArray[paramInt1][paramInt2].y;
     }
 
-    public void locationInit()
+    public void onInit()
     {
         this.programId = createProgram();
         this.maPostionLocation = GLES20.glGetAttribLocation(this.programId, "position");
@@ -107,10 +113,10 @@ public class GPUImageFilter {
         this.muSurfaceWidthLocation = GLES20.glGetUniformLocation(this.programId, "surfaceWidth");
         this.muSurfaceHeightLocation = GLES20.glGetUniformLocation(this.programId, "surfaceHeight");
         this.muNeedFlipLocation = GLES20.glGetUniformLocation(this.programId, "needFlip");
-        this.mLocationInited = true;
+        this.mIsInitialized = true;
     }
 
-    public void w() {}
+    public void onInitialized() {}
 
     public String x()
     {
@@ -119,7 +125,7 @@ public class GPUImageFilter {
 
     public PointF[][] setFaceDetResult(int faceCount, PointF[][] paramArrayOfPointF, int outputWidth, int outputHeight)
     {
-        this.facePointWrapper.a(faceCount, paramArrayOfPointF);
+        this.facePointWrapper.init(faceCount, paramArrayOfPointF);
         this.mOutputWidth = outputWidth;
         this.mOutputHeight = outputHeight;
         return paramArrayOfPointF;
@@ -139,9 +145,9 @@ public class GPUImageFilter {
 
     public final void destroy()
     {
-        C();
+        runPendingOnDrawTasks();
 
-        this.mLocationInited = false;
+        this.mIsInitialized = false;
         GLES20.glDeleteProgram(this.programId);
         onDestroy();
     }
@@ -161,10 +167,10 @@ public class GPUImageFilter {
 
     public void onDraw(int paramInt, FloatBuffer paramFloatBuffer1, FloatBuffer paramFloatBuffer2)
     {
-        z();
+        beforeGroupDraw();
         GLES20.glUseProgram(this.programId);
-        C();
-        if (!this.mLocationInited) {
+        runPendingOnDrawTasks();
+        if (!this.mIsInitialized) {
             return;
         }
         paramFloatBuffer1.position(0);
@@ -180,21 +186,21 @@ public class GPUImageFilter {
             GLES20.glBindTexture(y(), paramInt);
             GLES20.glUniform1i(this.muInputImageTextureLocation, 0);
         }
-        d(paramInt);
+        onDrawArraysPre(paramInt);
         GLES20.glDrawArrays(5, 0, 4);
         GLES20.glDisableVertexAttribArray(this.maPostionLocation);
         GLES20.glDisableVertexAttribArray(this.maInputTextureCoordinateLocation);
 
-        e(paramInt);
+        onDrawArraysAfter(paramInt);
 
         GLES20.glBindTexture(y(), 0);
     }
 
-    protected void z() {}
+    protected void beforeGroupDraw() {}
 
-    protected void e(int paramInt) {}
+    protected void onDrawArraysAfter(int paramInt) {}
 
-    protected void d(int paramInt)
+    protected void onDrawArraysPre(int paramInt)
     {
         if (-1 != this.muIsAndroidLocation) {
             setInt(this.muIsAndroidLocation, 1);
@@ -222,15 +228,15 @@ public class GPUImageFilter {
         return 5;
     }
 
-    protected void C()
+    protected void runPendingOnDrawTasks()
     {
         LinkedList localLinkedList = new LinkedList();
-        synchronized (this.aL)
+        synchronized (this.mRunnableList)
         {
-            for (Runnable localRunnable : this.aL) {
+            for (Runnable localRunnable : this.mRunnableList) {
                 localLinkedList.add(localRunnable);
             }
-            this.aL.clear();
+            this.mRunnableList.clear();
         }
         while (!localLinkedList.isEmpty()) {
             ((Runnable)localLinkedList.removeFirst()).run();
@@ -239,7 +245,7 @@ public class GPUImageFilter {
 
     public boolean isInitialized()
     {
-        return this.mLocationInited;
+        return this.mIsInitialized;
     }
 
     public int getProgram()
@@ -275,16 +281,16 @@ public class GPUImageFilter {
         GLES20.glUniformMatrix4fv(paramInt, 1, false, paramArrayOfFloat, 0);
     }
 
-    protected double a(float paramFloat1, float paramFloat2, float paramFloat3, float paramFloat4)
+    protected double getTwoPointDistance(float x1, float y1, float x2, float y2)
     {
-        return Math.sqrt((paramFloat1 - paramFloat3) * (paramFloat1 - paramFloat3) + (paramFloat2 - paramFloat4) * (paramFloat2 - paramFloat4));
+        return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
     }
 
     public void addTask(Runnable paramRunnable)
     {
-        synchronized (this.aL)
+        synchronized (this.mRunnableList)
         {
-            this.aL.addLast(paramRunnable);
+            this.mRunnableList.addLast(paramRunnable);
         }
     }
 

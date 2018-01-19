@@ -44,9 +44,9 @@ public class GPUImageMultiSectionGroup  extends GPUImageFilterGroupBase
         this.dw = new ArrayList();
     }
 
-    public void locationInit()
+    public void onInit()
     {
-        super.locationInit();
+        super.onInit();
         for (Map.Entry localEntry : this.mMultiSectionInfo.dJ.entrySet())
         {
             Object localObject1 = ((MultiSectionInfo.Filter)localEntry.getValue()).data;
@@ -250,9 +250,9 @@ public class GPUImageMultiSectionGroup  extends GPUImageFilterGroupBase
         super.releaseNoGLESRes();
     }
 
-    protected void z()
+    protected void beforeGroupDraw()
     {
-        super.z();
+        super.beforeGroupDraw();
 
         Map localMap = (Map)this.mMultiSectionInfo.dL.get(this.dG);
         if ((!FilterCompat.noFaceuAssist) && (null == localMap)) {
@@ -299,7 +299,7 @@ public class GPUImageMultiSectionGroup  extends GPUImageFilterGroupBase
         }
     }
 
-    public List<GPUImageFilter> H()
+    public List<GPUImageFilter> groupGPUFilterList()
     {
         return this.dw;
     }

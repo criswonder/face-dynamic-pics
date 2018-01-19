@@ -2,6 +2,7 @@ package com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.dstickers;
 
 import android.graphics.Matrix;
 import android.opengl.GLES20;
+import android.util.Log;
 
 import com.martin.ads.omoshiroilib.flyu.ysj.OmoshiroiNative;
 
@@ -11,6 +12,8 @@ import com.martin.ads.omoshiroilib.flyu.ysj.OmoshiroiNative;
 
 public class DynamicStickerDot extends DynamicStickerBase
 {
+    private final String TAG = "DynamicStickerDot";
+    private boolean VERBOSE = true;
     int[] cO = new int[5];
     int[] cP = new int[5];
     int cQ;
@@ -40,9 +43,9 @@ public class DynamicStickerDot extends DynamicStickerBase
         return OmoshiroiNative.loadDStickerDotFilter();
     }
 
-    public void locationInit()
+    public void onInit()
     {
-        super.locationInit();
+        super.onInit();
         this.cQ = GLES20.glGetUniformLocation(getProgram(), "inputImageTexture2");
         this.cR = GLES20.glGetUniformLocation(getProgram(), "faceCnt");
         this.cS = GLES20.glGetUniformLocation(getProgram(), "flipSticker");
@@ -59,8 +62,10 @@ public class DynamicStickerDot extends DynamicStickerBase
         return (paramInt - 50) * 2 / 100.0F;
     }
 
-    protected void d(int var1) {
-        super.d(var1);
+    protected void onDrawArraysPre(int var1) {
+        super.onDrawArraysPre(var1);
+        if (VERBOSE) Log.e(TAG, "onDrawArraysPre will access face pointArray");
+
         this.cU.scaleWidth = (int)(this.cY + this.g(this.bi) * this.cY);
         this.cU.alignX = (int)(this.cZ + this.g(this.bj) * this.cZ);
         this.cU.alignY = (int)(this.da + this.g(this.bk) * this.da);
@@ -73,7 +78,7 @@ public class DynamicStickerDot extends DynamicStickerBase
         GLES20.glUniform1i(this.cS, this.needFlip ?1:0);
 
         for(int var3 = 0; var3 < var2; ++var3) {
-            float var4 = (float)this.a(this.facePointWrapper.pointArray[var3][this.cU.rightIndex].x, this.facePointWrapper.pointArray[var3][this.cU.rightIndex].y, this.facePointWrapper.pointArray[var3][this.cU.leftIndex].x, this.facePointWrapper.pointArray[var3][this.cU.leftIndex].y) / (float)this.cU.scaleWidth;
+            float var4 = (float)this.getTwoPointDistance(this.facePointWrapper.pointArray[var3][this.cU.rightIndex].x, this.facePointWrapper.pointArray[var3][this.cU.rightIndex].y, this.facePointWrapper.pointArray[var3][this.cU.leftIndex].x, this.facePointWrapper.pointArray[var3][this.cU.leftIndex].y) / (float)this.cU.scaleWidth;
             float var5 = var4 * (float)this.cU.width;
             float var6 = var5 * (float)this.cU.height / (float)this.cU.width;
             float var8 = 0.0F;
@@ -90,8 +95,8 @@ public class DynamicStickerDot extends DynamicStickerBase
 
             int var14;
             for(var14 = 0; var14 < this.cU.alignIndexLst.length; ++var14) {
-                var12 += this.g(var3, this.cU.alignIndexLst[var14]);
-                var13 += this.h(var3, this.cU.alignIndexLst[var14]);
+                var12 += this.faceMethoda(var3, this.cU.alignIndexLst[var14]);
+                var13 += this.faceMethodb(var3, this.cU.alignIndexLst[var14]);
             }
 
             var12 /= (float)this.cU.alignIndexLst.length;

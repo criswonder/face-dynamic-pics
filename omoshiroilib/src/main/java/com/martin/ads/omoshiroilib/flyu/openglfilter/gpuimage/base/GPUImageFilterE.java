@@ -28,6 +28,8 @@ import java.util.List;
 public class GPUImageFilterE extends GPUImageAudioFilter
         implements IImageLoader.IAsyncLoadImgListener
 {
+    private final String TAG = "GPUImageFilterE";
+    private boolean VERBOSE = true;
     final int bp = 2;
     final int bq = 3;
     final int br = 8;
@@ -62,9 +64,9 @@ public class GPUImageFilterE extends GPUImageAudioFilter
         }
     }
 
-    public void locationInit()
+    public void onInit()
     {
-        super.locationInit();
+        super.onInit();
         if (null != this.by) {
             try
             {
@@ -127,9 +129,9 @@ public class GPUImageFilterE extends GPUImageAudioFilter
     }
 
     @CallSuper
-    protected void d(int paramInt)
+    protected void onDrawArraysPre(int paramInt)
     {
-        super.d(paramInt);
+        super.onDrawArraysPre(paramInt);
         for (int i = 0; i < 8; i++) {
             if (this.bu[i] != -1)
             {
@@ -241,6 +243,7 @@ public class GPUImageFilterE extends GPUImageAudioFilter
 
     protected void b(int paramInt1, int paramInt2, int paramInt3)
     {
+        if (VERBOSE) Log.e(TAG, "b will access face pointArray");
         float[] arrayOfFloat = new float[2];
         arrayOfFloat[0] = (this.facePointWrapper.pointArray[paramInt2][paramInt3].x / this.mOutputWidth);
         if (this.needFlip) {

@@ -3,6 +3,7 @@ package com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.multitriangle;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.opengl.GLES20;
+import android.util.Log;
 
 import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.base.GPUImageFilterE;
 import com.martin.ads.omoshiroilib.flyu.ysj.OmoshiroiNative;
@@ -17,6 +18,8 @@ import java.nio.FloatBuffer;
 
 public class DrawMultiTriangleNet extends GPUImageFilterE
 {
+    private final String TAG = "DrawMultiTriangleNet";
+    private boolean VERBOSE = true;
     static final int eB = 200;
     int ej;
     int ek;
@@ -90,17 +93,17 @@ public class DrawMultiTriangleNet extends GPUImageFilterE
         return OmoshiroiNative.loadDrawMultiTriangleFilter();
     }
 
-    public void locationInit()
+    public void onInit()
     {
-        super.locationInit();
+        super.onInit();
 
         this.ej = GLES20.glGetAttribLocation(getProgram(), "inputTextureCoordinate2");
         this.ek = GLES20.glGetUniformLocation(getProgram(), "drawMask");
     }
 
-    protected void d(int paramInt)
+    protected void onDrawArraysPre(int paramInt)
     {
-        super.d(paramInt);
+        super.onDrawArraysPre(paramInt);
         setInt(this.ek, 0);
     }
 
@@ -112,15 +115,16 @@ public class DrawMultiTriangleNet extends GPUImageFilterE
         return localPointF;
     }
 
-    protected void e(int paramInt)
+    protected void onDrawArraysAfter(int paramInt)
     {
-        super.e(paramInt);
+        super.onDrawArraysAfter(paramInt);
         if (this.facePointWrapper.faceCount == 0) {
             return;
         }
         int i = Math.min(this.facePointWrapper.faceCount, this.eC.eI.size());
         for (int j = 0; j < i; j++)
         {
+            if (VERBOSE) Log.e(TAG, "onDrawArraysAfter will access face pointArray");
             setInt(this.ek, j + 1);
             PointF[] arrayOfPointF = this.facePointWrapper.pointArray[j];
             MultiTriangleInfo.a locala = (MultiTriangleInfo.a)this.eC.eI.get(j);
@@ -158,7 +162,7 @@ public class DrawMultiTriangleNet extends GPUImageFilterE
             }
             localMatrix2.getValues(this.eH);
 
-            float f8 = (float)a(arrayOfPointF[locala.eK[0]].x, arrayOfPointF[locala.eK[0]].y, arrayOfPointF[locala.eK[1]].x, arrayOfPointF[locala.eK[1]].y);
+            float f8 = (float) getTwoPointDistance(arrayOfPointF[locala.eK[0]].x, arrayOfPointF[locala.eK[0]].y, arrayOfPointF[locala.eK[1]].x, arrayOfPointF[locala.eK[1]].y);
             for (int k = 0; k < locala.eL.length; k++)
             {
                 PointF localPointF1 = a(arrayOfPointF[locala.eL[k]].x, arrayOfPointF[locala.eL[k]].y, this.eH);

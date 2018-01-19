@@ -13,5 +13,9 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
         assertEquals(4, 2 + 2);
+
+        System.out.println(Math.pow(3, 2));
+
+        System.out.println(Math.sqrt((Math.pow(3,2)+Math.pow(4,2))));
     }
 }

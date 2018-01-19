@@ -3,6 +3,7 @@ package com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.makeup;
 
 import android.graphics.PointF;
 import android.opengl.GLES20;
+import android.util.Log;
 
 import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.base.GPUImageFilterE;
 import com.martin.ads.omoshiroilib.flyu.ysj.OmoshiroiNative;
@@ -17,6 +18,8 @@ import java.util.Iterator;
  */
 
 public class MakeUpFilter extends GPUImageFilterE {
+    private final String TAG = "MakeUpFilter";
+    private boolean VERBOSE = true;
     static final int ef = 106;
     static final int eg = 114;
     static final int[] eh = {34, 6, 12, 16, 20, 26, 41, 43};
@@ -73,8 +76,8 @@ public class MakeUpFilter extends GPUImageFilterE {
         return OmoshiroiNative.loadMakeUpFilter();
     }
 
-    public void locationInit() {
-        super.locationInit();
+    public void onInit() {
+        super.onInit();
 
         this.ej = GLES20.glGetAttribLocation(getProgram(), "inputTextureCoordinate2");
         this.ek = GLES20.glGetUniformLocation(getProgram(), "drawMask");
@@ -165,20 +168,21 @@ public class MakeUpFilter extends GPUImageFilterE {
         return (PointF[][]) localObject1;
     }
 
-    protected void d(int paramInt) {
-        super.d(paramInt);
+    protected void onDrawArraysPre(int paramInt) {
+        super.onDrawArraysPre(paramInt);
 
         setInt(this.ek, 0);
     }
 
-    protected void e(int paramInt) {
-        super.e(paramInt);
+    protected void onDrawArraysAfter(int paramInt) {
+        super.onDrawArraysAfter(paramInt);
         if (this.facePointWrapper.faceCount == 0) {
             return;
         }
         int i = Math.min(this.facePointWrapper.faceCount, this.ei.maxcount);
         for (int j = 0; j < i; j++) {
             setInt(this.ek, j + 1);
+            if (VERBOSE) Log.e(TAG, "onDrawArraysAfter will access face pointArray");
             PointF[] arrayOfPointF = this.facePointWrapper.pointArray[j];
             MakeupData.a locala = (MakeupData.a) this.ei.eo.get(j);
 

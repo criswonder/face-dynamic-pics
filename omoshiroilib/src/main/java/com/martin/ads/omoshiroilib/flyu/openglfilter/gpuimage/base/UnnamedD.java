@@ -5,18 +5,18 @@ package com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.base;
  */
 
 public class UnnamedD implements Runnable {
-    private GPUImageFilter bo;
+    private GPUImageFilter gpuImageFilter;
     private int bl,bm,bn;
-    UnnamedD(GPUImageFilter var1, int var2, int var3, int var4) {
-        this.bo = var1;
+    UnnamedD(GPUImageFilter gpuImageFilter1, int var2, int var3, int var4) {
+        this.gpuImageFilter = gpuImageFilter1;
         this.bl = var2;
         this.bm = var3;
         this.bn = var4;
     }
 
     public void run() {
-        this.bo.bi = this.bl;
-        this.bo.bj = this.bm;
-        this.bo.bk = this.bn;
+        this.gpuImageFilter.bi = this.bl;
+        this.gpuImageFilter.bj = this.bm;
+        this.gpuImageFilter.bk = this.bn;
     }
 }

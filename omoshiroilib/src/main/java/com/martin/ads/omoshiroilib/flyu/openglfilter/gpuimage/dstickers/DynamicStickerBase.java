@@ -45,8 +45,8 @@ public class DynamicStickerBase extends GPUImageFilterE {
         }
     }
 
-    public void locationInit() {
-        super.locationInit();
+    public void onInit() {
+        super.onInit();
         if (null != this.cG) {
             try {
                 this.cG.init();
@@ -71,8 +71,8 @@ public class DynamicStickerBase extends GPUImageFilterE {
         this.cH = -1;
     }
 
-    protected void z() {
-        super.z();
+    protected void beforeGroupDraw() {
+        super.beforeGroupDraw();
         if (this.facePointWrapper.faceCount <= 0) {
             this.cI = -1L;
             stop();

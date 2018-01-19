@@ -28,9 +28,9 @@ public class DynamicStickerVignette extends DynamicStickerBase
         return OmoshiroiNative.loadDStickerVignetteFilter();
     }
 
-    public void locationInit()
+    public void onInit()
     {
-        super.locationInit();
+        super.onInit();
         this.cQ = GLES20.glGetUniformLocation(getProgram(), "inputImageTexture2");
         this.cR = GLES20.glGetUniformLocation(getProgram(), "faceCnt");
         this.cS = GLES20.glGetUniformLocation(getProgram(), "flipSticker");
@@ -38,9 +38,9 @@ public class DynamicStickerVignette extends DynamicStickerBase
         this.df = GLES20.glGetUniformLocation(getProgram(), "rightBottom");
     }
 
-    protected void d(int paramInt)
+    protected void onDrawArraysPre(int paramInt)
     {
-        super.d(paramInt);
+        super.onDrawArraysPre(paramInt);
 
         GLES20.glUniform1i(this.cR, this.facePointWrapper.faceCount > 0 ? 1 : 0);
         GLES20.glUniform1i(this.cS, this.needFlip ? 1 : 0);

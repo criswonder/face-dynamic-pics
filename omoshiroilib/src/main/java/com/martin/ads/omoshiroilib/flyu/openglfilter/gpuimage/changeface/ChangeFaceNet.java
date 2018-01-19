@@ -64,9 +64,9 @@ public class ChangeFaceNet extends ChangeFaceBaseFilter
         }
     }
 
-    public void locationInit()
+    public void onInit()
     {
-        super.locationInit();
+        super.onInit();
 
         this.bW = GLES20.glGetUniformLocation(getProgram(), "p_left");
         this.bX = GLES20.glGetUniformLocation(getProgram(), "p_right");
@@ -96,9 +96,9 @@ public class ChangeFaceNet extends ChangeFaceBaseFilter
         this.cs = GLES20.glGetUniformLocation(getProgram(), "m_time");
     }
 
-    protected void d(int paramInt)
+    protected void onDrawArraysPre(int paramInt)
     {
-        super.d(paramInt);
+        super.onDrawArraysPre(paramInt);
         if (this.bU.bO.length != 8) {
             return;
         }

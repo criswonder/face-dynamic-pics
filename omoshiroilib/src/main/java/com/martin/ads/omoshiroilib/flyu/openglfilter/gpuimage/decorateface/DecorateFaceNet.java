@@ -27,9 +27,9 @@ public class DecorateFaceNet  extends GPUImageFilterE
         F();
     }
 
-    public void locationInit()
+    public void onInit()
     {
-        super.locationInit();
+        super.onInit();
 
         this.cB = new int[this.cz.cv.size()];
         for (int i = 0; i < this.cz.cv.size(); i++) {
@@ -37,9 +37,9 @@ public class DecorateFaceNet  extends GPUImageFilterE
         }
     }
 
-    protected void d(int paramInt)
+    protected void onDrawArraysPre(int paramInt)
     {
-        super.d(paramInt);
+        super.onDrawArraysPre(paramInt);
         for (int i = 0; i < this.cB.length; i++)
         {
             DecorateFaceBean.a locala = (DecorateFaceBean.a)this.cz.cv.get(i);

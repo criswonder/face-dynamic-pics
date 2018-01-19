@@ -182,7 +182,7 @@ public class SenseTimeDetector implements Runnable ,IFaceDetector{
             mDetectHandler.sendMessage(Message.obtain(mDetectHandler, MSG_DETECT, direction, 0, mSampleData));
         }
     }
-
+    //TODO andymao 搞懂下面的意思
     public int getFaceDetectResult(PointF[][] detectResult, int imageScaleWidth, int imageScaleHeight,
                                    int outputWidth, int outputHeight) {
         float width = 100f, height = 100f;

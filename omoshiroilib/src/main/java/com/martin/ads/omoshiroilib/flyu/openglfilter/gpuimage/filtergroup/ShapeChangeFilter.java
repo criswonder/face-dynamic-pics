@@ -18,7 +18,8 @@ import java.util.ArrayList;
 
 public class ShapeChangeFilter extends GPUImageFilterE
 {
-    static final String TAG = "ShapeChangeFilter";
+    private final String TAG = "ShapeChangeFilter";
+    private boolean VERBOSE = true;
     static final String dW = "#define parameter";
     static final String dX = "uniform float parameter;";
     GroupData mGroupData;
@@ -67,9 +68,9 @@ public class ShapeChangeFilter extends GPUImageFilterE
         return paramString;
     }
 
-    public void locationInit()
+    public void onInit()
     {
-        super.locationInit();
+        super.onInit();
 
         this.muLocations = new int[this.mGroupData.pointIndexArray.size()];
         for (int i = 0; i < this.mGroupData.pointIndexArray.size(); i++) {
@@ -85,9 +86,9 @@ public class ShapeChangeFilter extends GPUImageFilterE
         this.muParameterLocation = GLES20.glGetUniformLocation(getProgram(), "parameter");
     }
 
-    protected void d(int paramInt)
+    protected void onDrawArraysPre(int paramInt)
     {
-        super.d(paramInt);
+        super.onDrawArraysPre(paramInt);
         int i = Math.min(this.facePointWrapper.faceCount, this.mGroupData.maxcount);
 
         int j = 0;
@@ -129,6 +130,7 @@ public class ShapeChangeFilter extends GPUImageFilterE
             {
                 float f2 = 0.0F;
                 float f3 = -1.0F;
+                if (VERBOSE) Log.e(TAG, "onDrawArraysPre will access face pointArray");
                 float f4 = this.facePointWrapper.pointArray[k][43].x - this.facePointWrapper.pointArray[k][46].x;
                 float f5 = this.facePointWrapper.pointArray[k][43].y - this.facePointWrapper.pointArray[k][46].y;
                 float f1 = (float)Math.acos((f2 * f4 + f3 * f5) / Math.sqrt(f2 * f2 + f3 * f3) / Math.sqrt(f4 * f4 + f5 * f5));

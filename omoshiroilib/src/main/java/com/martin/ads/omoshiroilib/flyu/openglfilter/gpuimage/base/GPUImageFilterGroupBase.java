@@ -23,8 +23,8 @@ import java.util.List;
 
 public abstract class GPUImageFilterGroupBase extends GPUImageAudioFilter
 {
-    int[] bD;
-    int[] bE;
+    int[] mFrameBuffers;
+    int[] mTextureIds;
     final FloatBuffer bF;
     final FloatBuffer bG;
     final FloatBuffer bH;
@@ -56,14 +56,14 @@ public abstract class GPUImageFilterGroupBase extends GPUImageAudioFilter
         this.bK = paramIFilterDrawListener;
     }
 
-    public abstract List<GPUImageFilter> H();
+    public abstract List<GPUImageFilter> groupGPUFilterList();
 
     public abstract void addFilter(GPUImageFilter paramGPUImageFilter);
 
     public void setPhoneDirection(int paramInt)
     {
         super.setPhoneDirection(paramInt);
-        for (GPUImageFilter localGPUImageFilter : H()) {
+        for (GPUImageFilter localGPUImageFilter : groupGPUFilterList()) {
             localGPUImageFilter.setPhoneDirection(paramInt);
         }
     }
@@ -80,7 +80,7 @@ public abstract class GPUImageFilterGroupBase extends GPUImageAudioFilter
 
     public void onDestroy()
     {
-        I();
+        destoryFrameBuffers();
         if (null != this.bI)
         {
             this.bI.destroy();
@@ -89,40 +89,40 @@ public abstract class GPUImageFilterGroupBase extends GPUImageAudioFilter
         super.onDestroy();
     }
 
-    private void I()
+    private void destoryFrameBuffers()
     {
-        if (this.bE != null)
+        if (this.mTextureIds != null)
         {
-            GLES20.glDeleteTextures(this.bE.length, this.bE, 0);
-            this.bE = null;
-            GLES20.glDeleteFramebuffers(this.bD.length, this.bD, 0);
-            this.bD = null;
+            GLES20.glDeleteTextures(this.mTextureIds.length, this.mTextureIds, 0);
+            this.mTextureIds = null;
+            GLES20.glDeleteFramebuffers(this.mFrameBuffers.length, this.mFrameBuffers, 0);
+            this.mFrameBuffers = null;
         }
     }
 
-    public void onOutputSizeChanged(int paramInt1, int paramInt2)
+    public void onOutputSizeChanged(int width, int height)
     {
-        super.onOutputSizeChanged(paramInt1, paramInt2);
-        if (this.bD != null) {
-            I();
+        super.onOutputSizeChanged(width, height);
+        if (this.mFrameBuffers != null) {
+            destoryFrameBuffers();
         }
-        int i = H().size();
+        int i = groupGPUFilterList().size();
         for (int j = 0; j < i; j++) {
-            ((GPUImageFilter)H().get(j)).onOutputSizeChanged(paramInt1, paramInt2);
+            ((GPUImageFilter) groupGPUFilterList().get(j)).onOutputSizeChanged(width, height);
         }
         if (null != this.bI) {
-            this.bI.onOutputSizeChanged(paramInt1, paramInt2);
+            this.bI.onOutputSizeChanged(width, height);
         }
-        if ((H() != null) && (H().size() > 0))
+        if ((groupGPUFilterList() != null) && (groupGPUFilterList().size() > 0))
         {
-            this.bD = new int[2];
-            this.bE = new int[2];
-            for (int j = 0; j < this.bD.length; j++)
+            this.mFrameBuffers = new int[2];
+            this.mTextureIds = new int[2];
+            for (int j = 0; j < this.mFrameBuffers.length; j++)
             {
-                GLES20.glGenFramebuffers(1, this.bD, j);
-                GLES20.glGenTextures(1, this.bE, j);
-                //Log.d(TAG, "20170717: "+paramInt1+" "+paramInt2);
-                OpenGlUtils.bindTextureToFrameBuffer(this.bD[j], this.bE[j], paramInt1, paramInt2);
+                GLES20.glGenFramebuffers(1, this.mFrameBuffers, j);
+                GLES20.glGenTextures(1, this.mTextureIds, j);
+                //Log.d(TAG, "20170717: "+width+" "+height);
+                OpenGlUtils.bindTextureToFrameBuffer(this.mFrameBuffers[j], this.mTextureIds[j], width, height);
             }
         }
     }
@@ -134,24 +134,24 @@ public abstract class GPUImageFilterGroupBase extends GPUImageAudioFilter
 
     public void draw(int paramInt1, int paramInt2, FloatBuffer paramFloatBuffer1, FloatBuffer paramFloatBuffer2)
     {
-        z();
-        C();
+        beforeGroupDraw();
+        runPendingOnDrawTasks();
         start();
-        if ((!isInitialized()) || (this.bD == null) || (this.bE == null) || (null == H())) {
+        if ((!isInitialized()) || (this.mFrameBuffers == null) || (this.mTextureIds == null) || (null == groupGPUFilterList())) {
             return;
         }
         if (paramInt1 == -1) {
             return;
         }
-        int i = H().size();
+        int i = groupGPUFilterList().size();
         int j = paramInt1;
         for (int k = 0; k < i; k++)
         {
-            GPUImageFilter localGPUImageFilter = (GPUImageFilter)H().get(k);
+            GPUImageFilter localGPUImageFilter = (GPUImageFilter) groupGPUFilterList().get(k);
             int m = k < i - 1 ? 1 : 0;
             if (m != 0)
             {
-                GLES20.glBindFramebuffer(36160, this.bD[(k % 2)]);
+                GLES20.glBindFramebuffer(36160, this.mFrameBuffers[(k % 2)]);
                 GLES20.glClearColor(0.0F, 0.0F, 0.0F, 0.0F);
             }
             else if (-1 != paramInt2)
@@ -161,17 +161,17 @@ public abstract class GPUImageFilterGroupBase extends GPUImageAudioFilter
             }
             if (k == 0)
             {
-                localGPUImageFilter.d(false);
+                localGPUImageFilter.onDrawArraysPre(false);
                 localGPUImageFilter.onDraw(j, paramFloatBuffer1, paramFloatBuffer2);
             }
             else if (k == i - 1)
             {
-                localGPUImageFilter.d(i % 2 == 0);
+                localGPUImageFilter.onDrawArraysPre(i % 2 == 0);
                 localGPUImageFilter.onDraw(j, this.bF, i % 2 == 0 ? this.bH : this.bG);
             }
             else
             {
-                localGPUImageFilter.d(false);
+                localGPUImageFilter.onDrawArraysPre(false);
                 localGPUImageFilter.onDraw(j, this.bF, this.bG);
             }
             if (null != this.bK) {
@@ -180,7 +180,7 @@ public abstract class GPUImageFilterGroupBase extends GPUImageAudioFilter
             if (m != 0)
             {
                 GLES20.glBindFramebuffer(36160, 0);
-                j = this.bE[(k % 2)];
+                j = this.mTextureIds[(k % 2)];
             }
             else
             {
@@ -192,7 +192,7 @@ public abstract class GPUImageFilterGroupBase extends GPUImageAudioFilter
     public PointF[][] setFaceDetResult(int faceCount, PointF[][] paramArrayOfPointF, int outPutWith, int outputHeight)
     {
         super.setFaceDetResult(faceCount, paramArrayOfPointF, outPutWith, outputHeight);
-        for (GPUImageFilter localGPUImageFilter : H()) {
+        for (GPUImageFilter localGPUImageFilter : groupGPUFilterList()) {
             paramArrayOfPointF = localGPUImageFilter.setFaceDetResult(faceCount, paramArrayOfPointF, outPutWith, outputHeight);
         }
         return paramArrayOfPointF;
@@ -201,14 +201,14 @@ public abstract class GPUImageFilterGroupBase extends GPUImageAudioFilter
     public void b(float[] paramArrayOfFloat)
     {
         super.b(paramArrayOfFloat);
-        for (GPUImageFilter localGPUImageFilter : H()) {
+        for (GPUImageFilter localGPUImageFilter : groupGPUFilterList()) {
             localGPUImageFilter.b(paramArrayOfFloat);
         }
     }
 
     public int J()
     {
-        for (GPUImageFilter localGPUImageFilter : H()) {
+        for (GPUImageFilter localGPUImageFilter : groupGPUFilterList()) {
             if (b(localGPUImageFilter))
             {
                 if (((localGPUImageFilter instanceof ShapeChangeFilter)) && (((ShapeChangeFilter)localGPUImageFilter).R())) {
@@ -224,7 +224,7 @@ public abstract class GPUImageFilterGroupBase extends GPUImageAudioFilter
 
     public void a(int paramInt1, int paramInt2, int paramInt3)
     {
-        for (GPUImageFilter localGPUImageFilter : H()) {
+        for (GPUImageFilter localGPUImageFilter : groupGPUFilterList()) {
             if (b(localGPUImageFilter))
             {
                 localGPUImageFilter.a(paramInt1, paramInt2, paramInt3);
@@ -235,7 +235,7 @@ public abstract class GPUImageFilterGroupBase extends GPUImageAudioFilter
 
     public void f(int paramInt)
     {
-        for (GPUImageFilter localGPUImageFilter : H()) {
+        for (GPUImageFilter localGPUImageFilter : groupGPUFilterList()) {
             if (b(localGPUImageFilter))
             {
                 localGPUImageFilter.f(paramInt);
@@ -246,7 +246,7 @@ public abstract class GPUImageFilterGroupBase extends GPUImageAudioFilter
 
     public int[] D()
     {
-        for (GPUImageFilter localGPUImageFilter : H()) {
+        for (GPUImageFilter localGPUImageFilter : groupGPUFilterList()) {
             if (b(localGPUImageFilter)) {
                 return localGPUImageFilter.D();
             }

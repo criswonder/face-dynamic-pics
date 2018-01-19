@@ -3,6 +3,7 @@ package com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.switchface;
 import android.graphics.PointF;
 import android.net.Uri;
 import android.opengl.GLES20;
+import android.util.Log;
 
 import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.base.GPUImageFilterE;
 import com.martin.ads.omoshiroilib.flyu.sdk.utils.MiscUtils;
@@ -13,6 +14,8 @@ import com.martin.ads.omoshiroilib.flyu.sdk.utils.MiscUtils;
 
 public class SwitchFaceNet extends GPUImageFilterE
 {
+    private final String TAG = "SwitchFaceNet";
+    private boolean VERBOSE = true;
     SwitchFaceInfo ff;
     String bV;
     PointF cA = new PointF(0.0F, 0.0F);
@@ -34,9 +37,9 @@ public class SwitchFaceNet extends GPUImageFilterE
         F();
     }
 
-    public void locationInit()
+    public void onInit()
     {
-        super.locationInit();
+        super.onInit();
 
         this.cB = new int[this.ff.cv.size()];
         for (int i = 0; i < this.ff.cv.size(); i++) {
@@ -49,9 +52,9 @@ public class SwitchFaceNet extends GPUImageFilterE
         this.ea = GLES20.glGetUniformLocation(getProgram(), "m_orientation");
     }
 
-    protected void d(int paramInt)
+    protected void onDrawArraysPre(int paramInt)
     {
-        super.d(paramInt);
+        super.onDrawArraysPre(paramInt);
 
         int i = 0;
         switch (this.ba)
@@ -89,6 +92,7 @@ public class SwitchFaceNet extends GPUImageFilterE
             {
                 float f2 = 0.0F;
                 float f3 = -1.0F;
+                if (VERBOSE) Log.e(TAG, "onDrawArraysPre will access face pointArray");
                 float f4 = this.facePointWrapper.pointArray[j][43].x - this.facePointWrapper.pointArray[j][46].x;
                 float f5 = this.facePointWrapper.pointArray[j][43].y - this.facePointWrapper.pointArray[j][46].y;
                 float f1 = (float)Math.acos((f2 * f4 + f3 * f5) / Math.sqrt(f2 * f2 + f3 * f3) / Math.sqrt(f4 * f4 + f5 * f5));

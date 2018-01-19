@@ -23,7 +23,7 @@ public class GPUImageFilterGroup extends GPUImageFilterGroupBase
         this.dw = new ArrayList();
     }
 
-    public List<GPUImageFilter> H()
+    public List<GPUImageFilter> groupGPUFilterList()
     {
         return this.dw;
     }
@@ -37,9 +37,9 @@ public class GPUImageFilterGroup extends GPUImageFilterGroupBase
         O();
     }
 
-    public void locationInit()
+    public void onInit()
     {
-        super.locationInit();
+        super.onInit();
         for (int i = 0; i < this.dw.size(); i++)
         {
             ((GPUImageFilter)this.dw.get(i)).init();

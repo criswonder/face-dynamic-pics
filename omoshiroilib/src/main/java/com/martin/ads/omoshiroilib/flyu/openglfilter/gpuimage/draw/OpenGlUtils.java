@@ -93,10 +93,10 @@ public class OpenGlUtils
         GLES20.glDeleteTextures(1, arrayOfInt, 0);
     }
 
-    public static void bindTextureToFrameBuffer(int paramInt1, int paramInt2, int paramInt3, int paramInt4)
+    public static void bindTextureToFrameBuffer(int paramInt1, int paramInt2, int width, int height)
     {
         GLES20.glBindTexture(3553, paramInt2);
-        GLES20.glTexImage2D(3553, 0, 6408, paramInt3, paramInt4, 0, 6408, 5121, null);
+        GLES20.glTexImage2D(3553, 0, 6408, width, height, 0, 6408, 5121, null);
 
         GLES20.glTexParameterf(3553, 10240, 9729.0F);
 
