@@ -72,10 +72,10 @@ public class DynamicStickerVignette extends DynamicStickerBase
                 setFloatArray(this.df, new float[] { 1.0F, f2 });
             }
         }
-        if (this.cC != -1)
+        if (this.bitmapTextureId != -1)
         {
             GLES20.glActiveTexture(33987);
-            GLES20.glBindTexture(3553, this.cC);
+            GLES20.glBindTexture(3553, this.bitmapTextureId);
             GLES20.glUniform1i(this.cQ, 3);
         }
         else

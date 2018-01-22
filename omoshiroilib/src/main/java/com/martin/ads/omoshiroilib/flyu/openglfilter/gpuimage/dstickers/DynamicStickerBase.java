@@ -1,13 +1,9 @@
 package com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.dstickers;
 
-import android.util.Log;
-import android.util.Pair;
-
-
 import android.graphics.Bitmap;
 import android.net.Uri;
-
-import java.io.IOException;
+import android.util.Log;
+import android.util.Pair;
 
 import com.martin.ads.omoshiroilib.flyu.openglfilter.common.BitmapLoader;
 import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.base.GPUImageFilterE;
@@ -16,79 +12,80 @@ import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.base.MResFileReade
 import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.draw.OpenGlUtils;
 import com.martin.ads.omoshiroilib.flyu.sdk.utils.MiscUtils;
 
+import java.io.IOException;
+
 /**
  * Created by Ads on 2017/6/6.
  */
 
 public class DynamicStickerBase extends GPUImageFilterE {
-    static final String TAG = "DynamicStickerBase";
-    protected int cC;
-    static final int cD = 0;
-    static final int K = 1;
-    String cE;
-    DstickerDataBean cF;
-    MResFileIndexReader cG = null;
-    int cH = -1;
-    long cI = -1L;
+    private final String TAG = "DynamicStickerBase";
+    private boolean VERBOSE = true;
+    protected int bitmapTextureId;
+    String multiSectionResPath;
+    DstickerDataBean mDstickerDataBean;
+    MResFileIndexReader mResMergeFileReader = null;
+    int previousFrameIndex = -1;
+    long mStartTimestamp = -1L;
     int cJ = 0;
 
     public DynamicStickerBase(DstickerDataBean parama, String paramString1, String paramString2, String paramString3) {
         super(paramString2, paramString3);
-        this.cE = paramString1;
-        this.cF = parama;
-        this.name = this.cF.folderName;
+        this.multiSectionResPath = paramString1;
+        this.mDstickerDataBean = parama;
+        this.name = this.mDstickerDataBean.folderName;
 
-        String str = this.cE.substring("file://".length());
+        String str = this.multiSectionResPath.substring("file://".length());
         Pair localPair = MResFileReaderBase.tryGetMergeFile(str);
         if (null != localPair) {
-            this.cG = new MResFileIndexReader(str + "/" + (String) localPair.first, str + "/" + (String) localPair.second);
+            this.mResMergeFileReader = new MResFileIndexReader(str + "/" + (String) localPair.first, str + "/" + (String) localPair.second);
         }
     }
 
     public void onInit() {
         super.onInit();
-        if (null != this.cG) {
+        if (null != this.mResMergeFileReader) {
             try {
-                this.cG.init();
+                this.mResMergeFileReader.init();
             } catch (IOException localIOException) {
                 Log.e("DynamicStickerBase", "init merge res reader failed", localIOException);
-                this.cG = null;
+                this.mResMergeFileReader = null;
             }
         }
-        this.cC = -1;
-        if ((!MiscUtils.isNilOrNull(this.cF.audio)) &&
-                (this.cE.startsWith("file://"))) {
-            String str = this.cE.substring("file://".length());
-            setAudioUri(Uri.parse(str + "/" + this.cF.audio));
-            b(this.cF.looping);
+        this.bitmapTextureId = -1;
+        if ((!MiscUtils.isNilOrNull(this.mDstickerDataBean.audio)) &&
+                (this.multiSectionResPath.startsWith("file://"))) {
+            String str = this.multiSectionResPath.substring("file://".length());
+            setAudioUri(Uri.parse(str + "/" + this.mDstickerDataBean.audio));
+            b(this.mDstickerDataBean.looping);
         }
     }
 
-    public void A() {
-        super.A();
+    public void resetDrawStartTimeStamp() {
+        super.resetDrawStartTimeStamp();
 
-        this.cI = -1L;
-        this.cH = -1;
+        this.mStartTimestamp = -1L;
+        this.previousFrameIndex = -1;
     }
 
     protected void beforeGroupDraw() {
         super.beforeGroupDraw();
         if (this.facePointWrapper.faceCount <= 0) {
-            this.cI = -1L;
+            this.mStartTimestamp = -1L;
             stop();
             return;
         }
-        if (((1 != this.cF.triggerType) || (!this.facePointWrapper.b())) && ((0 != this.cF.triggerType) ||
-                (!this.facePointWrapper.c())) && (2 != this.cF.triggerType)) {
-            if (3 != this.cF.triggerType) {
+        if (((1 != this.mDstickerDataBean.triggerType) || (!this.facePointWrapper.shakeEyeBrow())) && ((0 != this.mDstickerDataBean.triggerType) ||
+                (!this.facePointWrapper.mouthOpenBig())) && (2 != this.mDstickerDataBean.triggerType)) {
+            if (3 != this.mDstickerDataBean.triggerType) {
 
             }
         }
-        int i = this.facePointWrapper.d() ? 1 : 0;
-        if ((i == 0) && (!this.cF.showUtilFinish)) {
+        int i = this.facePointWrapper.isMouthOpen() ? 1 : 0;
+        if ((i == 0) && (!this.mDstickerDataBean.showUtilFinish)) {
             this.cJ = 0;
             stop();
-            this.cI = -1L;
+            this.mStartTimestamp = -1L;
         } else if ((i == 0) && (this.cJ == 1)) {
             this.cJ = 1;
             start();
@@ -100,42 +97,43 @@ public class DynamicStickerBase extends GPUImageFilterE {
             stop();
         }
         if (this.cJ != 1) {
-            this.cC = -1;
-            this.cH = -1;
+            this.bitmapTextureId = -1;
+            this.previousFrameIndex = -1;
             return;
         }
-        if (this.cI == -1L) {
-            this.cI = System.currentTimeMillis();
+        if (this.mStartTimestamp == -1L) {
+            this.mStartTimestamp = System.currentTimeMillis();
         }
-        int j = (int) ((System.currentTimeMillis() - this.cI) / this.cF.frameDuration);
-        if (j >= this.cF.frames) {
-            if (!this.cF.looping) {
-                this.cI = -1L;
-                this.cC = -1;
-                this.cH = -1;
+        int frameIndex = (int) ((System.currentTimeMillis() - this.mStartTimestamp) / this.mDstickerDataBean.frameDuration);
+        if (frameIndex >= this.mDstickerDataBean.frames) {
+            if (!this.mDstickerDataBean.looping) {
+                this.mStartTimestamp = -1L;
+                this.bitmapTextureId = -1;
+                this.previousFrameIndex = -1;
                 this.cJ = 0;
                 return;
             }
-            j = 0;
-            this.cI = System.currentTimeMillis();
+            frameIndex = 0;
+            this.mStartTimestamp = System.currentTimeMillis();
         }
-        if (j < 0) {
-            j = 0;
+        if (frameIndex < 0) {
+            frameIndex = 0;
         }
-        if (this.cH == j) {
+        if (this.previousFrameIndex == frameIndex) {
             return;
         }
-        if ((j == 0) && (this.cF.alignAudio)) {
-            r();
+        if ((frameIndex == 0) && (this.mDstickerDataBean.alignAudio)) {
+            playerVideo();
         }
         Bitmap localBitmap = null;
-        if (null != this.cG) {
-            localBitmap = this.cG.loadBitmapAtIndex(j);
+        if (null != this.mResMergeFileReader) {
+            localBitmap = this.mResMergeFileReader.loadBitmapAtIndex(frameIndex);
         }
         if (null == localBitmap) {
-            String str1 = String.format(this.cF.folderName + "_%03d.png", new Object[]{Integer.valueOf(j)});
-            if (this.cE.startsWith("file://")) {
-                String str2 = this.cE.substring("file://".length()) + "/" + str1;
+            String bitmapPath = String.format(this.mDstickerDataBean.folderName + "_%03d.png", new Object[]{Integer.valueOf(frameIndex)});
+            if (VERBOSE) Log.e(TAG, "beforeGroupDraw filePath=" + bitmapPath);
+            if (this.multiSectionResPath.startsWith("file://")) {
+                String str2 = this.multiSectionResPath.substring("file://".length()) + "/" + bitmapPath;
 
                 localBitmap = BitmapLoader.loadBitmapFromFile(str2);
             } else {
@@ -143,21 +141,21 @@ public class DynamicStickerBase extends GPUImageFilterE {
             }
         }
         if (null != localBitmap) {
-            this.cC = OpenGlUtils.loadTexture(localBitmap, this.cC, true);
-            this.cH = j;
+            this.bitmapTextureId = OpenGlUtils.loadTexture(localBitmap, this.bitmapTextureId, true);
+            this.previousFrameIndex = frameIndex;
         } else {
-            this.cC = -1;
-            this.cH = -1;
+            this.bitmapTextureId = -1;
+            this.previousFrameIndex = -1;
         }
     }
 
     public int n() {
-        return this.cF.maxcount;
+        return this.mDstickerDataBean.maxcount;
     }
 
     public void onDestroy() {
-        OpenGlUtils.deleteTexture(this.cC);
-        this.cC = -1;
+        OpenGlUtils.deleteTexture(this.bitmapTextureId);
+        this.bitmapTextureId = -1;
         super.onDestroy();
     }
 }

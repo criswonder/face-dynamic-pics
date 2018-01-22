@@ -1,5 +1,7 @@
 package com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.dstickers;
 
+import android.util.Log;
+
 import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.filtergroup.GPUImageFilterGroup;
 
 /**
@@ -7,7 +9,8 @@ import com.martin.ads.omoshiroilib.flyu.openglfilter.gpuimage.filtergroup.GPUIma
  */
 
 public class DynamicStickerMulti extends GPUImageFilterGroup {
-    static final String TAG = "DynamicStickerMulti";
+    private final String TAG = "DynamicStickerMulti";
+    private boolean VERBOSE = true;
     String mFileDir;
     DynamicStickerData dc;
 
@@ -16,6 +19,7 @@ public class DynamicStickerMulti extends GPUImageFilterGroup {
         this.dc = dynamicStickerData;
         for (DstickerDataBean stickerBean : dynamicStickerData.dstickerDataBeanList) {
             String str = "file://" + fileDir + "/" + stickerBean.folderName;
+            if(VERBOSE) Log.e(TAG,"DynamicStickerMulti filePath="+str);
             if ((stickerBean instanceof DstickerDataBeanExt)) {
                 addFilter(new DynamicStickerDot(str, (DstickerDataBeanExt) stickerBean));
             } else if ((stickerBean instanceof DStickerVignetteBean)) {

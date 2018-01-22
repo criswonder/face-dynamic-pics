@@ -233,14 +233,14 @@ public class FilterFactory {
 
         JSONObject localJSONObject1 = new JSONObject(paramString2);
         JSONArray jsonArray = localJSONObject1.getJSONArray("filterlist");
-        localMultiSectionInfo.dJ = new HashMap();
+        localMultiSectionInfo.stringFilterMap = new HashMap();
         Object section;
         Object type;
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject filterJSONObject = jsonArray.getJSONObject(i);
             section = new MultiSectionInfo.Filter();
             ((MultiSectionInfo.Filter) section).name = filterJSONObject.getString("name");
-            ((MultiSectionInfo.Filter) section).dP = (paramString1 + "/" + ((MultiSectionInfo.Filter) section).name);
+            ((MultiSectionInfo.Filter) section).path = (paramString1 + "/" + ((MultiSectionInfo.Filter) section).name);
             ((MultiSectionInfo.Filter) section).reload = (filterJSONObject.getInt("reload") == 1);
 
             type = filterJSONObject.getString("type");
@@ -251,7 +251,7 @@ public class FilterFactory {
             } else if ("makeup".equals(type)) {
                 ((MultiSectionInfo.Filter) section).data = parseMakeUpInfo(paramString1, filterJSONObject.getJSONObject("data"));
             }
-            localMultiSectionInfo.dJ.put(((MultiSectionInfo.Filter) section).name, (MultiSectionInfo.Filter) section);
+            localMultiSectionInfo.stringFilterMap.put(((MultiSectionInfo.Filter) section).name, (MultiSectionInfo.Filter) section);
         }
         JSONArray localJSONArray2 = localJSONObject1.getJSONArray("sections");
         localMultiSectionInfo.sectionsMap = new HashMap();

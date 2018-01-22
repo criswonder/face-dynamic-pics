@@ -49,7 +49,7 @@ public class ShapeChangeFilter extends GPUImageFilterE
             setAudioUri(Uri.parse(this.mFragmentStr + "/" + this.mGroupData.audio));
         }
         if (1 == this.mGroupData.resloadtype) {
-            F();
+            setRestypeTo2();
         }
     }
 
@@ -92,7 +92,7 @@ public class ShapeChangeFilter extends GPUImageFilterE
         int i = Math.min(this.facePointWrapper.faceCount, this.mGroupData.maxcount);
 
         int j = 0;
-        switch (this.ba)
+        switch (this.phoneDirection)
         {
             case 0:
                 j = 3;
@@ -150,8 +150,8 @@ public class ShapeChangeFilter extends GPUImageFilterE
                 } else {
                     this.cu = 1.0F;
                 }
-                if (((this.mGroupData.triggerType == 1) && (this.facePointWrapper.b())) || ((this.mGroupData.triggerType == 0) &&
-                        (this.facePointWrapper.c())) || (this.mGroupData.triggerType == 2))
+                if (((this.mGroupData.triggerType == 1) && (this.facePointWrapper.shakeEyeBrow())) || ((this.mGroupData.triggerType == 0) &&
+                        (this.facePointWrapper.mouthOpenBig())) || (this.mGroupData.triggerType == 2))
                 {
                     this.cu = 2.1F;
                     start();
@@ -200,9 +200,9 @@ public class ShapeChangeFilter extends GPUImageFilterE
         }
     }
 
-    public void A()
+    public void resetDrawStartTimeStamp()
     {
-        super.A();
+        super.resetDrawStartTimeStamp();
 
         this.ct = 0.0F;
         this.cu = 0.0F;

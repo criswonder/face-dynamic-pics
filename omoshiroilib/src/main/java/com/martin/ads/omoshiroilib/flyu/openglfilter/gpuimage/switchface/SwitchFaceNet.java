@@ -34,7 +34,7 @@ public class SwitchFaceNet extends GPUImageFilterE
         if (!MiscUtils.isNilOrNull(this.ff.bS)) {
             setAudioUri(Uri.parse(this.bV + "/" + this.ff.bS));
         }
-        F();
+        setRestypeTo2();
     }
 
     public void onInit()
@@ -57,7 +57,7 @@ public class SwitchFaceNet extends GPUImageFilterE
         super.onDrawArraysPre(paramInt);
 
         int i = 0;
-        switch (this.ba)
+        switch (this.phoneDirection)
         {
             case 0:
                 i = 3;

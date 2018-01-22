@@ -26,7 +26,7 @@ public class GPUImageAudioFilter extends GPUImageFilter
     boolean M = false;
     boolean N = false;
     int O = 0;
-    MediaPlayer P = null;
+    MediaPlayer mediaPlayer = null;
     Set<Object> Q = new HashSet();
 
     public GPUImageAudioFilter() {}
@@ -63,7 +63,7 @@ public class GPUImageAudioFilter extends GPUImageFilter
 
     protected void start()
     {
-        if ((null == this.L) || (this.bc)) {
+        if ((null == this.L) || (this.pause)) {
             return;
         }
         if (0 == this.O)
@@ -72,8 +72,8 @@ public class GPUImageAudioFilter extends GPUImageFilter
         }
         else if (2 == this.O)
         {
-            this.P.start();
-            this.P.seekTo(0);
+            this.mediaPlayer.start();
+            this.mediaPlayer.seekTo(0);
             this.O = 3;
             Log.d("GPUImageAudioFilter", "status: STATUS_PLAYING");
         }
@@ -85,19 +85,19 @@ public class GPUImageAudioFilter extends GPUImageFilter
 
     protected void stop()
     {
-        if ((null != this.P) && (3 == this.O))
+        if ((null != this.mediaPlayer) && (3 == this.O))
         {
-            this.P.pause();
+            this.mediaPlayer.pause();
             this.O = 2;
             Log.d("GPUImageAudioFilter", "status: STATUS_INITED");
         }
         this.N = false;
     }
 
-    protected void r()
+    protected void playerVideo()
     {
-        if ((null != this.P) && (3 == this.O)) {
-            this.P.seekTo(0);
+        if ((null != this.mediaPlayer) && (3 == this.O)) {
+            this.mediaPlayer.seekTo(0);
         }
     }
 
@@ -110,13 +110,13 @@ public class GPUImageAudioFilter extends GPUImageFilter
     void s()
     {
         stop();
-        if ((null != this.P) && (2 == this.O))
+        if ((null != this.mediaPlayer) && (2 == this.O))
         {
-            this.P.stop();
-            this.P.release();
-            this.Q.remove(this.P);
+            this.mediaPlayer.stop();
+            this.mediaPlayer.release();
+            this.Q.remove(this.mediaPlayer);
         }
-        this.P = null;
+        this.mediaPlayer = null;
         this.O = 0;
         Log.d("GPUImageAudioFilter", "status: STATUS_UNINITIAL");
     }
@@ -127,32 +127,32 @@ public class GPUImageAudioFilter extends GPUImageFilter
         s();
     }
 
-    public void t()
+    public void pause()
     {
-        super.t();
-        if ((null != this.P) && (3 == this.O)) {
-            this.P.pause();
+        super.pause();
+        if ((null != this.mediaPlayer) && (3 == this.O)) {
+            this.mediaPlayer.pause();
         }
     }
 
-    public void u()
+    public void resume()
     {
-        super.u();
-        if ((null != this.P) && (3 == this.O)) {
-            this.P.start();
+        super.resume();
+        if ((null != this.mediaPlayer) && (3 == this.O)) {
+            this.mediaPlayer.start();
         }
     }
 
     void v()
     {
-        this.P = new b(this);
+        this.mediaPlayer = new b(this);
         try
         {
-            this.P.setDataSource(GlobalConfig.context, this.L);
-            this.P.setOnPreparedListener(new a());
-            this.Q.add(this.P);
-            this.P.prepareAsync();
-            this.P.setLooping(this.M);
+            this.mediaPlayer.setDataSource(GlobalConfig.context, this.L);
+            this.mediaPlayer.setOnPreparedListener(new a());
+            this.Q.add(this.mediaPlayer);
+            this.mediaPlayer.prepareAsync();
+            this.mediaPlayer.setLooping(this.M);
             this.O = 1;
             this.N = true;
             Log.d("GPUImageAudioFilter", "status: STATUS_INITING");
@@ -200,9 +200,9 @@ public class GPUImageAudioFilter extends GPUImageFilter
 
         public void run()
         {
-            if (N && (1 == O) && (null != P))
+            if (N && (1 == O) && (null != mediaPlayer))
             {
-                P.start();
+                mediaPlayer.start();
                 O = 3;
                 Log.d("GPUImageAudioFilter", "status: STATUS_PLAYING");
             }
@@ -211,7 +211,7 @@ public class GPUImageAudioFilter extends GPUImageFilter
                 O = 2;
                 Log.d("GPUImageAudioFilter", "status: STATUS_INITED");
             }
-            if ((this.S != P) && (Q.contains(this.S)))
+            if ((this.S != mediaPlayer) && (Q.contains(this.S)))
             {
                 this.S.stop();
                 this.S.release();

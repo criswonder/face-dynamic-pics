@@ -76,19 +76,19 @@ public class GPUImageFilterGroup extends GPUImageFilterGroupBase
         super.releaseNoGLESRes();
     }
 
-    public void t()
+    public void pause()
     {
-        super.t();
+        super.pause();
         for (GPUImageFilter localGPUImageFilter : this.dw) {
-            localGPUImageFilter.t();
+            localGPUImageFilter.pause();
         }
     }
 
-    public void u()
+    public void resume()
     {
-        super.u();
+        super.resume();
         for (GPUImageFilter localGPUImageFilter : this.dw) {
-            localGPUImageFilter.u();
+            localGPUImageFilter.resume();
         }
     }
 

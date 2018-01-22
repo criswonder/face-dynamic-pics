@@ -43,15 +43,15 @@ public class MResFileReaderBase {
 
     public void init() throws IOException {
         this.mStartPosMap = parseIndexFile(this.mIdxFilePath);
-        File var1 = new File(this.mDataFilePath);
-        this.mDataBuffer = ByteBuffer.allocateDirect((int)var1.length());
-        FileInputStream var2 = new FileInputStream(var1);
+        File dataFile = new File(this.mDataFilePath);
+        this.mDataBuffer = ByteBuffer.allocateDirect((int)dataFile.length());
+        FileInputStream dataFileInputStream = new FileInputStream(dataFile);
         byte[] var3 = new byte[2048];
         boolean var5 = false;
 
         try {
             int var4;
-            while((var4 = var2.read(var3)) != -1) {
+            while((var4 = dataFileInputStream.read(var3)) != -1) {
                 this.mDataBuffer.put(var3, 0, var4);
             }
 
@@ -59,7 +59,7 @@ public class MResFileReaderBase {
         } catch (IOException var10) {
             Log.e("MergeResFileReader", "read data file failed, " + var10.getMessage());
         } finally {
-            MiscUtils.safeClose(var2);
+            MiscUtils.safeClose(dataFileInputStream);
         }
 
         if(!var5) {
@@ -201,6 +201,13 @@ public class MResFileReaderBase {
         return var1;
     }
 
+    /**
+     * 把assets下面的zip文件解压成为*.idx和*.dat
+     * @param var0
+     * @param var1
+     * @param var2
+     * @throws IOException
+     */
     public static void unzipToAFile(InputStream var0, File var1, Map<String, ArrayList<MResFileReaderBase.FileItem>> var2) throws IOException {
         HashMap var3 = new HashMap();
         HashMap var4 = new HashMap();

@@ -73,7 +73,7 @@ public abstract class SwitchFaceBase extends GPUImageFilterE {
         setInt(this.eZ, this.facePointWrapper.faceCount);
 
         int i = 0;
-        switch (this.ba) {
+        switch (this.phoneDirection) {
             case 0:
                 i = 3;
                 break;

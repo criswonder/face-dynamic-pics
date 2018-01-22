@@ -24,7 +24,7 @@ public class DecorateFaceNet  extends GPUImageFilterE
         for (int i = 0; i < this.cz.bR.length; i++) {
             j(this.bV + "/" + this.cz.bR[i]);
         }
-        F();
+        setRestypeTo2();
     }
 
     public void onInit()

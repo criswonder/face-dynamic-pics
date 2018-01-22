@@ -143,9 +143,9 @@ public class DynamicStickerDot extends DynamicStickerBase
             this.setUniformMatrix4f(this.cT[var3], this.cW);
         }
 
-        if(this.cC != -1) {
+        if(this.bitmapTextureId != -1) {
             GLES20.glActiveTexture('蓃');
-            GLES20.glBindTexture(3553, this.cC);
+            GLES20.glBindTexture(3553, this.bitmapTextureId);
             GLES20.glUniform1i(this.cQ, 3);
         } else {
             GLES20.glUniform1i(this.cR, 0);

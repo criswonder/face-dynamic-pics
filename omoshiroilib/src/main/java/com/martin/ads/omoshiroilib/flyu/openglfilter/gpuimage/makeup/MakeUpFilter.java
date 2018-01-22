@@ -36,7 +36,7 @@ public class MakeUpFilter extends GPUImageFilterE {
         this.db = paramString;
         this.ei = parama;
         if (this.ei.resloadtype == 1) {
-            F();
+            setRestypeTo2();
         }
         int i = 0;
         for (Iterator localIterator = this.ei.eo.iterator(); localIterator.hasNext(); ) {

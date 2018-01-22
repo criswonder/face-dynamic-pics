@@ -131,8 +131,8 @@ public class ChangeFaceNet extends ChangeFaceBaseFilter
             } else {
                 this.cu = 1.0F;
             }
-            if (((this.bM == 1) && (this.facePointWrapper.b())) || ((this.bM == 0) &&
-                    (this.facePointWrapper.c())) || (this.bM == 2))
+            if (((this.bM == 1) && (this.facePointWrapper.shakeEyeBrow())) || ((this.bM == 0) &&
+                    (this.facePointWrapper.mouthOpenBig())) || (this.bM == 2))
             {
                 this.cu = 2.1F;
                 start();
