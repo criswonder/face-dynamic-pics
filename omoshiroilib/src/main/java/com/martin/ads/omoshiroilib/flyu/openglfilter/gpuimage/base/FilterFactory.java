@@ -281,7 +281,7 @@ public class FilterFactory {
                 localJSONArray3 = new JSONArray();
             }
         }
-        localMultiSectionInfo.dL = new HashMap();
+        localMultiSectionInfo.stateMachineMap = new HashMap();
         for (int k = 0; k < localJSONArray3.length(); k++) {
             type = localJSONArray3.getJSONObject(k);
             localObject3 = ((JSONObject) type).getString("oldsection");
@@ -289,18 +289,18 @@ public class FilterFactory {
             String str = ((JSONObject) type).getString("newsection");
             int n = ((JSONObject) type).optInt("sectionduration", 0);
             Map localObject4;
-            if (localMultiSectionInfo.dL.containsKey(localObject3)) {
-                localObject4 = (Map) localMultiSectionInfo.dL.get(localObject3);
+            if (localMultiSectionInfo.stateMachineMap.containsKey(localObject3)) {
+                localObject4 = (Map) localMultiSectionInfo.stateMachineMap.get(localObject3);
             } else {
                 localObject4 = new HashMap();
-                localMultiSectionInfo.dL.put((String) localObject3, localObject4);
+                localMultiSectionInfo.stateMachineMap.put((String) localObject3, localObject4);
             }
-            MultiSectionInfo.c localc = new MultiSectionInfo.c();
-            localc.dV = n;
-            localc.dU = str;
+            MultiSectionInfo.SateMachineBean localc = new MultiSectionInfo.SateMachineBean();
+            localc.sectionduration = n;
+            localc.sectionname = str;
             ((Map) localObject4).put(Integer.valueOf(m), localc);
         }
-        localMultiSectionInfo.dM = localJSONObject1.getString("initsection");
+        localMultiSectionInfo.sectionName = localJSONObject1.getString("initsection");
         return localMultiSectionInfo;
     }
 

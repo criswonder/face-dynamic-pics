@@ -14,28 +14,28 @@ public class DynamicStickerDot extends DynamicStickerBase
 {
     private final String TAG = "DynamicStickerDot";
     private boolean VERBOSE = true;
-    int[] cO = new int[5];
-    int[] cP = new int[5];
-    int cQ;
-    int cR;
-    int cS;
-    int[] cT = new int[5];
-    DstickerDataBeanExt cU;
+    int[] muAlignPointLocations = new int[5];
+    int[] muSizeLocation = new int[5];
+    int uLocationInputImageTexture2;
+    int muLocationFaceCnt;
+    int muLocationFlipSticker;
+    int[] muRotateMatrixLocation = new int[5];
+    DstickerDataBeanExt mDstickerDataBeanExt;
     float[] cV = new float[16];
     float[] cW = new float[16];
     float[] cX = new float[9];
-    float cY;
-    float cZ;
-    float da;
+    float scaleWidth;
+    float alignX;
+    float alignY;
 
-    public DynamicStickerDot(String paramString, DstickerDataBeanExt paramb)
+    public DynamicStickerDot(String resDir, DstickerDataBeanExt dstickerDataBeanExt)
     {
-        super(paramb, paramString, "attribute vec4 position;\nattribute vec4 inputTextureCoordinate;\n \nvarying vec2 textureCoordinate;\n \nvoid main()\n{\n    gl_Position = position;\n    textureCoordinate = inputTextureCoordinate.xy;\n}", "varying highp vec2 textureCoordinate;\n \nuniform sampler2D inputImageTexture;\n \nvoid main()\n{\n     gl_FragColor = texture2D(inputImageTexture, textureCoordinate);\n}");
-        this.cU = paramb;
+        super(dstickerDataBeanExt, resDir, "attribute vec4 position;\nattribute vec4 inputTextureCoordinate;\n \nvarying vec2 textureCoordinate;\n \nvoid main()\n{\n    gl_Position = position;\n    textureCoordinate = inputTextureCoordinate.xy;\n}", "varying highp vec2 textureCoordinate;\n \nuniform sampler2D inputImageTexture;\n \nvoid main()\n{\n     gl_FragColor = texture2D(inputImageTexture, textureCoordinate);\n}");
+        this.mDstickerDataBeanExt = dstickerDataBeanExt;
 
-        this.cY = this.cU.scaleWidth;
-        this.cZ = this.cU.alignX;
-        this.da = this.cU.alignY;
+        this.scaleWidth = this.mDstickerDataBeanExt.scaleWidth;
+        this.alignX = this.mDstickerDataBeanExt.alignX;
+        this.alignY = this.mDstickerDataBeanExt.alignY;
         this.bi = (this.bj = this.bk = 50);
     }
 
@@ -46,14 +46,14 @@ public class DynamicStickerDot extends DynamicStickerBase
     public void onInit()
     {
         super.onInit();
-        this.cQ = GLES20.glGetUniformLocation(getProgram(), "inputImageTexture2");
-        this.cR = GLES20.glGetUniformLocation(getProgram(), "faceCnt");
-        this.cS = GLES20.glGetUniformLocation(getProgram(), "flipSticker");
+        this.uLocationInputImageTexture2 = GLES20.glGetUniformLocation(getProgram(), "inputImageTexture2");
+        this.muLocationFaceCnt = GLES20.glGetUniformLocation(getProgram(), "faceCnt");
+        this.muLocationFlipSticker = GLES20.glGetUniformLocation(getProgram(), "flipSticker");
         for (int i = 0; i < 5; i++)
         {
-            this.cO[i] = GLES20.glGetUniformLocation(getProgram(), "alignPoint" + i);
-            this.cP[i] = GLES20.glGetUniformLocation(getProgram(), "size" + i);
-            this.cT[i] = GLES20.glGetUniformLocation(getProgram(), "rotateMatrix" + i);
+            this.muAlignPointLocations[i] = GLES20.glGetUniformLocation(getProgram(), "alignPoint" + i);
+            this.muSizeLocation[i] = GLES20.glGetUniformLocation(getProgram(), "size" + i);
+            this.muRotateMatrixLocation[i] = GLES20.glGetUniformLocation(getProgram(), "rotateMatrix" + i);
         }
     }
 
@@ -66,21 +66,21 @@ public class DynamicStickerDot extends DynamicStickerBase
         super.onDrawArraysPre(var1);
         if (VERBOSE) Log.e(TAG, "onDrawArraysPre will access face pointArray");
 
-        this.cU.scaleWidth = (int)(this.cY + this.g(this.bi) * this.cY);
-        this.cU.alignX = (int)(this.cZ + this.g(this.bj) * this.cZ);
-        this.cU.alignY = (int)(this.da + this.g(this.bk) * this.da);
-        if(this.cU.scaleWidth == 0) {
-            this.cU.scaleWidth = 1;
+        this.mDstickerDataBeanExt.scaleWidth = (int)(this.scaleWidth + this.g(this.bi) * this.scaleWidth);
+        this.mDstickerDataBeanExt.alignX = (int)(this.alignX + this.g(this.bj) * this.alignX);
+        this.mDstickerDataBeanExt.alignY = (int)(this.alignY + this.g(this.bk) * this.alignY);
+        if(this.mDstickerDataBeanExt.scaleWidth == 0) {
+            this.mDstickerDataBeanExt.scaleWidth = 1;
         }
 
-        int var2 = Math.min(this.facePointWrapper.faceCount, this.cU.maxcount);
-        GLES20.glUniform1i(this.cR, var2);
-        GLES20.glUniform1i(this.cS, this.needFlip ?1:0);
+        int var2 = Math.min(this.facePointWrapper.faceCount, this.mDstickerDataBeanExt.maxcount);
+        GLES20.glUniform1i(this.muLocationFaceCnt, var2);
+        GLES20.glUniform1i(this.muLocationFlipSticker, this.needFlip ?1:0);
 
         for(int var3 = 0; var3 < var2; ++var3) {
-            float var4 = (float)this.getTwoPointDistance(this.facePointWrapper.pointArray[var3][this.cU.rightIndex].x, this.facePointWrapper.pointArray[var3][this.cU.rightIndex].y, this.facePointWrapper.pointArray[var3][this.cU.leftIndex].x, this.facePointWrapper.pointArray[var3][this.cU.leftIndex].y) / (float)this.cU.scaleWidth;
-            float var5 = var4 * (float)this.cU.width;
-            float var6 = var5 * (float)this.cU.height / (float)this.cU.width;
+            float var4 = (float)this.getTwoPointDistance(this.facePointWrapper.pointArray[var3][this.mDstickerDataBeanExt.rightIndex].x, this.facePointWrapper.pointArray[var3][this.mDstickerDataBeanExt.rightIndex].y, this.facePointWrapper.pointArray[var3][this.mDstickerDataBeanExt.leftIndex].x, this.facePointWrapper.pointArray[var3][this.mDstickerDataBeanExt.leftIndex].y) / (float)this.mDstickerDataBeanExt.scaleWidth;
+            float var5 = var4 * (float)this.mDstickerDataBeanExt.width;
+            float var6 = var5 * (float)this.mDstickerDataBeanExt.height / (float)this.mDstickerDataBeanExt.width;
             float var8 = 0.0F;
             float var9 = -1.0F;
             float var10 = this.facePointWrapper.pointArray[var3][43].x - this.facePointWrapper.pointArray[var3][46].x;
@@ -94,17 +94,17 @@ public class DynamicStickerDot extends DynamicStickerBase
             float var13 = 0.0F;
 
             int var14;
-            for(var14 = 0; var14 < this.cU.alignIndexLst.length; ++var14) {
-                var12 += this.faceMethoda(var3, this.cU.alignIndexLst[var14]);
-                var13 += this.faceMethodb(var3, this.cU.alignIndexLst[var14]);
+            for(var14 = 0; var14 < this.mDstickerDataBeanExt.alignIndexLst.length; ++var14) {
+                var12 += this.faceMethoda(var3, this.mDstickerDataBeanExt.alignIndexLst[var14]);
+                var13 += this.faceMethodb(var3, this.mDstickerDataBeanExt.alignIndexLst[var14]);
             }
 
-            var12 /= (float)this.cU.alignIndexLst.length;
-            var13 /= (float)this.cU.alignIndexLst.length;
-            var14 = this.cU.width / 2 - this.cU.alignX;
-            int var15 = this.cU.height / 2 - this.cU.alignY;
-            float var16 = (float)var14 * 1.0F / (float)this.cU.width * var5;
-            float var17 = (float)var15 * 1.0F / (float)this.cU.height * var6;
+            var12 /= (float)this.mDstickerDataBeanExt.alignIndexLst.length;
+            var13 /= (float)this.mDstickerDataBeanExt.alignIndexLst.length;
+            var14 = this.mDstickerDataBeanExt.width / 2 - this.mDstickerDataBeanExt.alignX;
+            int var15 = this.mDstickerDataBeanExt.height / 2 - this.mDstickerDataBeanExt.alignY;
+            float var16 = (float)var14 * 1.0F / (float)this.mDstickerDataBeanExt.width * var5;
+            float var17 = (float)var15 * 1.0F / (float)this.mDstickerDataBeanExt.height * var6;
             float var18;
             float var19;
             if(!this.needFlip) {
@@ -138,17 +138,17 @@ public class DynamicStickerDot extends DynamicStickerBase
 
             android.opengl.Matrix.translateM(this.cV, 0, this.cW, 0, -var21 / (float)this.mOutputWidth / var23, -var22 / (float)this.mOutputHeight, 0.0F);
             android.opengl.Matrix.scaleM(this.cW, 0, this.cV, 0, 1.0F / var23, 1.0F, 1.0F);
-            this.setFloatArray(this.cO[var3], new float[]{var21 / (float)this.mOutputWidth, var22 / (float)this.mOutputHeight});
-            this.setFloatArray(this.cP[var3], new float[]{var5 / (float)this.mOutputWidth, var6 / (float)this.mOutputHeight});
-            this.setUniformMatrix4f(this.cT[var3], this.cW);
+            this.setFloatArray(this.muAlignPointLocations[var3], new float[]{var21 / (float)this.mOutputWidth, var22 / (float)this.mOutputHeight});
+            this.setFloatArray(this.muSizeLocation[var3], new float[]{var5 / (float)this.mOutputWidth, var6 / (float)this.mOutputHeight});
+            this.setUniformMatrix4f(this.muRotateMatrixLocation[var3], this.cW);
         }
 
         if(this.bitmapTextureId != -1) {
             GLES20.glActiveTexture('蓃');
             GLES20.glBindTexture(3553, this.bitmapTextureId);
-            GLES20.glUniform1i(this.cQ, 3);
+            GLES20.glUniform1i(this.uLocationInputImageTexture2, 3);
         } else {
-            GLES20.glUniform1i(this.cR, 0);
+            GLES20.glUniform1i(this.muLocationFaceCnt, 0);
         }
 
     }

@@ -14,18 +14,18 @@ import java.util.List;
 
 public class GPUImageFilterGroup extends GPUImageFilterGroupBase
 {
-    protected List<GPUImageFilter> dv;
-    protected List<GPUImageFilter> dw;
+    protected List<GPUImageFilter> gpuImageFilterList;
+    protected List<GPUImageFilter> gpuImageFilterList1;
 
     public GPUImageFilterGroup()
     {
-        this.dv = new ArrayList();
-        this.dw = new ArrayList();
+        this.gpuImageFilterList = new ArrayList();
+        this.gpuImageFilterList1 = new ArrayList();
     }
 
     public List<GPUImageFilter> groupGPUFilterList()
     {
-        return this.dw;
+        return this.gpuImageFilterList1;
     }
 
     public void addFilter(GPUImageFilter paramGPUImageFilter)
@@ -33,23 +33,23 @@ public class GPUImageFilterGroup extends GPUImageFilterGroupBase
         if (paramGPUImageFilter == null) {
             return;
         }
-        this.dv.add(paramGPUImageFilter);
-        O();
+        this.gpuImageFilterList.add(paramGPUImageFilter);
+        copyFilterList();
     }
 
     public void onInit()
     {
         super.onInit();
-        for (int i = 0; i < this.dw.size(); i++)
+        for (int i = 0; i < this.gpuImageFilterList1.size(); i++)
         {
-            ((GPUImageFilter)this.dw.get(i)).init();
-            ((GPUImageFilter)this.dw.get(i)).c(i % 2 == 1);
+            ((GPUImageFilter)this.gpuImageFilterList1.get(i)).init();
+            ((GPUImageFilter)this.gpuImageFilterList1.get(i)).c(i % 2 == 1);
         }
     }
 
     public void onDestroy()
     {
-        for (GPUImageFilter localGPUImageFilter : this.dw) {
+        for (GPUImageFilter localGPUImageFilter : this.gpuImageFilterList1) {
             localGPUImageFilter.destroy();
         }
         super.onDestroy();
@@ -57,7 +57,7 @@ public class GPUImageFilterGroup extends GPUImageFilterGroupBase
 
     public void releaseNoGLESRes()
     {
-        Iterator var1 = this.dw.iterator();
+        Iterator var1 = this.gpuImageFilterList1.iterator();
 
         GPUImageFilter var2;
         while(var1.hasNext()) {
@@ -65,7 +65,7 @@ public class GPUImageFilterGroup extends GPUImageFilterGroupBase
             var2.releaseNoGLESRes();
         }
         if(FilterCompat.saveParamsOnRelease) {
-            var1 = this.dv.iterator();
+            var1 = this.gpuImageFilterList.iterator();
 
             while(var1.hasNext()) {
                 var2 = (GPUImageFilter)var1.next();
@@ -79,7 +79,7 @@ public class GPUImageFilterGroup extends GPUImageFilterGroupBase
     public void pause()
     {
         super.pause();
-        for (GPUImageFilter localGPUImageFilter : this.dw) {
+        for (GPUImageFilter localGPUImageFilter : this.gpuImageFilterList1) {
             localGPUImageFilter.pause();
         }
     }
@@ -87,34 +87,34 @@ public class GPUImageFilterGroup extends GPUImageFilterGroupBase
     public void resume()
     {
         super.resume();
-        for (GPUImageFilter localGPUImageFilter : this.dw) {
+        for (GPUImageFilter localGPUImageFilter : this.gpuImageFilterList1) {
             localGPUImageFilter.resume();
         }
     }
 
-    public List<GPUImageFilter> N()
+    public List<GPUImageFilter> getGPUFilterList()
     {
-        return this.dw;
+        return this.gpuImageFilterList1;
     }
 
-    public void O()
+    public void copyFilterList()
     {
-        if (this.dv == null) {
+        if (this.gpuImageFilterList == null) {
             return;
         }
-        this.dw.clear();
-        for (GPUImageFilter localGPUImageFilter : this.dv) {
+        this.gpuImageFilterList1.clear();
+        for (GPUImageFilter localGPUImageFilter : this.gpuImageFilterList) {
             if ((localGPUImageFilter instanceof GPUImageFilterGroup))
             {
-                ((GPUImageFilterGroup)localGPUImageFilter).O();
-                List localList = ((GPUImageFilterGroup)localGPUImageFilter).N();
+                ((GPUImageFilterGroup)localGPUImageFilter).copyFilterList();
+                List localList = ((GPUImageFilterGroup)localGPUImageFilter).getGPUFilterList();
                 if ((localList != null) && (!localList.isEmpty())) {
-                    this.dw.addAll(localList);
+                    this.gpuImageFilterList1.addAll(localList);
                 }
             }
             else
             {
-                this.dw.add(localGPUImageFilter);
+                this.gpuImageFilterList1.add(localGPUImageFilter);
             }
         }
     }

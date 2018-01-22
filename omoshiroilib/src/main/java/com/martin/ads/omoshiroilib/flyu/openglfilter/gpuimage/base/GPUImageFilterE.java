@@ -33,7 +33,7 @@ public class GPUImageFilterE extends GPUImageAudioFilter
     final int bq = 3;
     final int br = 8;
     static int[] bs = {33987, 33988, 33989, 33990, 33991, 33992, 33993, 33994};
-    int[] bt = new int[8];
+    int[] muInputImageTextureLocations = new int[8];
     int[] bitmapTextureArray = new int[8];
     List<SoftReference<Bitmap>> bitmapCacheList = new ArrayList();
     public List<String> bitmapFileNames;
@@ -41,20 +41,20 @@ public class GPUImageFilterE extends GPUImageAudioFilter
     MResFileNameReader resFileNameReader = null;
     long onDrawStartTime = -1L;
 
-    public GPUImageFilterE(String paramString1, String paramString2) {
-        this(null, paramString1, paramString2);
+    public GPUImageFilterE(String vSource, String fSource) {
+        this(null, vSource, fSource);
     }
 
-    public GPUImageFilterE(String paramString1, String paramString2, String paramString3) {
-        super(paramString2, paramString3);
+    public GPUImageFilterE(String resPath, String vSource, String fSource) {
+        super(vSource, fSource);
         for (int i = 0; i < 8; i++) {
             this.bitmapTextureArray[i] = -1;
             this.bitmapCacheList.add(null);
         }
-        if (!MiscUtils.isNilOrNull(paramString1)) {
-            Pair localPair = MResFileReaderBase.tryGetMergeFile(paramString1);
+        if (!MiscUtils.isNilOrNull(resPath)) {
+            Pair localPair = MResFileReaderBase.tryGetMergeFile(resPath);
             if (null != localPair) {
-                this.resFileNameReader = new MResFileNameReader(paramString1 + "/" + (String) localPair.first, paramString1 + "/" + (String) localPair.second);
+                this.resFileNameReader = new MResFileNameReader(resPath + "/" + (String) localPair.first, resPath + "/" + (String) localPair.second);
             }
         }
     }
@@ -70,7 +70,7 @@ public class GPUImageFilterE extends GPUImageAudioFilter
             }
         }
         for (int i = 0; i < 8; i++) {
-            this.bt[i] = GLES20.glGetUniformLocation(getProgram(), "inputImageTexture" + (i + 2));
+            this.muInputImageTextureLocations[i] = GLES20.glGetUniformLocation(getProgram(), "inputImageTexture" + (i + 2));
         }
         loadTextures();
     }
@@ -122,7 +122,7 @@ public class GPUImageFilterE extends GPUImageAudioFilter
             if (this.bitmapTextureArray[i] != -1) {
                 GLES20.glActiveTexture(bs[i]);
                 GLES20.glBindTexture(3553, this.bitmapTextureArray[i]);
-                GLES20.glUniform1i(this.bt[i], 3 + i);
+                GLES20.glUniform1i(this.muInputImageTextureLocations[i], 3 + i);
             }
         }
     }

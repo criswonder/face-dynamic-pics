@@ -13,8 +13,8 @@ public class MultiSectionInfo extends AbsData {
     public static final String dI = "__empty__";
     public Map<String, Filter> stringFilterMap;
     public Map<String, Section> sectionsMap;
-    public Map<String, Map<Integer, c>> dL;
-    public String dM;
+    public Map<String, Map<Integer, SateMachineBean>> stateMachineMap;
+    public String sectionName;
 
     public String m()
     {
@@ -26,10 +26,10 @@ public class MultiSectionInfo extends AbsData {
         return 5;
     }
 
-    public static class c
+    public static class SateMachineBean
     {
-        public String dU;
-        public long dV;
+        public String sectionname;
+        public long sectionduration;
     }
 
     public static class Section

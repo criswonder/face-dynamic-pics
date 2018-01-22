@@ -29,10 +29,10 @@ public class DynamicStickerBase extends GPUImageFilterE {
     long mStartTimestamp = -1L;
     int cJ = 0;
 
-    public DynamicStickerBase(DstickerDataBean parama, String paramString1, String paramString2, String paramString3) {
-        super(paramString2, paramString3);
-        this.multiSectionResPath = paramString1;
-        this.mDstickerDataBean = parama;
+    public DynamicStickerBase(DstickerDataBean dstickerDataBean, String resPath, String vSource, String fSource) {
+        super(vSource, fSource);
+        this.multiSectionResPath = resPath;
+        this.mDstickerDataBean = dstickerDataBean;
         this.name = this.mDstickerDataBean.folderName;
 
         String str = this.multiSectionResPath.substring("file://".length());

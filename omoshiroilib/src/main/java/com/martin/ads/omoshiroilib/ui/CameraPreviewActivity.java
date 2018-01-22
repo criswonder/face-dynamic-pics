@@ -652,6 +652,7 @@ public class CameraPreviewActivity extends AppCompatActivity implements GPUImage
         groupBase.addFilter(new GPUImageFilter());
         if(type<0) return groupBase;
         try {
+            //andymao 点击某个动效后的入口
             if (type == TYPE_CHANGE_FACE) {
                 ChangeFaceInfo changeFaceInfo = FilterFactory.readChangeFaceInfo(unzipPath);
                 groupBase.addFilter(new ChangeFaceNet(unzipPath, changeFaceInfo));

@@ -53,10 +53,10 @@ public class GPUImageFilter {
         this("attribute vec4 position;\nattribute vec4 inputTextureCoordinate;\n \nvarying vec2 textureCoordinate;\n \nvoid main()\n{\n    gl_Position = position;\n    textureCoordinate = inputTextureCoordinate.xy;\n}", "varying highp vec2 textureCoordinate;\n \nuniform sampler2D inputImageTexture;\n \nvoid main()\n{\n     gl_FragColor = texture2D(inputImageTexture, textureCoordinate);\n}");
     }
 
-    public GPUImageFilter(String paramString1, String paramString2) {
+    public GPUImageFilter(String vSource, String fSource) {
         this.mRunnableList = new LinkedList();
-        this.vertexSource = paramString1;
-        this.fragmentSource = paramString2;
+        this.vertexSource = vSource;
+        this.fragmentSource = fSource;
     }
 
     public void setPhoneDirection(int paramInt) {

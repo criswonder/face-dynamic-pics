@@ -655,6 +655,7 @@ public class GLRender implements GLSurfaceView.Renderer , IFaceDetector.FaceDete
                         processFrame((byte[]) cmdItem.param1, (Camera) cmdItem.param2);
                         break;
                     case CMD_SET_FILTER:
+                        //andymao 外界选择的动图filter会在这里设置进来
                         setFilterInternal((GPUImageFilterGroupBase) cmdItem.param1);
                         break;
                     case CMD_RERUN_ONDRAW_RUNNABLE:
