@@ -23,10 +23,10 @@ public class JniEntry {
             int mRotation, boolean mMirror,
             byte[] mSampleData, int mSampleWidth, int mSampleHeight){
         //about 24ms on mi4
-        //Log.d(TAG, "YuvToGrayAndScaleJava: start");
+        Log.d(TAG, "YuvToGrayAndScaleJava: start");
         YuvToGrayAndScale(yuvData, mInputWidth, mInputHeight, mRotation, mMirror,
                 mSampleData, mSampleWidth, mSampleHeight);
-        //Log.d(TAG, "YuvToGrayAndScaleJava: end");
+        Log.d(TAG, "YuvToGrayAndScaleJava: end");
     }
 
     public static native void YuvToGrayAndScale(byte[] var0, int var1, int var2, int var3, boolean var4, byte[] var5, int var6, int var7);
